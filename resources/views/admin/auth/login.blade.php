@@ -27,23 +27,23 @@
 </head>
 <body>
     <!--authentication-->
-    <div class="auth-basic-wrapper d-flex align-items-center justify-content-center">
+    <div class="auth-basic-wrapper d-flex align-items-center justify-content-center" style="background:#23483b">
         <div class="container-fluid my-5 my-lg-0">
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-5 col-xxl-4 mx-auto">
                     <div class="card rounded-4 mb-0 border-4 border-primary border-gradient-1">
                         <div class="card-body p-5">
-                            <h1 class="text-center text-white mb-3">LuxyBiz</h1>
-                            <h4 class="fw-bold text-white text-center">Get Started Now</h4>
-                            <p class="mb-0 text-white text-center">Enter your credentials to login your account</p>
+                            <h1 class="text-center text-black mb-3">LuxyBiz</h1>
+                            <h4 class="fw-bold t-pm text-center">Get Started Now</h4>
+                            <p class="mb-0 t-pm text-center">Enter your credentials to login your account</p>
                             <div class="form-body my-5">
 								<form class="row g-3">
 									<div class="col-12">
-                                        <label for="inputEmailAddress" class="form-label text-white">Email</label>
+                                        <label for="inputEmailAddress" class="form-label text-black">Email</label>
                                         <input type="email" class="form-control" id="inputEmailAddress" placeholder="jhon@example.com">
 									</div>
 									<div class="col-12">
-                                        <label for="inputChoosePassword" class="form-label text-white">Password</label>
+                                        <label for="inputChoosePassword" class="form-label text-black">Password</label>
                                         <div class="input-group" id="show_hide_password">
 										    <input type="password" class="form-control border-end-0" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> 
                                             <a href="javascript:;" class="input-group-text bg-transparent"><i class="bi bi-eye-slash-fill"></i></a>
