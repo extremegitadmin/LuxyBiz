@@ -25,7 +25,7 @@
 	right: 0;
 	width: 100px;
 	height: 100%;
-	box-shadow: 0 0 10px #0d6efd, 0 0 5px #0d6efd;
+	box-shadow: 0 0 10px #23483b, 0 0 5px #23483b;
 	opacity: 1;
 	-webkit-transform: rotate(3deg) translate(0, -4px);
 	-moz-transform: rotate(3deg) translate(0, -4px);
@@ -42,8 +42,8 @@
 	width: 20px;
 	height: 20px;
 	border: solid 3px transparent;
-	border-top-color: #0d6efd;
-	border-left-color: #0d6efd;
+	border-top-color: #23483b;
+	border-left-color: #23483b;
 	border-radius: 10px;
 	-webkit-animation: pace-spinner .4s linear infinite;
 	-moz-animation: pace-spinner .4s linear infinite;

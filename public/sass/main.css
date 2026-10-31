@@ -936,7 +936,7 @@ form select.error:focus {
 /* alerts */
 .alert-border-primary {
   border: 1px solid var(--bs-gray-400);
-  border-left: 5px solid #008cff;
+  border-left: 5px solid #23483b;
 }
 
 .alert-border-secondary {
@@ -1022,7 +1022,7 @@ form select.error:focus {
 .border-gradient-1 {
   -o-border-image: linear-gradient(to right, #7928ca, #ff0080, #04e09a, #e0d504) 1;
      border-image: linear-gradient(to right, #7928ca, #ff0080, #04e09a, #e0d504) 1;
-     background: #23483b;
+     /* background: #23483b; */
 }
 
 .auth-basic-wrapper {
@@ -1394,7 +1394,7 @@ form select.error:focus {
 
 .chat-tab-menu .nav-pills .nav-link.active,
 .chat-tab-menu .nav-pills .show > .nav-link {
-  color: #008cff;
+  color: #23483b;
   background-color: rgba(0, 123, 255, 0);
 }
 
@@ -1494,7 +1494,7 @@ form select.error:focus {
   font-size: 23px;
 }
 .fm-menu .list-group a:hover {
-  background: #008cff;
+  background: #23483b;
   color: #fff;
   transition: all 0.2s ease-out;
 }
@@ -1563,3 +1563,8 @@ form select.error:focus {
     right: 2rem;
   }
 }/*# sourceMappingURL=main.css.map */
+
+.t-pm
+{
+  color: #2b483b;
+}
