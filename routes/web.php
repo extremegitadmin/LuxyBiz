@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BookingController;
+
 
 Route::get('/', function () {
     return view('admin.dashboard');
@@ -15,4 +17,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 });
 
+require __DIR__ . '/admin/bookings.php';
 
