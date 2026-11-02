@@ -61,12 +61,12 @@
               </li>
             </ul>
           </li>
-          <li class="menu-label">UI Elements</li>
+          <li class="menu-label">CATALOGUE</li>
           <li>
-            <a href="cards.html">
+            <a href="{{ route('admin.tours.index') }}">
               <div class="parent-icon"><i class="material-icons-outlined">inventory_2</i>
               </div>
-              <div class="menu-title">Cards</div>
+              <div class="menu-title">Tours</div>
             </a>
           </li>
           
