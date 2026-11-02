@@ -23,6 +23,7 @@ class UpdateBookingRequest extends FormRequest
         return [
             'insurance_selected' => ['nullable', 'boolean'],
             'notes' => ['nullable', 'string', 'max:2000'],
+            'reason' => ['nullable', 'string', 'max:255'],
             'lead_traveler_id' => ['required', Rule::in($ids)],
 
             'travelers' => ['required', 'array', 'min:1'],
@@ -64,6 +65,7 @@ class UpdateBookingRequest extends FormRequest
     {
         return [
             'notes' => 'notes',
+            'reason' => 'reason for change',
             'travelers.*.date_of_birth' => 'date of birth',
             'travelers.*.passport_expiry' => 'passport expiry',
             'travelers.*.arrival_date' => 'arrival date',

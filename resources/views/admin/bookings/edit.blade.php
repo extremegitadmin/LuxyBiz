@@ -215,11 +215,46 @@
                     <div class="alert alert-warning border-0">This booking has no travelers yet, so there is nothing to edit here.</div>
                 @endif
 
+                <div class="card rounded-4">
+                    <div class="card-body p-4">
+                        <label class="form-label" for="reason">Reason for this change <span class="text-secondary small">(optional, saved in the history)</span></label>
+                        <input id="reason" name="reason" maxlength="255" class="form-control @error('reason') is-invalid @enderror"
+                            value="{{ old('reason') }}" placeholder="e.g. Customer called to correct the arrival flight">
+                        @error('reason') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+                </div>
+
                 <div class="d-flex flex-wrap gap-2 mb-4">
                     <button type="submit" class="btn btn-primary px-4" @disabled($booking->travelers->isEmpty())>Save changes</button>
                     <a href="{{ Route::has('admin.bookings.index') ? route('admin.bookings.index') : url('/admin/dashboard') }}" class="btn btn-outline-secondary px-4">Cancel</a>
                 </div>
             </form>
+
+            {{-- Change history --}}
+            <div class="card rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="mb-3 fw-semibold">Change history</h5>
+                    @forelse ($changes as $change)
+                        <div class="{{ $loop->last ? '' : 'border-bottom pb-3 mb-3' }}">
+                            <div class="d-flex flex-wrap gap-2 align-items-center mb-1">
+                                <span class="fw-semibold">{{ $change->user->name ?? 'System' }}</span>
+                                <span class="text-secondary small">{{ $change->created_at?->format('d M Y, H:i') }}</span>
+                            </div>
+                            @if ($change->reason)
+                                <div class="small mb-1"><span class="text-secondary">Reason:</span> {{ $change->reason }}</div>
+                            @endif
+                            <ul class="mb-0 ps-3 small">
+                                @foreach ($change->summaryLines() as $line)
+                                    <li>{{ $line }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @empty
+                        <p class="text-secondary mb-0">No changes have been recorded for this booking yet.</p>
+                    @endforelse
+                    <div class="form-text mt-3">Passport numbers and health notes are logged as "changed" only. Their values are never stored in the history.</div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
