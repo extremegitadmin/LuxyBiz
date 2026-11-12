@@ -69,7 +69,14 @@
               <div class="menu-title">Tours</div>
             </a>
           </li>
-          
+                    <li class="menu-label">BOOKINGS</li>
+          <li class="{{ request()->routeIs('admin.bookings.*') ? 'mm-active' : '' }}">
+            <a href="{{ route('admin.bookings.index') }}">
+              <div class="parent-icon"><i class="material-icons-outlined">confirmation_number</i>
+              </div>
+              <div class="menu-title">Bookings</div>
+            </a>
+          </li>
           <li>
             <a href="javascript:;" class="has-arrow">
               <div class="parent-icon"><i class="material-icons-outlined">shopping_bag</i>
