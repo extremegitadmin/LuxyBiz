@@ -77,6 +77,14 @@
               <div class="menu-title">Bookings</div>
             </a>
           </li>
+          <li class="{{ request()->routeIs('admin.payments.*') ? 'mm-active' : '' }}">
+    <a href="{{ route('admin.payments.index') }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">payments</i>
+        </div>
+        <div class="menu-title">Payments</div>
+    </a>
+</li>
           <li>
             <a href="javascript:;" class="has-arrow">
               <div class="parent-icon"><i class="material-icons-outlined">shopping_bag</i>
