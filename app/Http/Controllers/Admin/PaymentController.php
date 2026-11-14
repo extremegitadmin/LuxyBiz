@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-/** Payments list (E4). Money is charged and refunded elsewhere; this page only reads. */
+/** Payments list (E4) and payment detail (E5). Money is charged and refunded elsewhere; these pages only read. */
 class PaymentController extends Controller
 {
     public function index(Request $request)
@@ -26,6 +26,48 @@ class PaymentController extends Controller
             'totals' => $this->totals($filters),
             'methods' => Payment::query()->whereNotNull('method')->distinct()->orderBy('method')->pluck('method'),
         ]);
+    }
+
+    public function show(Payment $payment)
+    {
+        $payment->load(['booking.user:id,name,email', 'recorder:id,name']);
+        $booking = $payment->booking;
+
+        return view('admin.payments.show', [
+            'payment' => $payment,
+            'booking' => $booking,
+            'timeline' => $this->timeline($payment),
+            'siblings' => $booking
+                ? $booking->payments()->where('id', '!=', $payment->id)->orderByDesc('created_at')->orderByDesc('id')->get()
+                : collect(),
+            'net' => $booking?->paidAmount(),
+        ]);
+    }
+
+    /**
+     * Status timeline built from the payment row itself. Gateway webhook events get their own
+     * log on Day 9, so nothing here depends on a gateway being connected.
+     *
+     * @return array<int, array{label: string, at: ?\Illuminate\Support\Carbon, tone: string, detail: ?string}>
+     */
+    private function timeline(Payment $p): array
+    {
+        $isRefund = $p->type === 'refund';
+        $steps = [[
+            'label' => $isRefund ? 'Refund recorded' : 'Payment recorded',
+            'at' => $p->created_at,
+            'tone' => 'secondary',
+            'detail' => $p->recorder ? 'by ' . $p->recorder->name : ($p->channel === 'online' ? 'by the customer, online' : null),
+        ]];
+
+        $steps[] = match ($p->status) {
+            'succeeded' => ['label' => $isRefund ? 'Refund completed' : 'Payment received', 'at' => $p->paid_at ?? $p->updated_at, 'tone' => 'success', 'detail' => null],
+            'failed' => ['label' => 'Payment failed', 'at' => $p->updated_at, 'tone' => 'danger', 'detail' => $p->failure_code ? 'Reason: ' . str_replace('_', ' ', $p->failure_code) : null],
+            'refunded' => ['label' => 'Marked refunded', 'at' => $p->updated_at, 'tone' => 'secondary', 'detail' => null],
+            default => ['label' => 'Waiting for the gateway', 'at' => null, 'tone' => 'warning', 'detail' => 'Still pending. It will update when the gateway confirms.'],
+        };
+
+        return $steps;
     }
 
     private function filters(Request $request): array

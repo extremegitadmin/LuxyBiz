@@ -10,4 +10,10 @@ use Illuminate\Support\Facades\Route;
 */
 Route::prefix('admin')->name('admin.')->middleware(AdminRole::class . ':admin')->group(function () {
     Route::get('payments', [PaymentController::class, 'index'])->name('payments.index');
+    Route::get('payments/{payment}', [PaymentController::class, 'show'])
+        ->name('payments.show')->whereNumber('payment');
 });
+
+Route::get('admin/payments', [PaymentController::class, 'index'])->name('admin.payments.index');
+Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
+        ->name('admin.payments.show')->whereNumber('payment');
