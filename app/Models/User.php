@@ -7,44 +7,55 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable;
+    
+    // role_id, is_super and is_active are NOT fillable: set them explicitly with forceFill().
+    protected $fillable = ['name', 'email', 'password', 'phone'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    private ?array $permissionCache = null;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_super' => 'boolean',
+            'is_active' => 'boolean',
         ];
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /** @return list<string> */
+    public function permissionSlugs(): array
+    {
+        if ($this->is_super) {
+            return Permission::allSlugs();
+        }
+
+        return $this->permissionCache ??= $this->role ? $this->role->permissionSlugs() : [];
+    }
+
+    /** True when the user holds ANY of the given permissions. The Super Admin always passes. */
+    public function hasPermission(string ...$slugs): bool
+    {
+        if ($this->is_super || $slugs === []) {
+            return true;
+        }
+
+        return array_intersect($slugs, $this->permissionSlugs()) !== [];
+    }
+
+    public function roleLabel(): string
+    {
+        return $this->is_super ? 'Super Admin' : ($this->role?->name ?? 'No role');
     }
 }
