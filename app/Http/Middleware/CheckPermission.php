@@ -8,28 +8,27 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Usage: ->middleware('admin.can')                       any active staff member
- *        ->middleware('admin.can:tours.manage')          needs that permission
- *        ->middleware('admin.can:reports.view,bookings.view')   needs ANY of them
- * A super admin always passes. Permissions are edited at Admin > Roles and permissions.
+ * Usage: ->middleware('permission')                      any signed-in, active user
+ *        ->middleware('permission:users.view')           needs that permission
+ *        ->middleware('permission:users.view,roles.view') needs ANY of them
+ * The Super Admin always passes.
  */
-class AdminCan
+class CheckPermission
 {
     public function handle(Request $request, Closure $next, string ...$permissions): Response
     {
         $user = $request->user();
 
         if (! $user) {
-            return redirect()->guest(route('admin.login'));
+            return redirect()->guest(route('login'));
         }
 
-        if (! $user->is_active || ! $user->isStaff()) {
+        if (! $user->is_active) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect()->route('admin.login')
-                ->withErrors(['email' => 'This account cannot open the admin panel.']);
+            return redirect()->route('login')->withErrors(['email' => 'Your account is deactivated.']);
         }
 
         if ($permissions && ! $user->hasPermission(...$permissions)) {
