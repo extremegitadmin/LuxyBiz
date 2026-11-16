@@ -2099,7 +2099,7 @@ textarea.form-control-lg {
 	margin-left: 0
 }
 .form-check-input {
-	--bs-form-check-bg: var(--bs-body-bg);
+	--bs-form-check-bg: #ffffff;
 	width: 1em;
 	height: 1em;
 	margin-top: .25em;
@@ -2112,7 +2112,7 @@ textarea.form-control-lg {
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
-	border: var(--bs-border-width) solid var(--bs-border-color);
+	border: var(--bs-border-width) solid rgb(175 168 168);
 	-webkit-print-color-adjust: exact;
 	color-adjust: exact;
 	print-color-adjust: exact
