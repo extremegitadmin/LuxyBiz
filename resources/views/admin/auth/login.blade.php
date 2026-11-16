@@ -26,70 +26,43 @@
     <link href="{{asset('sass/responsive.css')}}" rel="stylesheet">
 </head>
 <body>
-    <!--authentication-->
-    <div class="auth-basic-wrapper d-flex align-items-center justify-content-center" style="background:#23483b">
-        <div class="container-fluid my-5 my-lg-0">
-            <div class="row">
-                <div class="col-12 col-md-6 col-lg-4 col-xl-5 col-xxl-4 mx-auto">
-                    <div class="card rounded-4 mb-0 border-4 border-primary border-gradient-1">
-                        <div class="card-body p-5">
-                            <h1 class="text-center text-black mb-3">LuxyBiz</h1>
-                            <h4 class="fw-bold t-pm text-center">Get Started Now</h4>
-                            <p class="mb-0 t-pm text-center">Enter your credentials to login your account</p>
-                            <div class="form-body my-5">
-								<form class="row g-3">
-									<div class="col-12">
-                                        <label for="inputEmailAddress" class="form-label text-black">Email</label>
-                                        <input type="email" class="form-control" id="inputEmailAddress" placeholder="jhon@example.com">
-									</div>
-									<div class="col-12">
-                                        <label for="inputChoosePassword" class="form-label text-black">Password</label>
-                                        <div class="input-group" id="show_hide_password">
-										    <input type="password" class="form-control border-end-0" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> 
-                                            <a href="javascript:;" class="input-group-text bg-transparent"><i class="bi bi-eye-slash-fill"></i></a>
-										</div>
-									</div>
-                                    
-                                    <div class="col-md-12 text-end">	
-                                        <a href="#" class="text-white">Forgot Password ?</a>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary">Login</button>
-                                        </div>
-                                    </div>
-                                    
-								</form>
-							</div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div><!--end row-->
+<div class="auth-wrap">
+    <aside class="auth-art" aria-hidden="true">
+        <div class="d-flex align-items-center gap-2">
+            <span class="brand-mark">L</span>
+            <span class="brand-text text-white">LuxyBiz<small>Tours &amp; Wellness</small></span>
         </div>
+        <div>
+            <h2>Run every journey from one calm place.</h2>
+            <p>Bookings, departures, travelers and payments for your Kerala wellness and travel programmes.</p>
+        </div>
+        <div class="small" style="color:#6d9496">Staff access only</div>
+    </aside>
+    <section class="auth-form">
+        <div class="auth-box">
+            <h1 class="h3 page-title mb-1">Welcome back</h1>
+<p class="text-secondary mb-4">Sign in to the LuxyBiz staff admin.</p>
+
+
+<form method="POST" action="#" novalidate>
+    <input type="hidden" name="_token" value="XY3a1ZFeSlchxOCwb0cXY9xXqiHILSXjGA68JhgJ" autocomplete="off">    <div class="mb-3">
+        <label class="form-label" for="email">Email</label>
+        <input id="email" type="email" name="email" value="" class="form-control " autocomplete="username" autofocus required>
+            </div>
+    <div class="mb-3">
+        <label class="form-label d-flex justify-content-between" for="password">Password
+            <a class="small fw-normal" href="https://emapp.co.in/SD/luxybiz/admin/forgot-password">Forgot password?</a></label>
+        <input id="password" type="password" name="password" class="form-control " autocomplete="current-password" required>
+            </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+        <label class="form-check-label" for="remember">Keep me signed in on this device</label>
     </div>
-    <!--authentication-->
-
-    <!--plugins-->
-    <script src="{{asset('assets/js/jquery.min.js')}}"></script>
-
-    <script>
-        $(document).ready(function () {
-            $("#show_hide_password a").on('click', function (event) {
-                event.preventDefault();
-                if ($('#show_hide_password input').attr("type") == "text") {
-                    $('#show_hide_password input').attr('type', 'password');
-                    $('#show_hide_password i').addClass("bi-eye-slash-fill");
-                    $('#show_hide_password i').removeClass("bi-eye-fill");
-                } else if ($('#show_hide_password input').attr("type") == "password") {
-                    $('#show_hide_password input').attr('type', 'text');
-                    $('#show_hide_password i').removeClass("bi-eye-slash-fill");
-                    $('#show_hide_password i').addClass("bi-eye-fill");
-                }
-            });
-        });
-    </script>
-
+    <button class="btn btn-primary w-100 py-2">Sign in</button>
+</form>
+        </div>
+    </section>
+</div>
 </body>
 
 </html>
