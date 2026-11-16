@@ -60,8 +60,22 @@
               <li><a href="app-invoice.html"><i class="material-icons-outlined">arrow_right</i>Invoice</a>
               </li>
             </ul>
+<<<<<<< HEAD
           </li>-->
+=======
+          </li>
+
+>>>>>>> b5fef2920aa8d600de99d28968ddd0b598378a73
           <li class="menu-label">CATALOGUE</li>
+          <li>
+    <a href="{{ route('admin.tour-categories.index') }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">category</i>
+        </div>
+
+        <div class="menu-title">Tour Categories</div>
+    </a>
+</li>
           <li>
             <a href="{{ route('admin.tours.index') }}">
               <div class="parent-icon"><i class="material-icons-outlined">inventory_2</i>
