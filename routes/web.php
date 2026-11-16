@@ -5,10 +5,10 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\TourController;
 use App\Http\Controllers\Admin\ObjectiveController;
 use App\Http\Controllers\Admin\DepartureController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('admin.dashboard');
