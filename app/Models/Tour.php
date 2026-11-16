@@ -8,18 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tour extends Model
 {
-    public const STATUSES = [
-        'draft',
-        'published',
-        'archived',
-    ];
+    public const STATUSES = ['draft', 'published', 'archived'];
 
-    public const CURRENCIES = [
-        'USD',
-        'INR',
-        'EUR',
-        'GBP',
-    ];
+    public const CURRENCIES = ['USD', 'INR', 'EUR', 'GBP'];
 
     protected $guarded = [];
 
@@ -27,6 +18,9 @@ class Tour extends Model
     {
         return [
             'base_price' => 'decimal:2',
+            'price_inr' => 'decimal:2',
+            'senior_friendly' => 'boolean',
+            'gallery' => 'array',
         ];
     }
 
@@ -58,7 +52,7 @@ class Tour extends Model
     public function lines(string $field): array
     {
         return array_values(array_filter(
-            array_map('trim', preg_split('/\R/', (string) $this->{$field}))
+            array_map('trim', preg_split('/\R+/', (string) $this->{$field}))
         ));
     }
 }
