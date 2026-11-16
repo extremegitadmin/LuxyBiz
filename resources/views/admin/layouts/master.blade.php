@@ -25,10 +25,14 @@
     <!--start footer-->
     @include('admin.layouts.footer')
     <!--end footer-->
-    @include('admin.layouts.vendor-scripts') 
+   
     </main>
     <!--end main wrapper-->   
     <!--start overlay-->
-    
+    <!-- Load vendor scripts first -->
+    @include('admin.layouts.vendor-scripts')
+
+    <!-- Load page-specific scripts AFTER jQuery -->
+    @stack('scripts')
 </body>
 </html>

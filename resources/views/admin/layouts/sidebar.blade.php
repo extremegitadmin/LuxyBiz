@@ -61,7 +61,17 @@
               </li>
             </ul>
           </li>
+
           <li class="menu-label">CATALOGUE</li>
+          <li>
+    <a href="{{ route('admin.tour-categories.index') }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">category</i>
+        </div>
+
+        <div class="menu-title">Tour Categories</div>
+    </a>
+</li>
           <li>
             <a href="{{ route('admin.tours.index') }}">
               <div class="parent-icon"><i class="material-icons-outlined">inventory_2</i>
