@@ -1568,3 +1568,73 @@ form select.error:focus {
 {
   color: #2b483b;
 }
+
+.auth-art {
+    background: radial-gradient(900px 500px at 12% 8%, #14585c 0%, transparent 60%), radial-gradient(700px 500px at 90% 95%, #0f4a45 0%, transparent 55%), linear-gradient(160deg, #0a2528, #0c3236);
+    color: #d5e6e6;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-wrap {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(140deg, #0e7c7b, #0a4f55);
+    display: grid;
+    place-items: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #fff;
+    flex: 0 0 34px;
+    border-bottom: 3px solid #c9962e;
+}
+
+.brand-text {
+    font-family: 'Fraunces', serif;
+    font-size: 1.25rem;
+    line-height: 1.05;
+    white-space: nowrap;
+}
+
+.gap-2 {
+    gap: .5rem !important;
+}
+.align-items-center {
+    align-items: center !important;
+}
+.d-flex {
+    display: flex !important;
+}
+
+.auth-form {
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background: #f3f6f6;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 380px;
+}
+
+.brand-text small {
+    display: block;
+    font-family: 'Figtree', sans-serif;
+    font-size: .7rem;
+    color: #7ea6a8;
+    margin-top: .15rem;
+    letter-spacing: .02em;
+}
