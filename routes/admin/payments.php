@@ -16,7 +16,4 @@ Route::prefix('admin')->name('admin.')->middleware(AdminRole::class . ':admin')-
         ->name('payments.show')->whereNumber('payment');
 });
 
-    Route::get('admin/payments', [PaymentController::class, 'index'])->name('admin.payments.index');
-    Route::get('admin/payments/events', [PaymentEventController::class, 'index'])->name('admin.payments.events');   // above {payment}
-    Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
-        ->name('admin.payments.show')->whereNumber('payment');
+   
