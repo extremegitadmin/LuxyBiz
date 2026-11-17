@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class TourDay extends Model
 {
     protected $fillable = [
+        'tour_id',
         'day_number',
         'title',
         'description',
