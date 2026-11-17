@@ -109,6 +109,17 @@
     </a>
 </li>
 
+<li class="menu-label">SETTINGS</li>
+
+<li class="{{ request()->routeIs('admin.settings.gateway*') ? 'mm-active' : '' }}">
+    <a href="{{ route('admin.settings.gateway') }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">credit_card</i>
+        </div>
+        <div class="menu-title">Payment gateway</div>
+    </a>
+</li>
+
          <!-- <li>
             <a href="javascript:;" class="has-arrow">
               <div class="parent-icon"><i class="material-icons-outlined">shopping_bag</i>
