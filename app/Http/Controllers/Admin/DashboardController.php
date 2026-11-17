@@ -10,22 +10,19 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request)
+    public function index(Request $request)
     {
         $user = $request->user();
 
         // Only count what this person is allowed to open.
         $cards = [];
         if ($user->can('users.view')) {
-            $cards[] = ['Users', User::count(), 'bi-people', route('users.index')];
+            $cards[] = ['Users', User::count(), 'bi-people', route('admin.users.index')];
         }
         if ($user->can('roles.view')) {
-            $cards[] = ['Roles', Role::count(), 'bi-shield-lock', route('roles.index')];
-        }
-        if ($user->can('products.view')) {
-            $cards[] = ['Products', Product::count(), 'bi-box-seam', route('products.index')];
+            $cards[] = ['Roles', Role::count(), 'bi-shield-lock', route('admin.roles.index')];
         }
 
-        return view('dashboard', compact('cards'));
+        return view('admin.dashboard', compact('cards'));
     }
 }

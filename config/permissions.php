@@ -11,22 +11,22 @@
 return [
     'groups' => [
         'Users' => [
-            'users.view' => 'View users',
-            'users.create' => 'Create users',
-            'users.edit' => 'Edit users (including activate / deactivate)',
-            'users.delete' => 'Delete users',
+            'admin.users.view' => 'View users',
+            'admin.users.create' => 'Create users',
+            'admin.users.edit' => 'Edit users (including activate / deactivate)',
+            'admin.users.delete' => 'Delete users',
         ],
         'Roles' => [
-            'roles.view' => 'View roles',
-            'roles.create' => 'Create roles',
-            'roles.edit' => 'Edit roles and their permissions',
-            'roles.delete' => 'Delete roles',
+            'admin.roles.view' => 'View roles',
+            'admin.roles.create' => 'Create roles',
+            'admin.roles.edit' => 'Edit roles and their permissions',
+            'admin.roles.delete' => 'Delete roles',
         ],
-        'Products (sample module)' => [
-            'products.view' => 'View products',
-            'products.create' => 'Add products',
-            'products.edit' => 'Edit products',
-            'products.delete' => 'Delete products',
-        ],
+        // 'Products (sample module)' => [
+        //     'products.view' => 'View products',
+        //     'products.create' => 'Add products',
+        //     'products.edit' => 'Edit products',
+        //     'products.delete' => 'Delete products',
+        // ],
     ],
 ];

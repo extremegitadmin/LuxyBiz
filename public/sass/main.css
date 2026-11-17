@@ -454,7 +454,7 @@ input::placeholder {
   background-color: #fff;
 }
 .sidebar-wrapper .sidebar-nav .metismenu ul {
-  background-color: #fff;
+  /* background-color: #fff; */
   padding: 0;
 }
 .sidebar-wrapper .sidebar-nav .metismenu ul a {
@@ -589,8 +589,11 @@ footer.page-footer
   padding: 1.5rem;
 }
 .main-wrapper .main-content .breadcrumb-title {
-  font-size: 20px;
-  /* border-right: 1.5px solid #aaa4a4; */
+  font-size: 25px;
+  /* border-right: 1.5px solid #3a2020; */
+  color: #264d3f;
+  font-weight:1rem;
+  font-weight:600;
 }
 .main-wrapper .main-content .page-breadcrumb .breadcrumb li.breadcrumb-item {
   font-size: 16px;
@@ -1647,3 +1650,7 @@ form select.error:focus {
     background: repeating-linear-gradient(100deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 26px);
     transform: skewY(-6deg);
 }
+
+.panel { background: #fff; border: 1px solid #e3e8ef; border-radius: 8px; }
+        .panel-body { padding: 1.1rem; }
+        .panel-head { padding: .8rem 1.1rem; border-bottom: 1px solid #e3e8ef; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
