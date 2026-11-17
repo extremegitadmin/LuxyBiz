@@ -30,8 +30,11 @@ class PaymentController extends Controller
 
     public function show(Payment $payment)
     {
-        $payment->load(['booking.user:id,name,email', 'recorder:id,name']);
+        $payment->load(['booking.user:id,name,email', 'recorder:id,name', 'events']);
         $booking = $payment->booking;
+        $refunds = $booking
+            ? $booking->payments()->where('type', 'refund')->orderByDesc('created_at')->orderByDesc('id')->get()
+            : collect();
 
         return view('admin.payments.show', [
             'payment' => $payment,
@@ -41,6 +44,8 @@ class PaymentController extends Controller
                 ? $booking->payments()->where('id', '!=', $payment->id)->orderByDesc('created_at')->orderByDesc('id')->get()
                 : collect(),
             'net' => $booking?->paidAmount(),
+            'refunds' => $refunds,
+            'refundedTotal' => round((float) $refunds->where('status', 'succeeded')->sum('amount'), 2),
         ]);
     }
 
@@ -94,12 +99,13 @@ class PaymentController extends Controller
             ->when($f['from'] ?? null, fn (Builder $q, $v) => $q->whereDate('payments.created_at', '>=', $v))
             ->when($f['to'] ?? null, fn (Builder $q, $v) => $q->whereDate('payments.created_at', '<=', $v))
             ->when($f['q'] ?? null, function (Builder $q, $term) {
+                // "escape ?" makes % and _ literal on MySQL and SQLite alike
                 $like = '%' . addcslashes($term, '%_\\') . '%';
                 $q->where(function (Builder $w) use ($like) {
-                    $w->where('payments.gateway_reference', 'like', $like)
+                    $w->whereRaw('payments.gateway_reference like ? escape ?', [$like, '\\'])
                         ->orWhereHas('booking', function (Builder $b) use ($like) {
-                            $b->where('reference', 'like', $like)
-                                ->orWhereHas('user', fn (Builder $u) => $u->where('name', 'like', $like)->orWhere('email', 'like', $like));
+                            $b->whereRaw('reference like ? escape ?', [$like, '\\'])
+                                ->orWhereHas('user', fn (Builder $u) => $u->whereRaw('name like ? escape ?', [$like, '\\'])->orWhereRaw('email like ? escape ?', [$like, '\\']));
                         });
                 });
             });

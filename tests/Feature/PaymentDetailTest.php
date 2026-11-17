@@ -89,11 +89,36 @@ class PaymentDetailTest extends TestCase
             ->assertDontSee(route('admin.payments.show', $other), false);
     }
 
-    public function test_card_brand_and_last4_are_shown_but_never_a_full_number(): void
+    public function test_no_card_data_is_shown_even_if_it_exists_in_the_row(): void
     {
         $p = Payment::factory()->create(['booking_id' => $this->booking()->id, 'card_brand' => 'visa', 'card_last4' => '4242']);
 
-        $this->get(route('admin.payments.show', $p))->assertOk()->assertSee('Visa ending 4242');
+        $this->get(route('admin.payments.show', $p))
+            ->assertOk()->assertDontSee('4242')->assertDontSee('Visa');
+    }
+
+    public function test_refund_history_lists_refunds_with_a_total_of_succeeded_ones(): void
+    {
+        $b = $this->booking(['total_amount' => 1000]);
+        $charge = Payment::factory()->create(['booking_id' => $b->id, 'amount' => 1000]);
+        $r1 = Payment::factory()->refund()->create(['booking_id' => $b->id, 'amount' => 300, 'note' => 'Partial goodwill refund']);
+        Payment::factory()->refund()->create(['booking_id' => $b->id, 'amount' => 100]);
+        Payment::factory()->refund()->create(['booking_id' => $b->id, 'amount' => 999, 'status' => 'failed']);
+
+        $this->get(route('admin.payments.show', $charge))
+            ->assertOk()
+            ->assertSee('Refund history')
+            ->assertSee(route('admin.payments.show', $r1), false)
+            ->assertSee('Partial goodwill refund')
+            ->assertSee('USD 400.00')            // 300 + 100, the failed 999 is not counted
+            ->assertDontSee('USD 1,399.00');
+    }
+
+    public function test_refund_history_says_so_when_there_are_none(): void
+    {
+        $p = Payment::factory()->create(['booking_id' => $this->booking()->id]);
+
+        $this->get(route('admin.payments.show', $p))->assertSee('No refunds on this booking.');
     }
 
     public function test_notes_are_escaped(): void

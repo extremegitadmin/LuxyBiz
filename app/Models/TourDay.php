@@ -17,6 +17,13 @@ class TourDay extends Model
         'stay',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'day_number' => 'integer',
+        ];
+    }
+
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class);

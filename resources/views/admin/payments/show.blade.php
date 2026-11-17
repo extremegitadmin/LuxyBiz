@@ -71,12 +71,6 @@
                                 <div class="fw-semibold text-break">{{ $payment->gateway_session_id }}</div>
                             </div>
                         @endif
-                        @if ($payment->card_brand || $payment->card_last4)
-                            <div class="col-6">
-                                <div class="text-secondary small">Card</div>
-                                <div class="fw-semibold">{{ ucfirst((string) $payment->card_brand) }} {{ $payment->card_last4 ? 'ending ' . $payment->card_last4 : '' }}</div>
-                            </div>
-                        @endif
                         <div class="col-6">
                             <div class="text-secondary small">Recorded</div>
                             <div class="fw-semibold">{{ $payment->created_at?->format('d M Y, H:i') }}</div>
@@ -112,7 +106,28 @@
                             </li>
                         @endforeach
                     </ul>
-                    <div class="form-text mt-3">Gateway webhook events will be listed in the webhook events log once an online gateway is connected.</div>
+                </div>
+            </div>
+
+            {{-- Gateway events for this payment --}}
+            <div class="card rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <h5 class="mb-0 fw-semibold">Gateway events</h5>
+                        <a href="{{ route('admin.payments.events') }}" class="ms-auto small">All events</a>
+                    </div>
+                    @forelse ($payment->events as $e)
+                        <div class="py-2 {{ $loop->last ? '' : 'border-bottom' }}">
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                <code>{{ $e->event }}</code>
+                                @include('admin.payments.events._badge', ['value' => $e->outcome])
+                                <span class="small text-secondary ms-auto">{{ $e->created_at?->format('d M Y, H:i') }}</span>
+                            </div>
+                            @if ($e->note)<div class="small text-secondary mt-1">{{ $e->note }}</div>@endif
+                        </div>
+                    @empty
+                        <div class="text-secondary">No gateway events yet. Offline payments never have any.</div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -129,6 +144,34 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Refund history --}}
+            <div class="card rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <h5 class="mb-0 fw-semibold">Refund history</h5>
+                        @if ($refunds->isNotEmpty())
+                            <span class="ms-auto small text-secondary">Refunded in total: <strong class="text-danger">{{ $booking->currency }} {{ number_format($refundedTotal, 2) }}</strong></span>
+                        @endif
+                    </div>
+                    @forelse ($refunds as $r)
+                        <div class="d-flex justify-content-between align-items-center py-2 {{ $loop->last ? '' : 'border-bottom' }}">
+                            <div>
+                                @if ($r->id === $payment->id)
+                                    <span class="fw-semibold">Refund #{{ $r->id }} (this page)</span>
+                                @else
+                                    <a href="{{ route('admin.payments.show', $r) }}">Refund #{{ $r->id }}</a>
+                                @endif
+                                <div class="small text-secondary">{{ $r->created_at?->format('d M Y, H:i') }} @include('admin.payments._badge', ['value' => $r->status])</div>
+                                @if ($r->note)<div class="small text-secondary">{{ $r->note }}</div>@endif
+                            </div>
+                            <strong class="text-danger">-{{ $r->currency }} {{ number_format($r->amount, 2) }}</strong>
+                        </div>
+                    @empty
+                        <div class="text-secondary">No refunds on this booking.</div>
+                    @endforelse
+                </div>
+            </div>
 
             {{-- Other payments on this booking --}}
             <div class="card rounded-4">

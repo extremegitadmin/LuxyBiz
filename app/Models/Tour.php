@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +28,11 @@ class Tour extends Model
         return $this->belongsTo(Objective::class);
     }
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(TourCategory::class, 'tour_category_id');
+    }
+
     public function days(): HasMany
     {
         return $this->hasMany(TourDay::class)->orderBy('day_number');
@@ -44,15 +48,31 @@ class Tour extends Model
         return $this->hasMany(Booking::class);
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(TourImage::class)->orderBy('sort_order');
+    }
+
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
     }
 
+    /**
+     * Convert a newline-separated database field into a clean list.
+     */
     public function lines(string $field): array
     {
+        $allowed = ['highlights', 'inclusions', 'exclusions'];
+
+        if (! in_array($field, $allowed, true)) {
+            return [];
+        }
+
+        $lines = preg_split('/\R/u', (string) $this->{$field}) ?: [];
+
         return array_values(array_filter(
-            array_map('trim', preg_split('/\R+/', (string) $this->{$field}))
+            array_map('trim', $lines)
         ));
     }
 }
