@@ -14,6 +14,18 @@ Route::prefix('admin')->name('admin.')->middleware(AdminRole::class . ':admin')-
     Route::get('payments/events', [PaymentEventController::class, 'index'])->name('payments.events');   // above {payment}
     Route::get('payments/{payment}', [PaymentController::class, 'show'])
         ->name('payments.show')->whereNumber('payment');
+    // Gateway settings (M3). Holds payment keys: keep this to the highest admin role.
+    Route::get('settings/gateway', [GatewaySettingsController::class, 'edit'])->name('settings.gateway');
+    Route::put('settings/gateway', [GatewaySettingsController::class, 'update'])->name('settings.gateway.update');
 });
+
+
+Route::get('admin/payments', [PaymentController::class, 'index'])->name('admin.payments.index');
+    Route::get('admin/payments/events', [PaymentEventController::class, 'index'])->name('admin.payments.events');   // above {payment}
+    Route::get('admin/payments/{payment}', [PaymentController::class, 'show'])
+        ->name('admin.payments.show')->whereNumber('payment');
+    // Gateway settings (M3). Holds payment keys: keep this to the highest admin role.
+    Route::get('admin/settings/gateway', [GatewaySettingsController::class, 'edit'])->name('admin.settings.gateway');
+    Route::put('admin/settings/gateway', [GatewaySettingsController::class, 'update'])->name('admin.settings.gateway.update');
 
    
