@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PaymentEventController;
+use App\Http\Controllers\Admin\GatewaySettingsController;
 use App\Http\Middleware\AdminRole;
 use Illuminate\Support\Facades\Route;
 
