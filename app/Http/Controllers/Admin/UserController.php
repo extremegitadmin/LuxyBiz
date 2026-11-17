@@ -25,12 +25,12 @@ class UserController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('users.index', ['users' => $users, 'roles' => Role::orderBy('name')->get()]);
+        return view('admin.users.index', ['users' => $users, 'roles' => Role::orderBy('name')->get()]);
     }
 
     public function create()
     {
-        return view('users.form', [
+        return view('admin.users.form', [
             'member' => (new User)->forceFill(['is_active' => true]),
             'roles' => Role::with('permissions')->orderBy('name')->get(),
         ]);
@@ -58,14 +58,14 @@ class UserController extends Controller
             'email_verified_at' => now(),
         ])->save();
 
-        return redirect()->route('users.index')->with('success', 'User created. They can sign in on the same login page.');
+        return redirect()->route('admin.users.index')->with('success', 'User created. They can sign in on the same login page.');
     }
 
     public function edit(Request $request, User $user)
     {
         $this->authorizeTarget($request->user(), $user);
 
-        return view('users.form', ['member' => $user, 'roles' => Role::with('permissions')->orderBy('name')->get()]);
+        return view('admin.users.form', ['member' => $user, 'roles' => Role::with('permissions')->orderBy('name')->get()]);
     }
 
     public function update(Request $request, User $user)
@@ -105,7 +105,7 @@ class UserController extends Controller
             'is_active' => $active,
         ])->save();
 
-        return redirect()->route('users.index')->with('success', 'User saved.');
+        return redirect()->route('admin.users.index')->with('success', 'User saved.');
     }
 
     public function toggle(Request $request, User $user)
@@ -139,7 +139,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted.');
+        return redirect()->route('admin.users.index')->with('success', 'User deleted.');
     }
 
     /** Only a Super Admin can open or change a Super Admin account. */

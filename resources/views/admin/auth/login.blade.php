@@ -36,7 +36,7 @@
                 <span class="brand-text text-white">LuxyBiz<small>Tours &amp; Wellness</small></span>
             </div>
             <div>
-                <h2>Run every journey from one calm place.</h2>
+                <h3 class="text-white">Run every journey from one calm place.</h3>
                 <p>Bookings, departures, travelers and payments for your Kerala wellness and travel programmes.</p>
             </div>
             <div class="small" style="color:#6d9496">Staff access only</div>
@@ -45,16 +45,17 @@
             <div class="auth-box">
                 <h1 class="h3 page-title mb-1 text-black">Welcome back</h1>
                 <p class="text-secondary mb-4">Sign in to the LuxyBiz staff admin.</p>
-                <form method="POST" action="#" novalidate="">
-                    <input type="hidden" name="_token" value="4QUms35HHNPCYHxETZQHHF2XuVGci463JU9uAIDr" autocomplete="off">    
+                <form method="POST" action="{{ route('admin.login.submit') }}" novalidate="">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label text-black" for="email">Email</label>
-                        <input id="email" type="email" name="email" value="" class="form-control " autocomplete="username" autofocus="" required="">
+                        <input id="email" type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" autocomplete="username" autofocus required>
+                        @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-black d-flex justify-content-between" for="password">Password
                         <a class="small fw-normal" href="#">Forgot password?</a></label>
-                        <input id="password" type="password" name="password" class="form-control " autocomplete="current-password" required="">
+                        <input id="password" type="password" name="password" class="form-control" autocomplete="current-password" required>
                     </div>
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" name="remember" id="remember">

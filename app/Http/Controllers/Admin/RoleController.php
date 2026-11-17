@@ -13,7 +13,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        return view('roles.index', [
+        return view('admin.roles.index', [
             'roles' => Role::withCount(['users', 'permissions'])->orderBy('name')->get(),
             'total' => count(Permission::allSlugs()),
         ]);
@@ -21,7 +21,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        return view('roles.form', ['role' => new Role, 'held' => [], 'groups' => config('permissions.groups')]);
+        return view('admin.roles.form', ['role' => new Role, 'held' => [], 'groups' => config('permissions.groups')]);
     }
 
     public function store(Request $request)
@@ -38,14 +38,14 @@ class RoleController extends Controller
         $role->save();
         $role->syncPermissionSlugs($this->grantable($request->user(), $data['permissions'] ?? [], []));
 
-        return redirect()->route('roles.index')->with('success', "Role \"{$role->name}\" created. Now add users under it.");
+        return redirect()->route('admin.roles.index')->with('success', "Role \"{$role->name}\" created. Now add users under it.");
     }
 
     public function edit(Request $request, Role $role)
     {
         $this->guardOwnRole($request->user(), $role);
 
-        return view('roles.form', ['role' => $role, 'held' => $role->permissionSlugs(), 'groups' => config('permissions.groups')]);
+        return view('admin.roles.form', ['role' => $role, 'held' => $role->permissionSlugs(), 'groups' => config('permissions.groups')]);
     }
 
     public function update(Request $request, Role $role)
@@ -63,7 +63,7 @@ class RoleController extends Controller
         $role->update(['name' => $data['name'], 'description' => $data['description'] ?? null]);
         $role->syncPermissionSlugs($this->grantable($actor, $data['permissions'] ?? [], $role->permissionSlugs()));
 
-        return redirect()->route('roles.index')->with('success', 'Role saved. Changes apply immediately.');
+        return redirect()->route('admin.roles.index')->with('success', 'Role saved. Changes apply immediately.');
     }
 
     public function destroy(Role $role)
@@ -75,7 +75,7 @@ class RoleController extends Controller
 
         $role->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Role deleted.');
+        return redirect()->route('admin.roles.index')->with('success', 'Role deleted.');
     }
 
     /** You cannot widen the permissions of the role you hold yourself (the Super Admin can). */

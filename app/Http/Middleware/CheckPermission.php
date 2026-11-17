@@ -20,15 +20,15 @@ class CheckPermission
         $user = $request->user();
 
         if (! $user) {
-            return redirect()->guest(route('login'));
-        }
+            return redirect()->guest(route('admin.login'));
+        } 
 
         if (! $user->is_active) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect()->route('login')->withErrors(['email' => 'Your account is deactivated.']);
+            return redirect()->route('admin.login')->withErrors(['email' => 'Your account is deactivated.']);
         }
 
         if ($permissions && ! $user->hasPermission(...$permissions)) {
