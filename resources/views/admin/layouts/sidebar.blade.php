@@ -27,41 +27,7 @@
               </li>
             </ul>
           </li>
-          <li>
-            <a href="javascript:;" class="has-arrow">
-              <div class="parent-icon"><i class="material-icons-outlined">widgets</i>
-              </div>
-              <div class="menu-title">Widgets</div>
-            </a>
-            <ul>
-              <li><a href="widgets-data.html"><i class="material-icons-outlined">arrow_right</i>Data</a>
-              </li>
-              <li><a href="widgets-static.html"><i class="material-icons-outlined">arrow_right</i>Static</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a class="has-arrow" href="javascript:;">
-              <div class="parent-icon"><i class="material-icons-outlined">apps</i>
-              </div>
-              <div class="menu-title">Apps</div>
-            </a>
-            <ul>
-              <li><a href="app-emailbox.html"><i class="material-icons-outlined">arrow_right</i>Email Box</a>
-              </li>
-              <li><a href="app-emailread.html"><i class="material-icons-outlined">arrow_right</i>Email Read</a>
-              </li>
-              <li><a href="app-chat-box.html"><i class="material-icons-outlined">arrow_right</i>Chat</a>
-              </li>
-              <li><a href="app-fullcalender.html"><i class="material-icons-outlined">arrow_right</i>Calendar</a>
-              </li>
-              <li><a href="app-to-do.html"><i class="material-icons-outlined">arrow_right</i>To do</a>
-              </li>
-              <li><a href="app-invoice.html"><i class="material-icons-outlined">arrow_right</i>Invoice</a>
-              </li>
-            </ul>
-          </li>
-
+       
           <li class="menu-label">CATALOGUE</li>
           <li>
     <a href="{{ route('admin.tour-categories.index') }}">
@@ -87,7 +53,7 @@
               <div class="menu-title">Bookings</div>
             </a>
           </li>
-          <li class="{{ request()->routeIs('admin.payments.*') ? 'mm-active' : '' }}">
+          <li class="{{ request()->routeIs('admin.payments.index', 'admin.payments.show') ? 'mm-active' : '' }}">
     <a href="{{ route('admin.payments.index') }}">
         <div class="parent-icon">
             <i class="material-icons-outlined">payments</i>
@@ -95,7 +61,17 @@
         <div class="menu-title">Payments</div>
     </a>
 </li>
-          <li>
+
+<li class="{{ request()->routeIs('admin.payments.events') ? 'mm-active' : '' }}">
+    <a href="{{ route('admin.payments.events') }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">webhook</i>
+        </div>
+        <div class="menu-title">Webhook events</div>
+    </a>
+</li>
+
+         <!-- <li>
             <a href="javascript:;" class="has-arrow">
               <div class="parent-icon"><i class="material-icons-outlined">shopping_bag</i>
               </div>
@@ -178,8 +154,8 @@
                   Icons</a>
               </li>
             </ul>
-          </li>
-          <li class="menu-label">Forms & Tables</li>
+          </li>-->
+       <!--   <li class="menu-label">Forms & Tables</li>
           <li>
             <a class="has-arrow" href="javascript:;">
               <div class="parent-icon"><i class="material-icons-outlined">toc</i>
@@ -369,7 +345,7 @@
               </div>
               <div class="menu-title">Support</div>
             </a>
-          </li>
+          </li>-->
          </ul>
         <!--end navigation-->
     </div>

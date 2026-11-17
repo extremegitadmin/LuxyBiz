@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +19,7 @@ class TourDeparture extends Model
     {
         return [
             'departs_on' => 'date',
+            'capacity' => 'integer',
             'price_override' => 'decimal:2',
         ];
     }
@@ -34,11 +34,15 @@ class TourDeparture extends Model
         return $this->hasMany(Booking::class);
     }
 
+    public function scopeOpen($query)
+    {
+        return $query->where('status', 'open');
+    }
+
     public function scopeWithSeatsBooked($query)
     {
         return $query->withSum([
-            'bookings as seats_booked' => fn ($q) =>
-                $q->where('status', '!=', 'cancelled')
+            'bookings as seats_booked' => fn ($q) => $q->where('status', '!=', 'cancelled'),
         ], 'travelers_count');
     }
 }

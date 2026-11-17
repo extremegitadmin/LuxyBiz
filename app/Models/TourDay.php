@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class TourDay extends Model
 {
     protected $fillable = [
+        'tour_id',
         'day_number',
         'title',
         'description',
@@ -15,6 +16,13 @@ class TourDay extends Model
         'meals',
         'stay',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'day_number' => 'integer',
+        ];
+    }
 
     public function tour(): BelongsTo
     {
