@@ -27,6 +27,13 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div class="alert alert-danger border-0 alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     {{-- Summary --}}
     <div class="card rounded-4">
         <div class="card-body p-4">
@@ -74,6 +81,8 @@
             @endif
         </div>
     </div>
+
+    @include('admin.bookings._request_payment', ['balance' => $balance])
 
     {{-- Travelers --}}
     <div class="card rounded-4">

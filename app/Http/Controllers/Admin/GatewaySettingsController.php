@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentSetting;
+use App\Services\Payments\Gateway;
+use App\Services\Payments\GatewayException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -20,6 +22,8 @@ class GatewaySettingsController extends Controller
             'publicKey' => PaymentSetting::get('gateway_public_key'),
             'hasSecret' => PaymentSetting::has('gateway_secret_key'),
             'hasWebhook' => PaymentSetting::has('gateway_webhook_secret'),
+            'hasAdapter' => Gateway::hasAdapter((string) PaymentSetting::get('gateway_provider', 'manual')),
+            'canTest' => Gateway::isOnline(),
             'webhookUrl' => PaymentSetting::webhookUrl(),
             'updatedAt' => PaymentSetting::query()->where('key', 'like', 'gateway_%')->max('updated_at'),
         ]);
@@ -120,6 +124,18 @@ class GatewaySettingsController extends Controller
         return redirect()->route('admin.settings.gateway')->with('success', $isManual && ($hasSecret || $hasWebhook)
             ? 'Gateway settings saved. Saved keys were removed because Manual needs none.'
             : 'Gateway settings saved.');
+    }
+
+    /** Checks the SAVED keys against the provider. Shows a message only, never a key. */
+    public function test()
+    {
+        try {
+            $message = Gateway::resolve()->checkConnection();
+        } catch (GatewayException $e) {
+            return redirect()->route('admin.settings.gateway')->withErrors(['test' => $e->getMessage()]);
+        }
+
+        return redirect()->route('admin.settings.gateway')->with('success', $message);
     }
 
     /** Anakha's audit helper may not be merged yet, so call it only when it exists. */

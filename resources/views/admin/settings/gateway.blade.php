@@ -125,8 +125,17 @@
                         <span class="badge bg-{{ $hasSecret ? 'success' : 'secondary' }}">{{ $hasSecret ? 'Saved' : 'Not saved' }}</span></div>
                     <div class="d-flex justify-content-between mb-2"><span class="text-secondary">Webhook secret</span>
                         <span class="badge bg-{{ $hasWebhook ? 'success' : 'secondary' }}">{{ $hasWebhook ? 'Saved' : 'Not saved' }}</span></div>
+                    <div class="d-flex justify-content-between mb-2"><span class="text-secondary">Connection built</span>
+                        <span class="badge bg-{{ $hasAdapter ? 'success' : 'warning' }}">{{ $hasAdapter ? 'Yes' : 'Not yet' }}</span></div>
                     <div class="d-flex justify-content-between"><span class="text-secondary">Keys ready</span>
                         <span class="badge bg-{{ $ready ? 'success' : 'warning' }}">{{ $ready ? 'Yes' : 'No' }}</span></div>
+                    @if ($canTest)
+                        <form method="POST" action="{{ route('admin.settings.gateway.test') }}" class="mt-3">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-primary btn-sm w-100">Test saved keys</button>
+                            <div class="form-text">Asks the provider if the saved secret key works. Nothing is charged.</div>
+                        </form>
+                    @endif
                     @if ($updatedAt)
                         <div class="form-text mt-3">Last changed {{ \Illuminate\Support\Carbon::parse($updatedAt)->format('d M Y, H:i') }}</div>
                     @endif

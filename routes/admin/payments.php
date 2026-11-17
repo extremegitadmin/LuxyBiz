@@ -18,7 +18,18 @@ Route::prefix('admin')->name('admin.')->middleware(AdminRole::class . ':admin')-
     // Gateway settings (M3). Holds payment keys: keep this to the highest admin role.
     Route::get('settings/gateway', [GatewaySettingsController::class, 'edit'])->name('settings.gateway');
     Route::put('settings/gateway', [GatewaySettingsController::class, 'update'])->name('settings.gateway.update');
+    Route::post('settings/gateway/test', [GatewaySettingsController::class, 'test'])->name('settings.gateway.test');
+
+    // "Request online payment" on a booking
+    Route::post('bookings/{booking}/payment-link', [BookingPaymentLinkController::class, 'store'])
+        ->name('bookings.payment-link')->whereNumber('booking');
 });
+// Public pages the customer lands on after the hosted payment page. No login, no booking data.
+Route::get('payment/return', [PaymentReturnController::class, 'success'])->name('payment.return');
+Route::get('payment/cancelled', [PaymentReturnController::class, 'cancelled'])->name('payment.cancelled');
+
+
+//remove below
 
 
 Route::get('admin/payments', [PaymentController::class, 'index'])->name('admin.payments.index');
