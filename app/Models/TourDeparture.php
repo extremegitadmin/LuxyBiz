@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TourDeparture extends Model
 {
@@ -29,8 +29,20 @@ class TourDeparture extends Model
         return $this->belongsTo(Tour::class);
     }
 
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     public function scopeOpen($query)
     {
         return $query->where('status', 'open');
+    }
+
+    public function scopeWithSeatsBooked($query)
+    {
+        return $query->withSum([
+            'bookings as seats_booked' => fn ($q) => $q->where('status', '!=', 'cancelled'),
+        ], 'travelers_count');
     }
 }
