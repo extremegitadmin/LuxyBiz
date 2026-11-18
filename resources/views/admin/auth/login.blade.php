@@ -45,6 +45,9 @@
             <div class="auth-box">
                 <h1 class="h3 page-title mb-1 text-black">Welcome back</h1>
                 <p class="text-secondary mb-4">Sign in to the LuxyBiz staff admin.</p>
+                @if (session('status'))
+                    <div class="alert alert-success">{{ session('status') }}</div>
+                @endif
                 <form method="POST" action="{{ route('admin.login.submit') }}" novalidate="">
                     @csrf
                     <div class="mb-3">
@@ -54,7 +57,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-black d-flex justify-content-between" for="password">Password
-                        <a class="small fw-normal" href="#">Forgot password?</a></label>
+                        <a class="small fw-normal" href="{{ route('admin.password.request') }}">Forgot password?</a></label>
                         <input id="password" type="password" name="password" class="form-control" autocomplete="current-password" required>
                     </div>
                     <div class="form-check mb-3">

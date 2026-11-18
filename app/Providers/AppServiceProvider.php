@@ -8,6 +8,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Auth\Notifications\ResetPassword;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +34,13 @@ class AppServiceProvider extends ServiceProvider
         foreach (Permission::allSlugs() as $slug) {
             Gate::define($slug, fn (User $user) => $user->hasPermission($slug));
         }
+
+        ResetPassword::createUrlUsing(function ($user, string $token) {
+            return route('admin.password.reset', [
+                'token' => $token,
+                'email' => $user->getEmailForPasswordReset(),
+            ]);
+        });
+        
     }
 }

@@ -194,7 +194,9 @@
 }
 [data-bs-theme=blue-theme] body .form-select:disabled,
 [data-bs-theme=blue-theme] body .form-control:disabled {
-  background-color: var(--bs-disabled-bg);
+  background-color: #a2b0c5;
+    color:#000;
+    cursor: no-drop;
 }
 [data-bs-theme=blue-theme] body .main-wrapper .main-content .sharelink {
   color: #dee2e6;

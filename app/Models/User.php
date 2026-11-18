@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\AdminResetPassword;
 
 class User extends Authenticatable
 {
@@ -56,5 +57,10 @@ class User extends Authenticatable
     public function roleLabel(): string
     {
         return $this->is_super ? 'Super Admin' : ($this->role?->name ?? 'No role');
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new AdminResetPassword($token));
     }
 }
