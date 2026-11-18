@@ -22,6 +22,20 @@ return [
             'admin.roles.edit' => 'Edit roles and their permissions',
             'admin.roles.delete' => 'Delete roles',
         ],
+        'Bookings' => [
+            'admin.bookings.view' => 'View bookings (list and detail)',
+            'admin.bookings.edit' => 'Edit bookings',
+            'admin.bookings.export' => 'Export bookings to CSV',
+        ],
+        'Payments' => [
+            'admin.payments.view' => 'View payments (list and detail)',
+            'admin.payments.events.view' => 'View payment webhook events',
+            'admin.payments.link.create' => 'Create online payment links for a booking',
+        ],
+        'Payment settings' => [
+            'admin.settings.gateway.view' => 'View payment gateway settings',
+            'admin.settings.gateway.edit' => 'Change payment gateway settings (keys, routing, test connection)',
+        ],
         // 'Products (sample module)' => [
         //     'products.view' => 'View products',
         //     'products.create' => 'Add products',

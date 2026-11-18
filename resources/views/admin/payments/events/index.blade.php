@@ -12,7 +12,9 @@
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ route('admin.payments.index') }}" class="btn btn-outline-secondary px-4">Back to payments</a>
+            @can('admin.payments.view')
+                <a href="{{ route('admin.payments.index') }}" class="btn btn-outline-secondary px-4">Back to payments</a>
+            @endcan
         </div>
     </div>
     <!--end breadcrumb-->
@@ -105,7 +107,7 @@
                                 <td class="small text-secondary text-break">{{ $e->gateway_reference ?: '-' }}</td>
                                 <td>
                                     @if ($e->payment)
-                                        <a href="{{ route('admin.payments.show', $e->payment) }}">#{{ $e->payment->id }}</a>
+                                        @can('admin.payments.view')<a href="{{ route('admin.payments.show', $e->payment) }}">#{{ $e->payment->id }}</a>@else #{{ $e->payment->id }} @endcan
                                         @if ($e->payment->booking)<div class="small text-secondary">{{ $e->payment->booking->reference }}</div>@endif
                                     @else
                                         <span class="text-secondary">Not matched</span>

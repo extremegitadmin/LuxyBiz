@@ -15,14 +15,19 @@ class ManualGateway implements PaymentGateway
         return false;
     }
 
+    public function linkHours(): int
+    {
+        return 0;
+    }
+
     public function assertReady(): void
     {
-        throw new GatewayException('No online payment provider is set up. Choose one under Settings, Payment gateway.');
+        throw new GatewayException('No online payment provider is set up. Choose one under Settings, Payment gateways.');
     }
 
     public function createPaymentSession(PaymentSessionRequest $request): PaymentSession
     {
-        throw new GatewayException('No online payment provider is set up. Choose one under Settings, Payment gateway.');
+        throw new GatewayException('No online payment provider is set up. Choose one under Settings, Payment gateways.');
     }
 
     public function checkConnection(): string

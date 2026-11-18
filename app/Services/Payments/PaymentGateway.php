@@ -14,6 +14,9 @@ interface PaymentGateway
     /** Can this provider create a hosted payment page for a customer? */
     public function supportsPaymentSessions(): bool;
 
+    /** How many hours a payment link stays usable at this provider. */
+    public function linkHours(): int;
+
     /**
      * Check the saved settings BEFORE anything is created: keys present and matching the mode.
      * Makes no request to the provider.

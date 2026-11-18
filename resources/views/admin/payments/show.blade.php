@@ -114,7 +114,9 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <h5 class="mb-0 fw-semibold">Gateway events</h5>
-                        <a href="{{ route('admin.payments.events') }}" class="ms-auto small">All events</a>
+                        @can('admin.payments.events.view')
+                            <a href="{{ route('admin.payments.events') }}" class="ms-auto small">All events</a>
+                        @endcan
                     </div>
                     @forelse ($payment->events as $e)
                         <div class="py-2 {{ $loop->last ? '' : 'border-bottom' }}">

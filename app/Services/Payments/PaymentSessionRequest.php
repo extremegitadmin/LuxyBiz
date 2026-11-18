@@ -16,6 +16,7 @@ final class PaymentSessionRequest
         public readonly string $successUrl,
         public readonly string $cancelUrl,
         public readonly string $idempotencyKey,
+        public readonly ?string $customerName = null,
     ) {
     }
 }

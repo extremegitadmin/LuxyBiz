@@ -15,7 +15,9 @@
         </div>
         <div class="ms-auto d-flex gap-2">
             <a href="{{ route('admin.bookings.index') }}" class="btn btn-outline-secondary px-4">Back to list</a>
-            <a href="{{ route('admin.bookings.edit', $booking) }}" class="btn btn-primary px-4">Edit booking</a>
+            @can('admin.bookings.edit')
+                <a href="{{ route('admin.bookings.edit', $booking) }}" class="btn btn-primary px-4">Edit booking</a>
+            @endcan
         </div>
     </div>
     <!--end breadcrumb-->
@@ -82,7 +84,9 @@
         </div>
     </div>
 
-    @include('admin.bookings._request_payment', ['balance' => $balance])
+    @can('admin.payments.link.create')
+        @include('admin.bookings._request_payment', ['balance' => $balance])
+    @endcan
 
     {{-- Travelers --}}
     <div class="card rounded-4">

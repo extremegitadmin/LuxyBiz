@@ -31,6 +31,12 @@ class StripeGateway implements PaymentGateway
         return true;
     }
 
+    /** Stripe Checkout pages last at most 24 hours; we use 23. */
+    public function linkHours(): int
+    {
+        return 23;
+    }
+
     public function assertReady(): void
     {
         $this->secretKey();
@@ -44,7 +50,7 @@ class StripeGateway implements PaymentGateway
             'success_url' => $r->successUrl,
             'cancel_url' => $r->cancelUrl,
             'billing_address_collection' => 'required',   // customer name and address are needed for export payments
-            'expires_at' => now()->addHours(23)->timestamp,
+            'expires_at' => now()->addHours($this->linkHours())->timestamp,
             'line_items' => [[
                 'quantity' => 1,
                 'price_data' => [
@@ -126,7 +132,7 @@ class StripeGateway implements PaymentGateway
     {
         $secret = (string) ($this->config['secret_key'] ?? '');
         if ($secret === '') {
-            throw new GatewayException('Stripe is selected but no secret key is saved. Add it under Settings, Payment gateway.');
+            throw new GatewayException('Stripe is selected but no secret key is saved. Add it under Settings, Payment gateways.');
         }
         if (! preg_match('/^(sk|rk)_(test|live)_/', $secret, $m)) {
             throw new GatewayException('The saved secret key does not look like a Stripe secret key (it should start with sk_test_ or sk_live_).');
