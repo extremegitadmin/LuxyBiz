@@ -15,6 +15,16 @@
             </div>
         </div>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Please fix the following:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif 
     <!--end breadcrumb-->
     <div class="row">
 		<div class="col-12 col-xl-12">
@@ -22,37 +32,34 @@
                 <div class="card-body p-4">
                     <h5 class="mb-4">{{ $isEdit ? 'Edit role: ' . $role->name : 'Create role' }}</h5>
                     <form class="row g-3" method="POST" action="{{ $isEdit ? route('admin.roles.update', $role) : route('admin.roles.store') }}">
+                        @csrf
+                        @if ($isEdit) @method('PUT') @endif
                         <div class="col-md-5">
-                            <label for="input1" class="form-label">Role Name</label>
-                            <input type="text" class="form-control" maxlength="60" @error('name') is-invalid @enderror" value="{{ old('name', $role->name) }}" placeholder="For example: Accounts" required>
+                            <label for="input1" class="form-label">Role Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="name" id="name" maxlength="60" @error('name') is-invalid @enderror" value="{{ old('name', $role->name) }}" placeholder="For example: Accounts" required>
                         </div>
                         <div class="col-md-7">
-                            <label for="input2" class="form-label">Short Description</label>
+                            <label for="input2" class="form-label">Short description <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="description" name="description" maxlength="255" value="{{ old('description', $role->description) }}">
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="input12">
-                                <label class="form-check-label" for="input12">Check me out</label>
-                            </div>
                         </div>
                         <h5>Permissions</h5>
                         <p class="text-secondary small">Tick what people in this role may do. Anything not ticked is hidden from the menu and blocked on the server.</p>
-
-                        <div class="row g-3">
+                        <div class="row">
                             @foreach ($groups as $group => $items)
                                 <div class="col-lg-6">
                                     <div class="panel h-100">
                                         <div class="panel-head"><span>{{ $group }}</span>
-                                            <label class="form-check small fw-normal mb-0"><input type="checkbox" class="form-check-input js-group"> All</label></div>
+                                            <label class="form-check small fw-normal mb-0">
+                                            <input type="checkbox" class="form-check-input js-group"> All</label>
+                                        </div>
                                         <div class="panel-body">
                                             @foreach ($items as $slug => $label)
                                                 @php $may = $isSuper || in_array($slug, $mine, true); @endphp
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" id="p-{{ $slug }}" name="permissions[]" value="{{ $slug }}"
-                                                        @checked(in_array($slug, old('permissions', $held), true)) @disabled(! $may)>
+                                                    @checked(in_array($slug, old('permissions', $held), true)) @disabled(! $may)>
                                                     <label class="form-check-label" for="p-{{ $slug }}">{{ $label }}
-                                                        @unless ($may)<span class="d-block small text-secondary">You do not hold this permission, so you cannot grant it.</span>@endunless</label>
+                                                    @unless ($may)<span class="d-block small text-secondary">You do not hold this permission, so you cannot grant it.</span>@endunless</label>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -62,7 +69,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="d-md-flex d-grid align-items-center gap-3">
-                                <button type="button" class="btn btn-primary px-4">{{ $isEdit ? 'Save role' : 'Create role' }}</button>
+                                <button type="submit" class="btn btn-primary px-4">{{ $isEdit ? 'Save role' : 'Create role' }}</button>
                                 <button type="button" class="btn btn-secondary px-4">Reset</button>
                             </div>
                         </div>

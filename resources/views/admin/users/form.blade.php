@@ -19,23 +19,35 @@
         </div>
     </div>
     <!--end breadcrumb-->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Please fix the following:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif 
     <div class="row">
 		<div class="col-12 col-xl-12">
             <div class="card">
                 <div class="card-body p-4">
-                    <h5 class="mb-4">{{ $isEdit ? 'Edit user: ' . $role->name : 'Create user' }}</h5>
+                    <h5 class="mb-4">{{ $isEdit ? 'Edit user: ' . $member->name : 'Create user' }}</h5>
                     <form class="row g-3" method="POST" action="{{ $isEdit ? route('admin.users.update', $member) : route('admin.users.store') }}">
+                        @csrf
+                        @if ($isEdit) @method('PUT') @endif
                         <div class="col-md-3">
                             <label for="input1" class="form-label">Name</label>
-                            <input id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $member->name) }}" required>
+                            <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $member->name) }}" required maxlength="80">
                         </div>
                         <div class="col-md-3">
                             <label for="input2" class="form-label">Phone</label>
-                            <input id="phone" name="phone" class="form-control" value="{{ old('phone', $member->phone) }}" required>
+                            <input type="tel" name="phone" id="phone" class="form-control" value="{{ old('phone', $member->phone) }}" maxlength="15" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 15)" required>
                         </div>
                         <div class="col-md-3">
                             <label for="input2" class="form-label">Email (used to signin)</label>
-                            <input id="email" type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $member->email) }}" required>
+                            <input id="email" type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $member->email) }}" required maxlength="50">
                         </div>
                         <div class="col-md-3" id="role-box">
                             <label class="form-label" for="role_id">Role</label>
@@ -83,7 +95,7 @@
                         </div> 
                         <div class="col-md-12">
                             <div class="d-md-flex d-grid align-items-center gap-3">
-                                <button type="button" class="btn btn-primary px-4">{{ $isEdit ? 'Save user' : 'Create user' }}</button>
+                                <button type="submit" class="btn btn-primary px-4">{{ $isEdit ? 'Update user' : 'Create user' }}</button>
                                 <button type="button" class="btn btn-secondary px-4">Reset</button>
                             </div>
                         </div>
