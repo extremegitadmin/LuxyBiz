@@ -11,7 +11,18 @@
             </div>
         </div>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Please fix the following:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif 
     <form method="GET" class="panel panel-body mb-3 row g-2 align-items-end">
+        @csrf
         <div class="col-md-4"><label class="form-label small" for="q">Search</label>
             <input id="q" name="q" class="form-control" value="{{ request('q') }}" placeholder="Name, email or phone"></div>
         <div class="col-md-3"><label class="form-label small" for="role_id">Role</label>

@@ -11,6 +11,16 @@
         </div>
     </div>
     <!--end breadcrumb-->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Please fix the following:</strong>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif 
     <div class="row">
 		<div class="col-12 col-xl-12">
             <div class="card">
@@ -28,12 +38,11 @@
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                    <th>Role</th>
+                                    <th>Description</th>
+                                    <th>Permissions</th>
+                                    <th>Users</th>
+                                    <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,12 +51,12 @@
                                     <td class="fw-medium">{{ $role->name }}</td>
                                     <td class="text-secondary small">{{ $role->description }}</td>
                                     <td>{{ $role->permissions_count }} of {{ $total }}</td>
-                                    <td>@can('users.view')<a href="{{ route('users.index', ['role_id' => $role->id]) }}">{{ $role->users_count }}</a>@else{{ $role->users_count }}@endcan</td>
+                                    <td>@can('admin.users.view')<a href="{{ route('admin.users.index', ['role_id' => $role->id]) }}">{{ $role->users_count }}</a>@else{{ $role->users_count }}@endcan</td>
                                     <td class="text-end text-nowrap">
-                                        @can('users.create')<a class="btn btn-sm btn-outline-secondary" href="{{ route('users.create', ['role_id' => $role->id]) }}">Add user</a>@endcan
-                                        @can('roles.edit')<a class="btn btn-sm btn-outline-primary" href="{{ route('roles.edit', $role) }}">Edit</a>@endcan
+                                        @can('admin.users.create')<a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.users.create', ['role_id' => $role->id]) }}">Add user</a>@endcan
+                                        @can('admin.roles.edit')<a class="btn btn-sm btn-outline-primary" href="{{ route('admin.roles.edit', $role) }}">Edit</a>@endcan
                                         @can('roles.delete')
-                                            <form method="POST" action="{{ route('roles.destroy', $role) }}" class="d-inline" data-confirm="Delete the role {{ $role->name }}?">
+                                            <form method="POST" action="{{ route('admin.roles.destroy', $role) }}" class="d-inline" data-confirm="Delete the role {{ $role->name }}?">
                                                 @csrf @method('DELETE')
                                                 <button class="btn btn-sm btn-outline-danger" @disabled($role->users_count > 0) title="{{ $role->users_count > 0 ? 'Move its users to another role first' : 'Delete role' }}">Delete</button>
                                             </form>
