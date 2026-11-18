@@ -1841,7 +1841,7 @@ progress {
 	font-size: 15px;
 	font-weight: 400;
 	line-height: 1.5;
-	color: var(--bs-body-color);
+	color: #6c6969;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
@@ -2386,7 +2386,8 @@ textarea.form-control-lg {
 	color: #6c757d
 }
 .form-floating>.form-control:disabled~label::after, .form-floating>:disabled~label::after {
-	background-color: var(--bs-secondary-bg)
+	background-color: #565e64;
+	color:#000;
 }
 .input-group {
 	position: relative;

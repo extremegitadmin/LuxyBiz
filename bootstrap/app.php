@@ -17,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'permission' => CheckPermission::class,
         ]);
-        $middleware->redirectUsersTo('/dashboard');   // a signed-in person who opens /login goes to the dashboard
+        $middleware->redirectUsersTo('admin.dashboard');   // a signed-in person who opens /login goes to the dashboard
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
