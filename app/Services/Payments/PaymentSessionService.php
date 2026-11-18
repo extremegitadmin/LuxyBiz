@@ -23,9 +23,10 @@ class PaymentSessionService
      */
     public function start(Booking $booking, float $amount, ?User $staff = null, string $channel = 'csr_link'): array
     {
-        $gateway = Gateway::resolve();
+        // The booking's currency decides the provider (for example INR to Razorpay, USD to Stripe).
+        $gateway = Gateway::forCurrency($booking->currency);
         if (! $gateway->supportsPaymentSessions()) {
-            throw new GatewayException('No online payment provider is set up. Choose one under Settings, Payment gateway.');
+            throw new GatewayException('No online payment provider is set up for ' . $booking->currency . '. Choose and switch one on under Settings, Payment gateways.');
         }
         $gateway->assertReady();   // a settings problem must not leave a failed payment row behind
 
@@ -73,6 +74,7 @@ class PaymentSessionService
                 successUrl: route('payment.return'),
                 cancelUrl: route('payment.cancelled'),
                 idempotencyKey: 'payment-' . $payment->id,
+                customerName: $booking->user?->name,
             ));
         } catch (GatewayException $e) {
             $payment->update(['status' => 'failed', 'failure_code' => 'session_error']);
@@ -92,14 +94,22 @@ class PaymentSessionService
     }
 
     /**
-     * Payment links created in the last 23 hours that nobody has paid or cancelled yet.
+     * Payment links that are still usable (each provider has its own lifetime) and that nobody has paid or cancelled yet.
      * Two paid links for the same balance would overpay, so the booking page warns about these.
      *
-     * @return \Illuminate\Database\Eloquent\Collection<int, Payment>
+     * @return \Illuminate\Support\Collection<int, Payment>
      */
     public static function openLinks(Booking $booking)
     {
         return Payment::query()->where('booking_id', $booking->id)->where('type', 'charge')->where('status', 'pending')
-            ->whereNotNull('gateway_session_id')->where('created_at', '>=', now()->subHours(23))->get();
+            ->whereNotNull('gateway_session_id')->get()
+            ->filter(fn (Payment $p) => $p->created_at >= now()->subHours(max(1, self::linkHours((string) $p->gateway))))
+            ->values();
+    }
+
+    /** How long a link made through this provider stays usable. */
+    public static function linkHours(string $provider): int
+    {
+        return Gateway::hasAdapter($provider) ? Gateway::forProvider($provider)->linkHours() : 23;
     }
 }

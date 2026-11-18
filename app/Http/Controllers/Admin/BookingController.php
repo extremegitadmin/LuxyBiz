@@ -242,13 +242,12 @@ class BookingController extends Controller
     }
 
     /**
-     * Writes to Anakha's audit log. Until Anakha's App\Support\Audit helper is merged to develop
-     * this does nothing, so the screen keeps working. Once it is merged, entries appear automatically.
+     * Writes to the team's audit log (App\Support\Audit, signature: action, description, properties).
+     * SafeAudit never lets a problem with the audit log break the booking screen.
      */
     private function audit(string $action, ?Model $subject, array $meta): void
     {
-        if (class_exists(\App\Support\Audit::class)) {
-            \App\Support\Audit::log($action, $subject, $meta);
-        }
+        $label = $subject instanceof Booking ? 'Booking ' . $subject->reference : ($subject ? class_basename($subject) . ' #' . $subject->getKey() : $action);
+        \App\Support\SafeAudit::log($action, $label, $meta + ($subject ? ['subject_id' => $subject->getKey(), 'subject_type' => class_basename($subject)] : []));
     }
 }

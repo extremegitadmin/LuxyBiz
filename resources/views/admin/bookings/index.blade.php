@@ -12,7 +12,9 @@
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ route('admin.bookings.export', request()->query()) }}" class="btn btn-outline-primary px-4">Export CSV</a>
+            @can('admin.bookings.export')
+                <a href="{{ route('admin.bookings.export', request()->query()) }}" class="btn btn-outline-primary px-4">Export CSV</a>
+            @endcan
         </div>
     </div>
     <!--end breadcrumb-->
@@ -124,7 +126,9 @@
                                 <td class="text-nowrap">{{ $b->created_at?->format('d M Y') }}</td>
                                 <td class="text-end text-nowrap">
                                     <a href="{{ route('admin.bookings.show', $b) }}" class="btn btn-sm btn-outline-secondary">View</a>
-                                    <a href="{{ route('admin.bookings.edit', $b) }}" class="btn btn-sm btn-primary">Edit</a>
+                                    @can('admin.bookings.edit')
+                                        <a href="{{ route('admin.bookings.edit', $b) }}" class="btn btn-sm btn-primary">Edit</a>
+                                    @endcan
                                 </td>
                             </tr>
                         @empty

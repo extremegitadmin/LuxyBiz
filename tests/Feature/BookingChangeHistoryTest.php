@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Http\Middleware\AdminRole;
+use Tests\Concerns\SignsInAsStaff;
 use App\Models\Booking;
 use App\Models\BookingChange;
 use App\Models\BookingTraveler;
@@ -16,11 +16,12 @@ use Tests\TestCase;
 class BookingChangeHistoryTest extends TestCase
 {
     use RefreshDatabase;
+    use SignsInAsStaff;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withoutMiddleware(AdminRole::class);
+        $this->signInAsSuperAdmin();
     }
 
     private function booking(int $travelers = 2): Booking
@@ -80,7 +81,7 @@ class BookingChangeHistoryTest extends TestCase
         $booking = $this->booking(1);
         $payload = $this->payload($booking);
 
-        $this->put(route('admin.bookings.update', $booking), $payload);          // first save changes some values
+        $r = $this->put(route("admin.bookings.update", $booking), $payload); fwrite(STDERR, "STATUS ".$r->getStatusCode()." ".json_encode(session("errors")?->all())."\n");
         $this->assertSame(1, BookingChange::count());
 
         $this->put(route('admin.bookings.update', $booking->fresh()), $payload)   // identical save

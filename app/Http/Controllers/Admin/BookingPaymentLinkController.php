@@ -24,17 +24,17 @@ class BookingPaymentLinkController extends Controller
         }
 
         // The audit entry never contains the link itself.
-        if (class_exists(\App\Support\Audit::class)) {
-            \App\Support\Audit::log('payment.session_created', $booking, [
-                'payment_id' => $result['payment']->id,
-                'amount' => (float) $result['payment']->amount,
-                'currency' => $booking->currency,
-                'gateway' => $result['payment']->gateway,
-            ]);
-        }
+        \App\Support\SafeAudit::log('payment.session_created', 'Payment link for booking ' . $booking->reference, [
+            'booking_id' => $booking->id,
+            'payment_id' => $result['payment']->id,
+            'amount' => (float) $result['payment']->amount,
+            'currency' => $booking->currency,
+            'gateway' => $result['payment']->gateway,
+        ]);
 
         return redirect()->route('admin.bookings.show', $booking)
             ->with('success', 'Payment link created. The payment stays pending until the provider confirms it.')
-            ->with('payment_link', $result['url']);
+            ->with('payment_link', $result['url'])
+            ->with('payment_link_hours', \App\Services\Payments\PaymentSessionService::linkHours((string) $result['payment']->gateway));
     }
 }
