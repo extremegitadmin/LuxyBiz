@@ -92,7 +92,7 @@
                             @endphp
                             <tr>
                                 <td class="fw-semibold text-nowrap">
-                                    {{ $r->reference }}
+                                    <a href="{{ route('admin.cancellations.show', $r) }}">{{ $r->reference }}</a>
                                     @if ($r->source === 'customer')<div class="small text-secondary fw-normal">by customer</div>@endif
                                 </td>
                                 <td class="text-nowrap">
