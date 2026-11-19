@@ -82,6 +82,31 @@
         </a>
       </li>
       @endcan
+      @can('admin.settings.cancellation.view')
+      <li class="{{ request()->routeIs('admin.settings.cancellation*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.settings.cancellation') }}">
+          <div class="parent-icon">
+              <i class="material-icons-outlined">event_busy</i>
+          </div>
+          <div class="menu-title">Cancellation rules</div>
+        </a>
+      </li>
+      @endcan
+      @can('admin.cancellations.view')
+      <li class="{{ request()->routeIs('admin.cancellations*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.cancellations.index') }}">
+          <div class="parent-icon">
+              <i class="material-icons-outlined">cancel</i>
+          </div>
+          <div class="menu-title">
+            Cancellations
+            @if (($pendingCancellations = \App\Models\CancellationRequest::pendingCount()) > 0)
+              <span class="badge bg-warning text-dark ms-1">{{ $pendingCancellations }}</span>
+            @endif
+          </div>
+        </a>
+      </li>
+      @endcan
       <li class="menu-label">ROLES & PERMISSIONS</li>
       
       <li @if($url == "roles") class="active mm-active" @endif>
