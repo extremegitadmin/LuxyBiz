@@ -36,6 +36,14 @@ return [
             'admin.settings.gateway.view' => 'View payment gateway settings',
             'admin.settings.gateway.edit' => 'Change payment gateway settings (keys, routing, test connection)',
         ],
+        'Cancellation settings' => [
+            'admin.settings.cancellation.view' => 'View cancellation rules',
+            'admin.settings.cancellation.edit' => 'Change cancellation rules (refund percentages, credit, fees)',
+        ],
+        'Cancellations' => [
+            'admin.cancellations.view' => 'View cancellation requests',
+        ],
+
         // 'Products (sample module)' => [
         //     'products.view' => 'View products',
         //     'products.create' => 'Add products',

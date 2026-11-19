@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingPaymentLinkController;
+use App\Http\Controllers\Admin\CancellationSettingsController;
 use App\Http\Controllers\Admin\GatewaySettingsController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PaymentEventController;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 | Asha's payment routes (Day 7: list, 8: detail, 9: webhook events log, 10: gateway settings,
-| 11: payment links and return pages, 12: webhook receiver).
+| 11: payment links and return pages, 12: webhook receiver, 14: cancellation rules settings).
 | Loaded from routes/web.php with: require __DIR__ . '/admin/payments.php';
 */
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission'])->group(function () {
@@ -33,6 +34,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission'])->grou
     Route::post('settings/gateway/{provider}/test', [GatewaySettingsController::class, 'test'])
         ->middleware('permission:admin.settings.gateway.edit')
         ->name('settings.gateway.test')->whereIn('provider', ['razorpay', 'stripe']);
+
+    // Cancellation rules (M2, Day 14). The refund calculation (Day 15) reads these.
+    Route::get('settings/cancellation', [CancellationSettingsController::class, 'edit'])
+        ->middleware('permission:admin.settings.cancellation.view')->name('settings.cancellation');
+    Route::put('settings/cancellation', [CancellationSettingsController::class, 'update'])
+        ->middleware('permission:admin.settings.cancellation.edit')->name('settings.cancellation.update');
 
     // "Request online payment" on a booking
     Route::post('bookings/{booking}/payment-link', [BookingPaymentLinkController::class, 'store'])
