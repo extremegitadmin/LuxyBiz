@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CancellationRequest;
+use App\Services\Cancellations\RefundCalculator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-/** Cancellation requests list (F1, Day 16). */
+/** Cancellation requests: list (F1, Day 16) and detail (F2, Day 17). */
 class CancellationController extends Controller
 {
     public function index(Request $request)
@@ -51,6 +52,29 @@ class CancellationController extends Controller
             'requests' => $requests,
             'filters' => $f,
             'counts' => $counts,
+        ]);
+    }
+
+    /** One request: who, what was asked, the saved refund calculation, and the booking's money. */
+    public function show(CancellationRequest $cancellation, RefundCalculator $calculator)
+    {
+        $cancellation->load(['booking.user', 'booking.leadTraveler', 'booking.tour', 'booking.departure', 'booking.travelers', 'requester', 'decider']);
+        $booking = $cancellation->booking;
+
+        // While the request is still open, check whether today's rules or payments would now give another amount.
+        // A finished request is history: it keeps the amount it was decided with and is not compared.
+        $current = null;
+        if ($booking && in_array($cancellation->status, CancellationRequest::OPEN, true)) {
+            $current = $calculator->calculate($booking, $cancellation->requested_on);
+        }
+
+        return view('admin.cancellations.show', [
+            'r' => $cancellation,
+            'booking' => $booking,
+            'calc' => $cancellation->calculation,          // the snapshot saved when the request was opened (may be null on old rows)
+            'current' => $current,
+            'changed' => $current && round($current->refund, 2) !== round((float) $cancellation->calculated_refund, 2),
+            'payments' => $booking ? $booking->payments()->latest()->latest('id')->get() : collect(),
         ]);
     }
 }
