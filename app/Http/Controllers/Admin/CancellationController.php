@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CancellationRequest;
+use App\Services\Cancellations\CancellationDecisionService;
 use App\Services\Cancellations\RefundCalculator;
 use App\Support\SafeAudit;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +12,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-/** Cancellation requests: list (F1, Day 16), detail (F2, Day 17), refund override (Day 18). */
+/** Cancellation requests: list (F1, Day 16), detail (F2, Day 17), refund override (Day 18), approve/reject (Day 19). */
 class CancellationController extends Controller
 {
+    /** Values used for any key an older or partial snapshot does not have, so the detail page never breaks. */
+    private const EMPTY_CALC = [
+        'currency' => null, 'days_before' => null, 'percent' => 0, 'total' => 0, 'refundable_base' => 0, 'fixed_fee' => 0,
+        'entitlement' => 0, 'paid' => 0, 'retained' => 0, 'refund' => 0, 'credit' => 0, 'credit_valid_until' => null,
+        'needs_review' => false, 'policy_confirmed' => false, 'notes' => [], 'warnings' => [], 'tiers' => [],
+    ];
+
     public function index(Request $request)
     {
         $f = $request->validate([
@@ -73,7 +81,7 @@ class CancellationController extends Controller
         return view('admin.cancellations.show', [
             'r' => $cancellation,
             'booking' => $booking,
-            'calc' => $cancellation->calculation,          // the snapshot saved when the request was opened (may be null on old rows)
+            'calc' => $cancellation->calculation ? array_replace(self::EMPTY_CALC, $cancellation->calculation) : null,   // the snapshot saved when the request was opened; missing keys filled in
             'current' => $current,
             'changed' => $current && round($current->refund, 2) !== round((float) $cancellation->calculated_refund, 2),
             'payments' => $booking ? $booking->payments()->latest()->latest('id')->get() : collect(),
@@ -176,5 +184,50 @@ class CancellationController extends Controller
         }
 
         return redirect()->route('admin.cancellations.show', $cancellation)->with('success', 'Override removed. The refund is the calculated amount again.');
+    }
+
+    /** Approve: fixes the refund amount and emails the customer. No money moves yet. */
+    public function approve(Request $request, CancellationRequest $cancellation, CancellationDecisionService $decisions)
+    {
+        $data = $request->validate([
+            'note' => ['nullable', 'string', 'max:1000'],
+            'acknowledged' => ['nullable', 'boolean'],
+        ]);
+
+        try {
+            $row = $decisions->approve($cancellation, $request->user(), $data['note'] ?? null, $request->boolean('acknowledged'));
+        } catch (\DomainException $e) {
+            return back()->withInput()->withErrors(['decision' => $e->getMessage()]);
+        }
+
+        return redirect()->route('admin.cancellations.show', $cancellation)->with($row->notification_error ? 'warning' : 'success',
+            $row->notification_error ? 'Approved, but the customer was not told: ' . $row->notification_error : 'Approved. The customer has been emailed.');
+    }
+
+    /** Reject: needs a reason, which the customer sees. The booking goes back to how it was. */
+    public function reject(Request $request, CancellationRequest $cancellation, CancellationDecisionService $decisions)
+    {
+        $data = $request->validate(['reason' => ['required', 'string', 'max:1000']], ['reason.required' => 'Write the reason for rejecting. The customer will see it.']);
+
+        try {
+            $row = $decisions->reject($cancellation, $request->user(), $data['reason']);
+        } catch (\DomainException $e) {
+            return back()->withInput()->withErrors(['reject_reason' => $e->getMessage()]);
+        }
+
+        return redirect()->route('admin.cancellations.show', $cancellation)->with($row->notification_error ? 'warning' : 'success',
+            $row->notification_error ? 'Rejected, but the customer was not told: ' . $row->notification_error : 'Rejected. The customer has been emailed.');
+    }
+
+    public function resendEmail(Request $request, CancellationRequest $cancellation, CancellationDecisionService $decisions)
+    {
+        try {
+            $ok = $decisions->resend($cancellation, $request->user());
+        } catch (\DomainException $e) {
+            return back()->withErrors(['decision' => $e->getMessage()]);
+        }
+
+        return redirect()->route('admin.cancellations.show', $cancellation)->with($ok ? 'success' : 'warning',
+            $ok ? 'The email was sent again.' : ($cancellation->fresh()->notification_error ?? 'The email could not be sent.'));
     }
 }

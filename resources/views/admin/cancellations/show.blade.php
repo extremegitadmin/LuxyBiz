@@ -33,6 +33,13 @@
         </div>
     @endif
 
+    @if (session('warning'))
+        <div class="alert alert-warning border-0 alert-dismissible fade show" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     @if (session('success'))
         <div class="alert alert-success border-0 alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -263,19 +270,64 @@
                 </div>
             </div>
 
-            {{-- Decision (read only until Day 19) --}}
+            {{-- Decision (Day 19) --}}
             <div class="card rounded-4">
                 <div class="card-body p-4">
                     <h5 class="mb-3 fw-semibold">Decision</h5>
-                    @if ($r->decided_at)
+
+                    @if ($r->status === 'pending')
+                        @can('admin.cancellations.decide')
+                            <form method="POST" action="{{ route('admin.cancellations.approve', $r) }}" class="mb-4"
+                                onsubmit="return confirm('Approve this cancellation with a refund of {{ $r->currency }} {{ number_format($r->refundAmount(), 2) }}? The customer will be emailed.');">
+                                @csrf
+                                <div class="fw-semibold mb-2">Approve</div>
+                                <p class="small text-secondary">Fixes the refund at <strong>{{ $money($r->refundAmount()) }}</strong> and emails the customer. No money moves yet.</p>
+                                @if (! empty($calc['warnings']))
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="acknowledged" name="acknowledged" value="1" @checked(old('acknowledged'))>
+                                        <label class="form-check-label small" for="acknowledged">I have checked the warnings above</label>
+                                    </div>
+                                @endif
+                                <label class="form-label small" for="note">Note (optional, saved on the request)</label>
+                                <textarea id="note" name="note" rows="2" maxlength="1000" class="form-control mb-2">{{ old('note') }}</textarea>
+                                <button type="submit" class="btn btn-success px-4">Approve</button>
+                            </form>
+
+                            <form method="POST" action="{{ route('admin.cancellations.reject', $r) }}" onsubmit="return confirm('Reject this cancellation? The customer will be emailed the reason.');">
+                                @csrf
+                                <div class="fw-semibold mb-2">Reject</div>
+                                <label class="form-label small" for="reason_reject">Reason (required, the customer sees it)</label>
+                                <textarea id="reason_reject" name="reason" rows="2" maxlength="1000" class="form-control mb-2 @error('reason') is-invalid @enderror" required>{{ old('reason') }}</textarea>
+                                <button type="submit" class="btn btn-outline-danger px-4">Reject</button>
+                            </form>
+                        @else
+                            <div class="text-secondary">Waiting for a decision.</div>
+                        @endcan
+                    @elseif ($r->decided_at)
                         <dl class="mb-0">
                             <dt class="text-secondary small fw-normal">Decided</dt>
                             <dd>{{ $r->decided_at->format('d M Y, H:i') }}@if ($r->decider) by {{ $r->decider->name }}@endif</dd>
-                            @if ($r->decision_note)<dt class="text-secondary small fw-normal">Note</dt><dd>{{ $r->decision_note }}</dd>@endif
+                            @if ($r->decision_note)<dt class="text-secondary small fw-normal">{{ $r->status === 'rejected' ? 'Reason' : 'Note' }}</dt><dd>{{ $r->decision_note }}</dd>@endif
                             @if ($r->completed_at)<dt class="text-secondary small fw-normal">{{ $r->status === 'credited' ? 'Credit issued' : 'Refund paid' }}</dt><dd>{{ $r->completed_at->format('d M Y, H:i') }}</dd>@endif
                         </dl>
                     @else
                         <div class="text-secondary">Not decided yet.</div>
+                    @endif
+
+                    {{-- Was the customer told? --}}
+                    @if ($r->status !== 'pending')
+                        <hr>
+                        @if ($r->customer_notified_at)
+                            <div class="small text-success">Customer emailed on {{ $r->customer_notified_at->format('d M Y, H:i') }}.</div>
+                        @elseif ($r->notification_error)
+                            <div class="small text-warning">{{ $r->notification_error }}</div>
+                        @endif
+                        @can('admin.cancellations.decide')
+                            <form method="POST" action="{{ route('admin.cancellations.resend', $r) }}" class="mt-2">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">{{ $r->customer_notified_at ? 'Send the email again' : 'Try sending the email again' }}</button>
+                            </form>
+                        @endcan
                     @endif
                 </div>
             </div>

@@ -43,6 +43,7 @@ return [
         'Cancellations' => [
             'admin.cancellations.view' => 'View cancellation requests',
             'admin.cancellations.override' => 'Change the refund amount of a cancellation request (reason required)',
+            'admin.cancellations.decide' => 'Approve or reject cancellation requests (emails the customer)',
         ],
 
         // 'Products (sample module)' => [
