@@ -42,6 +42,7 @@ return [
         ],
         'Cancellations' => [
             'admin.cancellations.view' => 'View cancellation requests',
+            'admin.cancellations.override' => 'Change the refund amount of a cancellation request (reason required)',
         ],
 
         // 'Products (sample module)' => [
