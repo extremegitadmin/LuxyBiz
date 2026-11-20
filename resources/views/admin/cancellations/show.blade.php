@@ -25,6 +25,14 @@
     </div>
     <!--end breadcrumb-->
 
+    @if ($errors->any())
+        <div class="alert alert-danger border-0" role="alert">
+            <ul class="mb-0 ps-3">
+                @foreach ($errors->all() as $message)<li>{{ $message }}</li>@endforeach
+            </ul>
+        </div>
+    @endif
+
     @if (session('success'))
         <div class="alert alert-success border-0 alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -138,6 +146,42 @@
                     @endif
                 </div>
             </div>
+
+            {{-- Override the refund (Day 18) --}}
+            @can('admin.cancellations.override')
+                @if (in_array($r->status, \App\Models\CancellationRequest::OPEN, true))
+                    <div class="card rounded-4">
+                        <div class="card-body p-4">
+                            <h5 class="mb-1 fw-semibold">Change the refund amount</h5>
+                            <p class="small text-secondary">Use this when the rules do not fit, for example a tour cancelled by LuxyBiz or a medical emergency.
+                                The reason is required and is saved on the request. The refund cannot be more than the customer has paid
+                                ({{ $r->currency }} {{ number_format($maxRefund, 2) }}).</p>
+                            <form method="POST" action="{{ route('admin.cancellations.override', $r) }}" class="row g-3">
+                                @csrf @method('PUT')
+                                <div class="col-md-4">
+                                    <label class="form-label" for="amount">Refund amount ({{ $r->currency }})</label>
+                                    <input type="number" step="0.01" min="0" max="{{ $maxRefund }}" id="amount" name="amount" class="form-control @error('amount') is-invalid @enderror"
+                                        value="{{ old('amount', number_format($r->refundAmount(), 2, '.', '')) }}" required>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label" for="reason">Reason (required)</label>
+                                    <textarea id="reason" name="reason" rows="2" maxlength="1000" class="form-control @error('reason') is-invalid @enderror" required
+                                        placeholder="Why is the refund different from the rules?">{{ old('reason', $r->override_reason) }}</textarea>
+                                </div>
+                                <div class="col-12 d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary px-4">Save new amount</button>
+                                </div>
+                            </form>
+                            @if ($r->final_refund !== null)
+                                <form method="POST" action="{{ route('admin.cancellations.override.reset', $r) }}" class="mt-2">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-secondary px-4">Reset to calculated ({{ $money($r->calculated_refund) }})</button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            @endcan
 
             {{-- Money on the booking --}}
             <div class="card rounded-4">
