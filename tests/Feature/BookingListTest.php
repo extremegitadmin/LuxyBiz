@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Http\Middleware\AdminRole;
+use Tests\Concerns\SignsInAsStaff;
 use App\Models\Booking;
 use App\Models\BookingChange;
 use App\Models\BookingTraveler;
@@ -15,11 +15,12 @@ use Tests\TestCase;
 class BookingListTest extends TestCase
 {
     use RefreshDatabase;
+    use SignsInAsStaff;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withoutMiddleware(AdminRole::class);
+        $this->signInAsSuperAdmin();
     }
 
     private function make(array $attrs = [], ?string $customer = null): Booking

@@ -1,6 +1,7 @@
 {{-- Request online payment: staff creates a secure hosted payment link for the customer. --}}
 @php
-    $online = \App\Services\Payments\Gateway::isOnline();
+    $online = \App\Services\Payments\Gateway::isOnlineFor($booking->currency);
+    $providerName = \App\Models\PaymentSetting::PROVIDERS[\App\Services\Payments\Gateway::providerFor($booking->currency) ?? ''] ?? null;
     $payable = in_array($booking->status, \App\Services\Payments\PaymentSessionService::PAYABLE_STATUSES, true);
 @endphp
 <div class="card rounded-4">
@@ -9,7 +10,7 @@
 
         @if (session('payment_link'))
             <div class="alert alert-success border-0">
-                <div class="fw-semibold mb-2">Payment link (valid for 23 hours)</div>
+                <div class="fw-semibold mb-2">Payment link (valid for {{ session('payment_link_hours', 23) }} hours)</div>
                 <div class="input-group">
                     <input id="payment-link" class="form-control" value="{{ session('payment_link') }}" readonly>
                     <button type="button" class="btn btn-outline-secondary" id="copy-payment-link">Copy</button>
@@ -42,8 +43,8 @@
 
         @if (! $online)
             <div class="text-secondary">
-                Online payments are not set up yet. Choose a provider and save its keys under
-                <a href="{{ route('admin.settings.gateway') }}">Payment gateway</a>.
+                Online payments are not set up for {{ $booking->currency }} yet. Switch on a provider for this currency and save its keys under
+                @can('admin.settings.gateway.view')<a href="{{ route('admin.settings.gateway') }}">Payment gateways</a>@else Payment gateways @endcan.
                 Until then, staff record payments made outside the system.
             </div>
         @elseif (! $payable)
@@ -62,7 +63,7 @@
                 <div class="col-12 col-sm-auto">
                     <button type="submit" class="btn btn-primary px-4">Create payment link</button>
                 </div>
-                <div class="col-12 form-text">Balance due: {{ $booking->currency }} {{ number_format($balance, 2) }}. The customer pays on the provider's secure page. Card details never reach this system.</div>
+                <div class="col-12 form-text">Balance due: {{ $booking->currency }} {{ number_format($balance, 2) }}. The customer pays on {{ $providerName ?? 'the provider' }}'s secure page. Card details never reach this system.</div>
             </form>
         @endif
     </div>

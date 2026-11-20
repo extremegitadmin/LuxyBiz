@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Http\Middleware\AdminRole;
+use Tests\Concerns\SignsInAsStaff;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\PaymentEvent;
@@ -13,11 +13,12 @@ use Tests\TestCase;
 class PaymentEventLogTest extends TestCase
 {
     use RefreshDatabase;
+    use SignsInAsStaff;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withoutMiddleware(AdminRole::class);
+        $this->signInAsSuperAdmin();
     }
 
     private function payment(array $attrs = []): Payment

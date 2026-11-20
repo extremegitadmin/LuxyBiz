@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * One row per charge or refund. NEVER store card number, CVV or expiry here.
@@ -36,6 +37,12 @@ class Payment extends Model
     public function recorder(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    /** Gateway webhook events linked to this payment (Day 9). */
+    public function events(): HasMany
+    {
+        return $this->hasMany(PaymentEvent::class)->latest()->latest('id');
     }
 
     public function scopeCharges(Builder $query): Builder

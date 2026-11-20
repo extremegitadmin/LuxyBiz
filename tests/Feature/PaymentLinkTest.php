@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Http\Middleware\AdminRole;
+use Tests\Concerns\SignsInAsStaff;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\PaymentSetting;
@@ -22,6 +22,7 @@ use Tests\TestCase;
 class PaymentLinkTest extends TestCase
 {
     use RefreshDatabase;
+    use SignsInAsStaff;
 
     private const SECRET = 'sk_test_VERYSECRET1234567890';
     private const LINK = 'https://checkout.stripe.com/c/pay/cs_test_abc123';
@@ -31,17 +32,15 @@ class PaymentLinkTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withoutMiddleware(AdminRole::class);
-        $this->staff = User::factory()->create(['name' => 'Priya Staff']);
-        $this->actingAs($this->staff);
+        $this->staff = $this->signInAsSuperAdmin();
     }
 
     private function configureStripe(string $mode = 'sandbox', string $secret = self::SECRET): void
     {
-        PaymentSetting::put('gateway_provider', 'stripe');
-        PaymentSetting::put('gateway_mode', $mode);
-        PaymentSetting::put('gateway_public_key', 'pk_test_PUBLIC');
-        PaymentSetting::putSecret('gateway_secret_key', $secret);
+        PaymentSetting::putField('stripe', 'enabled', '1');
+        PaymentSetting::putField('stripe', 'mode', $mode);
+        PaymentSetting::putField('stripe', 'public_key', 'pk_test_PUBLIC');
+        PaymentSetting::putField('stripe', 'secret_key', $secret);
     }
 
     private function fakeStripeOk(): void
@@ -122,6 +121,7 @@ class PaymentLinkTest extends TestCase
     public function test_the_amount_is_sent_in_the_smallest_unit_of_the_booking_currency(): void
     {
         $this->configureStripe();
+        PaymentSetting::put('route.inr', 'stripe');   // INR goes to Razorpay unless the settings say otherwise
         $this->fakeStripeOk();
         $b = $this->booking(['currency' => 'INR', 'total_amount' => 100000]);
 
@@ -243,11 +243,13 @@ class PaymentLinkTest extends TestCase
 
     public function test_a_provider_without_an_adapter_behaves_like_manual(): void
     {
-        PaymentSetting::put('gateway_provider', 'razorpay');
-        $this->assertInstanceOf(ManualGateway::class, Gateway::resolve());
-        $this->assertFalse(Gateway::hasAdapter('razorpay'));
+        PaymentSetting::put('route.other', 'paypal');
+        PaymentSetting::putField('paypal', 'enabled', '1');
+        PaymentSetting::putField('paypal', 'secret_key', 'x');
+        $this->assertInstanceOf(ManualGateway::class, Gateway::forCurrency('USD'));
+        $this->assertFalse(Gateway::hasAdapter('paypal'));
         $this->assertTrue(Gateway::hasAdapter('stripe'));
-        $this->assertTrue(Gateway::hasAdapter('manual'));
+        $this->assertTrue(Gateway::hasAdapter('razorpay'));
     }
 
     public function test_a_live_key_in_sandbox_mode_is_refused_before_anything_happens(): void
@@ -364,7 +366,7 @@ class PaymentLinkTest extends TestCase
         $b = $this->booking();
 
         $this->get(route('admin.bookings.show', $b))
-            ->assertOk()->assertSee('Online payments are not set up yet')->assertDontSee('Create payment link')
+            ->assertOk()->assertSee('Online payments are not set up for USD yet')->assertDontSee('Create payment link')
             ->assertSee(route('admin.settings.gateway'), false);
     }
 
@@ -417,7 +419,7 @@ class PaymentLinkTest extends TestCase
         $this->configureStripe();
         Http::fake(['api.stripe.com/v1/balance' => Http::response(['object' => 'balance'], 200)]);
 
-        $this->post(route('admin.settings.gateway.test'))
+        $this->post(route('admin.settings.gateway.test', 'stripe'))
             ->assertSessionHas('success', 'Connected to Stripe (sandbox mode). The secret key works.');
         Http::assertSent(fn (Request $r) => $r->method() === 'GET' && $r->url() === 'https://api.stripe.com/v1/balance');
         $this->assertStringNotContainsString(self::SECRET, json_encode(session()->all()));
@@ -428,15 +430,15 @@ class PaymentLinkTest extends TestCase
         $this->configureStripe();
         Http::fake(['api.stripe.com/*' => Http::response(['error' => ['type' => 'authentication_error']], 401)]);
 
-        $this->post(route('admin.settings.gateway.test'))->assertSessionHasErrors('test');
-        $this->assertStringContainsString('rejected the secret key', session('errors')->first('test'));
+        $this->post(route('admin.settings.gateway.test', 'stripe'))->assertSessionHasErrors('test_stripe');
+        $this->assertStringContainsString('rejected the secret key', session('errors')->first('test_stripe'));
     }
 
     public function test_test_connection_with_manual_sends_nothing(): void
     {
         Http::fake();
 
-        $this->post(route('admin.settings.gateway.test'))->assertSessionHasErrors('test');
+        $this->post(route('admin.settings.gateway.test', 'stripe'))->assertSessionHasErrors('test_stripe');
         Http::assertNothingSent();
     }
 
@@ -445,14 +447,15 @@ class PaymentLinkTest extends TestCase
         $this->get(route('admin.settings.gateway'))->assertDontSee('Test saved keys');
 
         $this->configureStripe();
-        $this->get(route('admin.settings.gateway'))->assertSee('Test saved keys')->assertSee('Connection built');
+        $this->get(route('admin.settings.gateway'))->assertSee('Test saved keys');
     }
 
     public function test_resolve_returns_stripe_when_configured(): void
     {
         $this->configureStripe();
 
-        $this->assertInstanceOf(StripeGateway::class, Gateway::resolve());
-        $this->assertTrue(Gateway::isOnline());
+        $this->assertInstanceOf(StripeGateway::class, Gateway::forCurrency('USD'));
+        $this->assertTrue(Gateway::isOnlineFor('USD'));
+        $this->assertFalse(Gateway::isOnlineFor('INR'), 'INR is routed to Razorpay, which is not set up');
     }
 }

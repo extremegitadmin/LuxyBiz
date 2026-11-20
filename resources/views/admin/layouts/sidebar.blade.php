@@ -40,7 +40,10 @@
           <div class="menu-title">Tours</div>
         </a>
       </li>
+      @canany(['admin.bookings.view', 'admin.payments.view', 'admin.payments.events.view'])
       <li class="menu-label">BOOKINGS</li>
+      @endcanany
+      @can('admin.bookings.view')
       <li class="{{ request()->routeIs('admin.bookings.*') ? 'mm-active' : '' }}">
         <a href="{{ route('admin.bookings.index') }}">
           <div class="parent-icon"><i class="material-icons-outlined">confirmation_number</i>
@@ -48,6 +51,8 @@
           <div class="menu-title">Bookings</div>
         </a>
       </li>
+      @endcan
+      @can('admin.payments.view')
       <li class="{{ request()->routeIs('admin.payments.index', 'admin.payments.show') ? 'mm-active' : '' }}">
         <a href="{{ route('admin.payments.index') }}">
           <div class="parent-icon">
@@ -56,6 +61,8 @@
           <div class="menu-title">Payments</div>
         </a>
       </li>
+      @endcan
+      @can('admin.payments.events.view')
       <li class="{{ request()->routeIs('admin.payments.events') ? 'mm-active' : '' }}">
         <a href="{{ route('admin.payments.events') }}">
           <div class="parent-icon">
@@ -64,6 +71,42 @@
           <div class="menu-title">Webhook events</div>
         </a>
       </li>
+      @endcan
+      @can('admin.settings.gateway.view')
+      <li class="{{ request()->routeIs('admin.settings.gateway*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.settings.gateway') }}">
+          <div class="parent-icon">
+              <i class="material-icons-outlined">credit_card</i>
+          </div>
+          <div class="menu-title">Payment gateways</div>
+        </a>
+      </li>
+      @endcan
+      @can('admin.settings.cancellation.view')
+      <li class="{{ request()->routeIs('admin.settings.cancellation*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.settings.cancellation') }}">
+          <div class="parent-icon">
+              <i class="material-icons-outlined">event_busy</i>
+          </div>
+          <div class="menu-title">Cancellation rules</div>
+        </a>
+      </li>
+      @endcan
+      @can('admin.cancellations.view')
+      <li class="{{ request()->routeIs('admin.cancellations*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.cancellations.index') }}">
+          <div class="parent-icon">
+              <i class="material-icons-outlined">cancel</i>
+          </div>
+          <div class="menu-title">
+            Cancellations
+            @if (($pendingCancellations = \App\Models\CancellationRequest::pendingCount()) > 0)
+              <span class="badge bg-warning text-dark ms-1">{{ $pendingCancellations }}</span>
+            @endif
+          </div>
+        </a>
+      </li>
+      @endcan
       <li class="menu-label">ROLES & PERMISSIONS</li>
       
       <li @if($url == "roles") class="active mm-active" @endif>
