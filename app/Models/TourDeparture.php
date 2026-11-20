@@ -40,9 +40,13 @@ class TourDeparture extends Model
     }
 
     public function scopeWithSeatsBooked($query)
-    {
-        return $query->withSum([
-            'bookings as seats_booked' => fn ($q) => $q->where('status', '!=', 'cancelled'),
-        ], 'travelers_count');
-    }
+{
+    return $query->addSelect([
+        'seats_booked' => \Illuminate\Support\Facades\DB::table('booking_travelers')
+            ->join('bookings', 'bookings.id', '=', 'booking_travelers.booking_id')
+            ->whereColumn('bookings.tour_departure_id', 'tour_departures.id')
+            ->where('bookings.status', 'confirmed')
+            ->selectRaw('COUNT(booking_travelers.id)')
+    ]);
+}
 }

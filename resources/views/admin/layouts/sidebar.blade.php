@@ -40,6 +40,14 @@
           <div class="menu-title">Tours</div>
         </a>
       </li>
+      <li class="{{ request()->routeIs('admin.departure-operations.*') ? 'mm-active' : '' }}">
+    <a href="{{ route('admin.departure-operations.index') }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">event_available</i>
+        </div>
+        <div class="menu-title">Departure Operations</div>
+    </a>
+</li>
       @canany(['admin.bookings.view', 'admin.payments.view', 'admin.payments.events.view'])
       <li class="menu-label">BOOKINGS</li>
       @endcanany
