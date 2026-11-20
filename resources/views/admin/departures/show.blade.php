@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('admin.layouts.master')
 @section('title', 'Departure ' . $departure->departs_on->format('d M Y'))
 
 @php $left = $departure->capacity - $booked; $pct = min(100, round($booked / max(1, $departure->capacity) * 100)); @endphp
