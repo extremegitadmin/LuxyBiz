@@ -5,14 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CancellationRequest;
 use App\Services\Cancellations\CancellationDecisionService;
+use App\Services\Cancellations\CancellationCompletionService;
+use App\Services\Cancellations\CancellationDecisionService;
+use App\Services\Cancellations\CancellationPolicy;
 use App\Services\Cancellations\RefundCalculator;
 use App\Support\SafeAudit;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-/** Cancellation requests: list (F1, Day 16), detail (F2, Day 17), refund override (Day 18), approve/reject (Day 19). */
+
+/** Cancellation requests: list (F1, Day 16), detail (F2, Day 17), refund override (Day 18), approve/reject (Day 19), refunded/credit (Day 20). */
+
 class CancellationController extends Controller
 {
     /** Values used for any key an older or partial snapshot does not have, so the detail page never breaks. */
@@ -66,7 +72,7 @@ class CancellationController extends Controller
     }
 
     /** One request: who, what was asked, the saved refund calculation, and the booking's money. */
-    public function show(CancellationRequest $cancellation, RefundCalculator $calculator)
+    public function show(CancellationRequest $cancellation, RefundCalculator $calculator, CancellationCompletionService $completion)
     {
         $cancellation->load(['booking.user', 'booking.leadTraveler', 'booking.tour', 'booking.departure', 'booking.travelers', 'requester', 'decider']);
         $booking = $cancellation->booking;
@@ -86,6 +92,10 @@ class CancellationController extends Controller
             'changed' => $current && round($current->refund, 2) !== round((float) $cancellation->calculated_refund, 2),
             'payments' => $booking ? $booking->payments()->latest()->latest('id')->get() : collect(),
             'maxRefund' => $booking ? max(0, round($booking->paidAmount(), 2)) : 0,
+            'outstanding' => $cancellation->status === 'approved' ? $completion->outstanding($cancellation) : null,
+            'methods' => CancellationCompletionService::METHODS,
+            'policy' => CancellationPolicy::current(),
+            'credit' => Schema::hasTable('travel_credits') ? DB::table('travel_credits')->where('cancellation_request_id', $cancellation->id)->first() : null,
         ]);
     }
 
@@ -230,4 +240,43 @@ class CancellationController extends Controller
         return redirect()->route('admin.cancellations.show', $cancellation)->with($ok ? 'success' : 'warning',
             $ok ? 'The email was sent again.' : ($cancellation->fresh()->notification_error ?? 'The email could not be sent.'));
     }
+
+
+    /** Record that the approved refund was paid, and cancel the booking. */
+    public function markRefunded(Request $request, CancellationRequest $cancellation, CancellationCompletionService $completion)
+    {
+        $data = $request->validate([
+            'method' => ['required', Rule::in(array_keys(CancellationCompletionService::METHODS))],
+            'reference' => ['nullable', 'string', 'max:120'],
+            'refunded_on' => ['required', 'date', 'before_or_equal:today', 'after_or_equal:' . ($cancellation->decided_at?->toDateString() ?? '2000-01-01')],
+            'note' => ['nullable', 'string', 'max:1000'],
+        ], [
+            'method.required' => 'Choose how the refund was paid.',
+            'refunded_on.before_or_equal' => 'The refund date cannot be in the future.',
+            'refunded_on.after_or_equal' => 'The refund date cannot be before the request was approved.',
+        ], ['refunded_on' => 'refund date']);
+
+        try {
+            $completion->markRefunded($cancellation, $request->user(), $data);
+        } catch (\DomainException $e) {
+            return back()->withInput()->withErrors(['completion' => $e->getMessage()]);
+        }
+
+        return redirect()->route('admin.cancellations.show', $cancellation)->with('success', 'Marked as refunded. The booking is cancelled.');
+    }
+
+    /** End the request as travel credit instead of a refund. */
+    public function issueCredit(Request $request, CancellationRequest $cancellation, CancellationCompletionService $completion)
+    {
+        $data = $request->validate(['note' => ['nullable', 'string', 'max:1000']]);
+
+        try {
+            $code = $completion->issueCredit($cancellation, $request->user(), $data['note'] ?? null);
+        } catch (\DomainException $e) {
+            return back()->withInput()->withErrors(['completion' => $e->getMessage()]);
+        }
+
+        return redirect()->route('admin.cancellations.show', $cancellation)->with('success', 'Travel credit ' . $code . ' issued. The booking is cancelled.');
+    }
+
 }
