@@ -1651,6 +1651,10 @@ form select.error:focus {
     transform: skewY(-6deg);
 }
 
-.panel { background: #d7d7d7; border: 1px solid #e3e8ef; border-radius: 8px; }
+.panel { 
+  background: #fff; 
+  border: 1px solid #e3e8ef; 
+  border-radius: 8px; 
+}
         .panel-body { padding: 1.1rem; }
         .panel-head { padding: .8rem 1.1rem; border-bottom: 1px solid #e3e8ef; font-weight: 600; display: flex; justify-content: space-between; align-items: center;color:#000 }

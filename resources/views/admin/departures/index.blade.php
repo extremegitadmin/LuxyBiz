@@ -1,9 +1,23 @@
 @extends('admin.layouts.master')
 @section('title', 'Departures')
-
+<style>
+    .panel {
+    background: #ffffff;
+    border: 1px solid #e3e8ef;
+    border-radius: 8px;
+}
+</style>
 @section('content')
-<h1 class="page-title h3 mb-3">Departures</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Tour Departures</h4>
 
+    <a href="{{ route('admin.tours.index') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Tours
+    </a>
+    <!-- <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Tours
+    </a> -->
+</div>
 <form method="POST" action="{{ route('admin.departures.store') }}" class="panel panel-body mb-3 row g-2 align-items-end">
     @csrf
     <div class="col-12 fw-semibold">Add a departure</div>
