@@ -58,6 +58,10 @@ return [
             'admin.health.edit' => 'Change the health notes of a traveler (logged)',
             'admin.health.access_log' => 'See who viewed or changed the health information of a booking',
         ],
+        'Assisted bookings' => [
+            'admin.assisted.view' => 'See the list of bookings made by staff for customers',
+            'admin.assisted.create' => 'Make a booking for a customer (search customers, create a customer, choose tour and departure)',
+        ],
 
         // 'Products (sample module)' => [
         //     'products.view' => 'View products',
