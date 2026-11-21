@@ -30,4 +30,12 @@ class BookingTraveler extends Model
     {
         return $this->belongsTo(Booking::class);
     }
+    /**
+     * True when a health note exists. Safe for the manifest and the fulfillment desk: it never exposes the text.
+     * The text itself is restricted data (Days 24 and 25 add the restricted view and the access log).
+     */
+    public function hasHealthNote(): bool
+    {
+        return filled($this->attributes['health_notes'] ?? null);
+    }
 }
