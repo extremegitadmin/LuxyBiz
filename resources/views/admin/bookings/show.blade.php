@@ -126,7 +126,9 @@
             <div class="form-text mt-3">Health information is restricted and is not shown on this page.</div>
         </div>
     </div>
-
+ @can('admin.documents.view')
+        @include('admin.bookings._documents')
+    @endcan
     {{-- Payments --}}
     <div class="card rounded-4">
         <div class="card-body p-4">

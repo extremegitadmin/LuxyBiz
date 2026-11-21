@@ -46,6 +46,11 @@ return [
             'admin.cancellations.decide' => 'Approve or reject cancellation requests (emails the customer)',
             'admin.cancellations.complete' => 'Mark a refund as paid or issue travel credit (cancels the booking)',
         ],
+         'Customer documents' => [
+            'admin.documents.view' => 'See the list of documents on a booking (passport, visa, tickets, insurance)',
+            'admin.documents.upload' => 'Upload customer documents',
+            'admin.documents.delete' => 'Delete customer documents',
+        ],
 
         // 'Products (sample module)' => [
         //     'products.view' => 'View products',
