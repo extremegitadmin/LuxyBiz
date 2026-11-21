@@ -15,8 +15,8 @@ return new class extends Migration
                 ->constrained('tours')
                 ->cascadeOnDelete();
 
-            $table->string('image_path');
-            $table->string('alt_text')->nullable();
+            $table->string('image_path',191);
+            $table->string('alt_text',191)->nullable();
             $table->unsignedInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
 
