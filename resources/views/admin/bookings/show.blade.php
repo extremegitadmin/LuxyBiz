@@ -123,12 +123,19 @@
                     </tbody>
                 </table>
             </div>
-            <div class="form-text mt-3">Health information is restricted and is not shown on this page.</div>
+            <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+                <div class="form-text m-0">Health information is restricted and is not shown on this page.</div>
+                @can('admin.health.view')
+                    <a href="{{ route('admin.health.show', $booking) }}" class="btn btn-sm btn-outline-primary ms-auto">Health and intake</a>
+                @endcan
+            </div>
         </div>
     </div>
- @can('admin.documents.view')
+
+    @can('admin.documents.view')
         @include('admin.bookings._documents')
     @endcan
+
     {{-- Payments --}}
     <div class="card rounded-4">
         <div class="card-body p-4">

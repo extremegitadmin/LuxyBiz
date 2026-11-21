@@ -1,4 +1,4 @@
-{{-- Customer documents (G3, Day 22). Shown only with admin.documents.view. Day 23 adds View / Download. --}}
+{{-- Customer documents (G3, Days 22-23). Shown only with admin.documents.view. Opening and downloading are logged. --}}
 @php
     $documents = \App\Models\CustomerDocument::query()
         ->where('booking_id', $booking->id)
@@ -7,6 +7,11 @@
         ->get();
     $types = \App\Models\CustomerDocument::TYPES;
     $limitKb = \App\Services\Documents\DocumentStorage::MAX_KB;
+    $canSeeLog = auth()->user()?->can('admin.documents.access_log');
+    $history = $canSeeLog
+        ? \App\Models\DocumentAccessLog::query()->where('booking_id', $booking->id)->orderByDesc('id')->limit(20)->get()
+        : collect();
+    $liveIds = $documents->pluck('id')->all();
 @endphp
 <div class="card rounded-4 mb-4" id="documents">
     <div class="card-body p-4">
@@ -26,13 +31,21 @@
                             <td class="text-break">{{ $d->original_name }}</td>
                             <td class="text-nowrap">{{ $d->humanSize() }}</td>
                             <td class="text-nowrap small">{{ $d->created_at?->format('d M Y H:i') }}<div class="text-secondary">{{ $d->uploader?->name ?? '-' }}</div></td>
-                            <td class="text-end">
-                                @can('admin.documents.delete')
-                                    <form method="POST" action="{{ route('admin.documents.destroy', $d) }}" onsubmit="return confirm('Delete this document? The file is removed and cannot be recovered.')">
-                                        @csrf @method('DELETE')
-                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                    </form>
-                                @endcan
+                            <td class="text-end text-nowrap">
+                                <div class="d-inline-flex gap-1 align-items-center">
+                                    @can('admin.documents.view')
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.documents.view', $d) }}" target="_blank" rel="noopener noreferrer">View</a>
+                                    @endcan
+                                    @can('admin.documents.download')
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.documents.download', $d) }}">Download</a>
+                                    @endcan
+                                    @can('admin.documents.delete')
+                                        <form method="POST" action="{{ route('admin.documents.destroy', $d) }}" onsubmit="return confirm('Delete this document? The file is removed and cannot be recovered.')">
+                                            @csrf @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    @endcan
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -41,6 +54,32 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="form-text mt-2">Every time a document is opened or downloaded, it is recorded with the person's name and the time.</div>
+
+        @if ($canSeeLog)
+            <details class="mt-3">
+                <summary class="fw-semibold small">Access history ({{ $history->count() }}{{ $history->count() === 20 ? '+' : '' }})</summary>
+                <div class="table-responsive mt-2">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead><tr><th>When</th><th>Who</th><th>What</th><th>Document</th><th>From</th></tr></thead>
+                        <tbody>
+                            @forelse ($history as $h)
+                                <tr>
+                                    <td class="text-nowrap">{{ $h->created_at?->format('d M Y H:i:s') }}</td>
+                                    <td>{{ $h->user_name ?? 'Unknown' }}</td>
+                                    <td>{{ $h->actionLabel() }}</td>
+                                    <td>{{ \App\Models\CustomerDocument::TYPES[$h->document_type] ?? $h->document_type }} #{{ $h->document_id }}@unless (in_array($h->document_id, $liveIds, true)) <span class="text-secondary">(deleted)</span>@endunless</td>
+                                    <td class="small text-secondary">{{ $h->ip }}</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="5" class="text-center text-secondary py-3">Nobody has opened a document of this booking yet.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        @endif
 
         @can('admin.documents.upload')
             <hr>

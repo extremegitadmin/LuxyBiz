@@ -195,7 +195,7 @@
                                     @error($p.'arrival_details') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
 
-                                <div class="col-12"><hr class="my-1"><div class="fw-semibold small text-secondary text-uppercase">Flags and health</div></div>
+                                <div class="col-12"><hr class="my-1"><div class="fw-semibold small text-secondary text-uppercase">Traveler flag</div></div>
                                 <div class="col-12">
                                     <label class="form-label" for="t{{ $i }}_flag">Traveler flag</label>
                                     <input id="t{{ $i }}_flag" name="travelers[{{ $i }}][flag_note]" maxlength="255"
@@ -204,10 +204,8 @@
                                     @error($p.'flag_note') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label" for="t{{ $i }}_health">Health notes <span class="text-secondary small">(restricted data)</span></label>
-                                    <textarea id="t{{ $i }}_health" name="travelers[{{ $i }}][health_notes]" rows="2" maxlength="3000"
-                                        class="form-control @error($p.'health_notes') is-invalid @enderror">{{ old($p.'health_notes', $t->health_notes) }}</textarea>
-                                    @error($p.'health_notes') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                    <div class="form-text">Health notes are not edited here. They are on the restricted
+                                        @can('admin.health.view')<a href="{{ route('admin.health.show', $booking) }}">Health and intake</a> page.@else Health and intake page.@endcan</div>
                                 </div>
                             </div>
                         </div>

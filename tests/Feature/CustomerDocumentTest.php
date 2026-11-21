@@ -313,10 +313,10 @@ class CustomerDocumentTest extends TestCase
         $d = CustomerDocument::factory()->create(['booking_id' => $b->id]);
 
         $this->actingAs($this->userWith(['admin.bookings.view', 'admin.documents.view', 'admin.documents.upload'], 'a@example.test', 'Upload only'));
-        $this->get(route('admin.bookings.show', $b))->assertOk()->assertSee(route('admin.documents.store', $b), false)->assertDontSee(route('admin.documents.destroy', $d), false);
+        $this->get(route('admin.bookings.show', $b))->assertOk()->assertSee(route('admin.documents.store', $b), false)->assertDontSee('action="' . route('admin.documents.destroy', $d) . '"', false);
 
         $this->actingAs($this->userWith(['admin.bookings.view', 'admin.documents.view', 'admin.documents.delete'], 'b@example.test', 'Delete only'));
-        $this->get(route('admin.bookings.show', $b))->assertOk()->assertSee(route('admin.documents.destroy', $d), false)->assertDontSee(route('admin.documents.store', $b), false);
+        $this->get(route('admin.bookings.show', $b))->assertOk()->assertSee('action="' . route('admin.documents.destroy', $d) . '"', false)->assertDontSee(route('admin.documents.store', $b), false);
     }
 
     public function test_the_page_lists_the_travelers_and_whole_booking_documents(): void
