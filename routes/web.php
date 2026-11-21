@@ -24,13 +24,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [LoginController::class, 'show'])->name('login');
         Route::post('login', [LoginController::class, 'login'])->name('login.submit');
+        Route::get('forgot-password', [PasswordController::class, 'showForgot'])->name('password.request');
+        Route::post('forgot-password', [PasswordController::class, 'sendLink'])->middleware('throttle:5,1')->name('password.email');
+        Route::get('reset-password/{token}', [PasswordController::class, 'showReset'])->name('password.reset');
+        Route::post('reset-password', [PasswordController::class, 'reset'])->middleware('throttle:5,1')->name('password.update');
     });
 
     // Authenticated routes
     Route::middleware(['auth', 'permission'])->group(function () {
 
         Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // User management

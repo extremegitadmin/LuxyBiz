@@ -23,6 +23,6 @@ class DashboardController extends Controller
             $cards[] = ['Roles', Role::count(), 'bi-shield-lock', route('admin.roles.index')];
         }
 
-        return view('admin.dashboard', compact('cards'));
+        return view('admin/dashboard', compact('cards'));
     }
 }
