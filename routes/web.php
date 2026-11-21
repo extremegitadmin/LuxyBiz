@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\TourCategoryController;
 
 
 // Redirect home to admin dashboard
-Route::redirect('/', '/admin/dashboard');
+//Route::redirect('/', '/admin/dashboard');
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -82,7 +82,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('tours/{tour}/gallery/{image}', [TourController::class, 'destroyGalleryImage'])
         ->name('tours.gallery.destroy');
 
-    Route::resource('tours', TourController::class)->except(['show']);
+    Route::resource('tours', TourController::class)->except(['show']); 
 
 
  
