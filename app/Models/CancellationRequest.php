@@ -30,6 +30,7 @@ class CancellationRequest extends Model
             'calculation' => 'array',
             'decided_at' => 'datetime',
             'completed_at' => 'datetime',
+            'customer_notified_at' => 'datetime',
         ];
     }
 

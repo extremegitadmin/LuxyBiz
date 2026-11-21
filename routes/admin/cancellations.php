@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CancellationSettingsController;
 use Illuminate\Support\Facades\Route;
 
 /*
+
 | Asha's cancellation routes. Day 14: rules settings. Day 16: list. Day 17: detail. Day 18: refund override. Day 19: approve/reject. Day 20: refunded / credit.
 | Loaded from routes/web.php with: require __DIR__ . '/admin/cancellations.php';
 */

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CancellationRequest;
+use App\Services\Cancellations\CancellationDecisionService;
 use App\Services\Cancellations\CancellationCompletionService;
 use App\Services\Cancellations\CancellationDecisionService;
 use App\Services\Cancellations\CancellationPolicy;
@@ -15,7 +16,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+
 /** Cancellation requests: list (F1, Day 16), detail (F2, Day 17), refund override (Day 18), approve/reject (Day 19), refunded/credit (Day 20). */
+
 class CancellationController extends Controller
 {
     /** Values used for any key an older or partial snapshot does not have, so the detail page never breaks. */
@@ -238,6 +241,7 @@ class CancellationController extends Controller
             $ok ? 'The email was sent again.' : ($cancellation->fresh()->notification_error ?? 'The email could not be sent.'));
     }
 
+
     /** Record that the approved refund was paid, and cancel the booking. */
     public function markRefunded(Request $request, CancellationRequest $cancellation, CancellationCompletionService $completion)
     {
@@ -274,4 +278,5 @@ class CancellationController extends Controller
 
         return redirect()->route('admin.cancellations.show', $cancellation)->with('success', 'Travel credit ' . $code . ' issued. The booking is cancelled.');
     }
+
 }

@@ -46,7 +46,7 @@ class CancellationDetailTest extends TestCase
             ->assertSee($r->reference)->assertSee('Pending')
             ->assertSee($r->booking->reference)->assertSee('Olivia Bennett')->assertSee('olivia@example.test')->assertSee('Alpine Wellness Retreat')
             ->assertSee('90%')->assertSee('USD 4,500.00')->assertSee('USD 1,000.00')   // refund and kept by LuxyBiz
-            ->assertSee('Travel credit instead of a refund')->assertSee('Not decided yet')
+            ->assertSee('Travel credit instead of a refund')->assertSee('Approve')->assertSee('Reject')
             ->assertSee('60+ days before departure: 90%')->assertSee('Net paid so far');
     }
 
