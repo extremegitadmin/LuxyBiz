@@ -48,8 +48,15 @@ return [
         ],
          'Customer documents' => [
             'admin.documents.view' => 'See the list of documents on a booking (passport, visa, tickets, insurance)',
+            'admin.documents.download' => 'Download a copy of a customer document (every download is logged)',
             'admin.documents.upload' => 'Upload customer documents',
             'admin.documents.delete' => 'Delete customer documents',
+            'admin.documents.access_log' => 'See who opened or downloaded the documents of a booking',
+        ],
+         'Health and intake' => [
+            'admin.health.view' => 'See the health and intake information of a booking (restricted; every view is logged)',
+            'admin.health.edit' => 'Change the health notes of a traveler (logged)',
+            'admin.health.access_log' => 'See who viewed or changed the health information of a booking',
         ],
 
         // 'Products (sample module)' => [

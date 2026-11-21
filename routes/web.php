@@ -140,3 +140,4 @@ require __DIR__ . '/admin/payments.php';
 require __DIR__ . '/admin/cancellations.php';
 require __DIR__.'/admin/cms.php';
 require __DIR__ . '/admin/documents.php';
+require __DIR__ . '/admin/health.php';

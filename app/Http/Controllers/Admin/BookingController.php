@@ -129,8 +129,9 @@ class BookingController extends Controller
                     'arrival_time' => $row['arrival_time'] ?? null,
                     'arrival_details' => $row['arrival_details'] ?? null,
                     'flag_note' => $row['flag_note'] ?? null,
-                    'health_notes' => $row['health_notes'] ?? null,
                 ];
+
+                // Health notes are NOT part of this form: they are changed on the restricted health page (Day 24), so they are kept as they are here.
 
                 // A blank passport field keeps the stored (encrypted) number.
                 if (! empty($row['passport_number'])) {

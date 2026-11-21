@@ -105,7 +105,10 @@ class BookingChangeHistoryTest extends TestCase
 
         $lines = implode(' | ', BookingChange::first()->summaryLines());
         $this->assertStringContainsString('Passport number', $lines);
-        $this->assertStringContainsString('Health notes', $lines);
+
+        // Since Day 24 health notes are not part of the edit form: a value sent here is ignored, not saved and not in the history.
+        $this->assertStringNotContainsString('Health notes', $lines);
+        $this->assertNull($booking->travelers()->first()->health_notes);
     }
 
     public function test_history_is_shown_on_the_edit_page(): void
