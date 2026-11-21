@@ -137,3 +137,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 // Additional route files
 require __DIR__ . '/admin/bookings.php';
 require __DIR__ . '/admin/payments.php';
+require __DIR__ . '/admin/cancellations.php';
