@@ -41,13 +41,88 @@
         </a>
       </li>
       <li class="{{ request()->routeIs('admin.departure-operations.*') ? 'mm-active' : '' }}">
-    <a href="{{ route('admin.departure-operations.index') }}">
+        <a href="{{ route('admin.departure-operations.index') }}">
+            <div class="parent-icon">
+                <i class="material-icons-outlined">event_available</i>
+            </div>
+            <div class="menu-title">Departure Operations</div>
+        </a>
+    </li>
+
+    <!-- content management -->
+    <li class="menu-label">CONTENT MANAGEMENT</li>
+
+<li>
+    <a href="{{ route('admin.cms.pages.index') }}"
+       class="{{ request()->routeIs('admin.cms.pages.*') ? 'active' : '' }}">
         <div class="parent-icon">
-            <i class="material-icons-outlined">event_available</i>
-        </div>
-        <div class="menu-title">Departure Operations</div>
+            <i class="material-icons-outlined">description</i>
+          </div>
+          <div class="menu-title">CMS Pages</div>
     </a>
 </li>
+
+<li>
+    <a href="{{ route('admin.cms.homepage.edit') }}"
+       class="{{ request()->routeIs('admin.cms.homepage.*') ? 'active' : '' }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">home</i>
+          </div>
+          <div class="menu-title">Homepage</div>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('admin.cms.testimonials.index') }}"
+       class="{{ request()->routeIs('admin.cms.testimonials.*') ? 'active' : '' }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">reviews</i>
+          </div>
+          <div class="menu-title">Testimonials</div>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('admin.cms.trust-items.index') }}"
+       class="{{ request()->routeIs('admin.cms.trust-items.*') ? 'active' : '' }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">verified_user</i>
+          </div>
+          <div class="menu-title">Trust Items</div>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('admin.cms.menus.index') }}"
+       class="{{ request()->routeIs('admin.cms.menus.*') ? 'active' : '' }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">menu</i>
+          </div>
+          <div class="menu-title">Menu</div>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('admin.cms.site-settings.edit') }}"
+       class="{{ request()->routeIs('admin.cms.site-settings.*') ? 'active' : '' }}">
+        <div class="parent-icon">
+            <i class="material-icons-outlined">settings</i>
+          </div>
+          <div class="menu-title"> Site Settings</div>
+    </a>
+</li>
+
+    <li>
+        <a href="{{ route('admin.media.index') }}"
+          class="{{ request()->routeIs('admin.media.*') ? 'active' : '' }}">
+          <div class="parent-icon">
+            <i class="material-icons-outlined">perm_media</i>
+          </div>
+          <div class="menu-title">Media Library</div>
+        </a>
+    </li>
+    
+
       @canany(['admin.bookings.view', 'admin.payments.view', 'admin.payments.events.view'])
       <li class="menu-label">BOOKINGS</li>
       @endcanany

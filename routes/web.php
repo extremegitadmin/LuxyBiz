@@ -138,3 +138,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 require __DIR__ . '/admin/bookings.php';
 require __DIR__ . '/admin/payments.php';
 require __DIR__ . '/admin/cancellations.php';
+require __DIR__.'/admin/cms.php';
