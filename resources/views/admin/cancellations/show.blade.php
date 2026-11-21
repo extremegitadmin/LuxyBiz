@@ -33,6 +33,13 @@
         </div>
     @endif
 
+    @if (session('warning'))
+        <div class="alert alert-warning border-0 alert-dismissible fade show" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     @if (session('success'))
         <div class="alert alert-success border-0 alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -183,6 +190,81 @@
                 @endif
             @endcan
 
+            {{-- Finish an approved request (Day 20) --}}
+            @can('admin.cancellations.complete')
+                @if ($r->status === 'approved' && $outstanding)
+                    <div class="card rounded-4">
+                        <div class="card-body p-4">
+                            <h5 class="mb-1 fw-semibold">Finish this cancellation</h5>
+                            <p class="small text-secondary">Approved refund: <strong>{{ $money($outstanding['amount']) }}</strong>. Finishing cancels the booking.</p>
+
+                            @if ($outstanding['already'] > 0)
+                                <div class="alert alert-info border-0 small">
+                                    A refund of <strong>{{ $money($outstanding['already']) }}</strong> was already recorded on this booking after the approval
+                                    ({{ $outstanding['already_rows'] }} {{ \Illuminate\Support\Str::plural('payment', $outstanding['already_rows']) }}, from the payment provider). It is counted, so nothing is refunded twice.
+                                    @if ($outstanding['to_record'] <= 0) Nothing more needs to be recorded. @else Still to record: <strong>{{ $money($outstanding['to_record']) }}</strong>. @endif
+                                </div>
+                            @endif
+
+                            <div class="row g-4">
+                                <div class="col-lg-7">
+                                    <form method="POST" action="{{ route('admin.cancellations.refunded', $r) }}"
+                                        onsubmit="return confirm('Record this refund as paid and cancel the booking?');">
+                                        @csrf
+                                        <div class="fw-semibold mb-2">Mark refunded</div>
+                                        <p class="small text-secondary">This records a refund that was already paid. It does not send money.</p>
+                                        <div class="mb-2">
+                                            <label class="form-label small" for="method">How was it paid?</label>
+                                            <select id="method" name="method" class="form-select" required>
+                                                <option value="">Choose...</option>
+                                                @foreach ($methods as $key => $label)
+                                                    <option value="{{ $key }}" @selected(old('method') === $key)>{{ $label }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label small" for="reference">Reference (required for the provider's dashboard: the refund id, e.g. rfnd_... or re_...)</label>
+                                            <input id="reference" name="reference" maxlength="120" class="form-control" value="{{ old('reference') }}">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label small" for="refunded_on">Date refunded</label>
+                                            <input type="date" id="refunded_on" name="refunded_on" class="form-control" value="{{ old('refunded_on', now()->toDateString()) }}" max="{{ now()->toDateString() }}" min="{{ $r->decided_at?->toDateString() }}" required>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label small" for="completion_note">Note (optional)</label>
+                                            <textarea id="completion_note" name="note" rows="2" maxlength="1000" class="form-control">{{ old('note') }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-success px-4">Mark refunded</button>
+                                    </form>
+                                </div>
+
+                                <div class="col-lg-5">
+                                    <form method="POST" action="{{ route('admin.cancellations.credit', $r) }}"
+                                        onsubmit="return confirm('Issue travel credit instead of a refund and cancel the booking?');">
+                                        @csrf
+                                        <div class="fw-semibold mb-2">Travel credit instead</div>
+                                        @php $creditAmount = round($outstanding['amount'] * $policy->creditPercent / 100, 2); @endphp
+                                        <p class="small text-secondary">
+                                            Credit of <strong>{{ $money($creditAmount) }}</strong> ({{ $policy->creditPercent }}% of the refund), valid {{ $policy->creditMonths }} months from today.
+                                            The money stays with LuxyBiz.
+                                        </p>
+                                        @if (! $booking?->user_id)
+                                            <div class="small text-warning mb-2">This booking has no customer account, so credit cannot be issued.</div>
+                                        @elseif ($outstanding['amount'] <= 0)
+                                            <div class="small text-secondary mb-2">No refund amount, so no credit.</div>
+                                        @elseif ($outstanding['already'] > 0)
+                                            <div class="small text-secondary mb-2">A refund was already recorded, so credit is not possible.</div>
+                                        @endif
+                                        <textarea name="note" rows="2" maxlength="1000" class="form-control mb-2" placeholder="Note (optional)"></textarea>
+                                        <button type="submit" class="btn btn-outline-primary px-4" @disabled(! $booking?->user_id || $outstanding['amount'] <= 0 || $outstanding['already'] > 0)>Issue credit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endcan
+
             {{-- Money on the booking --}}
             <div class="card rounded-4">
                 <div class="card-body p-4">
@@ -263,19 +345,69 @@
                 </div>
             </div>
 
-            {{-- Decision (read only until Day 19) --}}
+            {{-- Decision (Day 19) --}}
             <div class="card rounded-4">
                 <div class="card-body p-4">
                     <h5 class="mb-3 fw-semibold">Decision</h5>
-                    @if ($r->decided_at)
+
+                    @if ($r->status === 'pending')
+                        @can('admin.cancellations.decide')
+                            <form method="POST" action="{{ route('admin.cancellations.approve', $r) }}" class="mb-4"
+                                onsubmit="return confirm('Approve this cancellation with a refund of {{ $r->currency }} {{ number_format($r->refundAmount(), 2) }}? The customer will be emailed.');">
+                                @csrf
+                                <div class="fw-semibold mb-2">Approve</div>
+                                <p class="small text-secondary">Fixes the refund at <strong>{{ $money($r->refundAmount()) }}</strong> and emails the customer. No money moves yet.</p>
+                                @if (! empty($calc['warnings']))
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="acknowledged" name="acknowledged" value="1" @checked(old('acknowledged'))>
+                                        <label class="form-check-label small" for="acknowledged">I have checked the warnings above</label>
+                                    </div>
+                                @endif
+                                <label class="form-label small" for="note">Note (optional, saved on the request)</label>
+                                <textarea id="note" name="note" rows="2" maxlength="1000" class="form-control mb-2">{{ old('note') }}</textarea>
+                                <button type="submit" class="btn btn-success px-4">Approve</button>
+                            </form>
+
+                            <form method="POST" action="{{ route('admin.cancellations.reject', $r) }}" onsubmit="return confirm('Reject this cancellation? The customer will be emailed the reason.');">
+                                @csrf
+                                <div class="fw-semibold mb-2">Reject</div>
+                                <label class="form-label small" for="reason_reject">Reason (required, the customer sees it)</label>
+                                <textarea id="reason_reject" name="reason" rows="2" maxlength="1000" class="form-control mb-2 @error('reason') is-invalid @enderror" required>{{ old('reason') }}</textarea>
+                                <button type="submit" class="btn btn-outline-danger px-4">Reject</button>
+                            </form>
+                        @else
+                            <div class="text-secondary">Waiting for a decision.</div>
+                        @endcan
+                    @elseif ($r->decided_at)
                         <dl class="mb-0">
                             <dt class="text-secondary small fw-normal">Decided</dt>
                             <dd>{{ $r->decided_at->format('d M Y, H:i') }}@if ($r->decider) by {{ $r->decider->name }}@endif</dd>
-                            @if ($r->decision_note)<dt class="text-secondary small fw-normal">Note</dt><dd>{{ $r->decision_note }}</dd>@endif
+                            @if ($r->decision_note)<dt class="text-secondary small fw-normal">{{ $r->status === 'rejected' ? 'Reason' : 'Note' }}</dt><dd>{{ $r->decision_note }}</dd>@endif
                             @if ($r->completed_at)<dt class="text-secondary small fw-normal">{{ $r->status === 'credited' ? 'Credit issued' : 'Refund paid' }}</dt><dd>{{ $r->completed_at->format('d M Y, H:i') }}</dd>@endif
+                            @if ($r->completion_note)<dt class="text-secondary small fw-normal">Completion note</dt><dd>{{ $r->completion_note }}</dd>@endif
+                            @if ($credit)
+                                <dt class="text-secondary small fw-normal">Travel credit</dt>
+                                <dd>{{ $credit->code }}: {{ $credit->currency }} {{ number_format($credit->amount, 2) }}@if ($credit->expires_at), valid until {{ \Illuminate\Support\Carbon::parse($credit->expires_at)->format('d M Y') }}@endif</dd>
+                            @endif
                         </dl>
                     @else
                         <div class="text-secondary">Not decided yet.</div>
+                    @endif
+
+                    {{-- Was the customer told? --}}
+                    @if ($r->status !== 'pending')
+                        <hr>
+                        @if ($r->customer_notified_at)
+                            <div class="small text-success">Customer emailed on {{ $r->customer_notified_at->format('d M Y, H:i') }}.</div>
+                        @elseif ($r->notification_error)
+                            <div class="small text-warning">{{ $r->notification_error }}</div>
+                        @endif
+                        @can('admin.cancellations.decide')
+                            <form method="POST" action="{{ route('admin.cancellations.resend', $r) }}" class="mt-2">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">{{ $r->customer_notified_at ? 'Send the email again' : 'Try sending the email again' }}</button>
+                            </form>
+                        @endcan
                     @endif
                 </div>
             </div>

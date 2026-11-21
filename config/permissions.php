@@ -43,6 +43,8 @@ return [
         'Cancellations' => [
             'admin.cancellations.view' => 'View cancellation requests',
             'admin.cancellations.override' => 'Change the refund amount of a cancellation request (reason required)',
+            'admin.cancellations.decide' => 'Approve or reject cancellation requests (emails the customer)',
+            'admin.cancellations.complete' => 'Mark a refund as paid or issue travel credit (cancels the booking)',
         ],
 
         // 'Products (sample module)' => [
