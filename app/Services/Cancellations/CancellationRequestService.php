@@ -51,7 +51,8 @@ class CancellationRequestService
             $booking->update(['status' => 'cancellation_requested']);
 
             SafeAudit::log('cancellation.requested', 'Cancellation request ' . $request->reference . ' for booking ' . $booking->reference, [
-                'subject_id' => $request->id, 'subject_type' => 'CancellationRequest', 'calculated_refund' => $calc->refund, 'source' => $source,
+                ...$request->setRelation('booking', $booking)->auditContext(),
+                'calculated_refund' => $calc->refund, 'source' => $source, 'requested_by' => $by?->id,
             ]);
 
             return $request;

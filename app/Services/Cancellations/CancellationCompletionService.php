@@ -102,8 +102,10 @@ class CancellationCompletionService
             $booking->syncPaymentStatus();
 
             SafeAudit::log('cancellation.refunded', 'Cancellation ' . $row->reference . ' marked refunded', [
-                'subject_id' => $row->id, 'subject_type' => 'CancellationRequest', 'amount' => $out['amount'], 'recorded_now' => $out['to_record'],
-                'already_recorded' => $out['already'], 'method' => $method, 'currency' => $row->currency,
+                ...$row->auditContext(),
+                'amount' => $out['amount'], 'recorded_now' => $out['to_record'],
+                'already_recorded' => $out['already'], 'method' => $method, 'provider_refund_id' => $reference,
+                'refunded_on' => $refundedOn->toDateString(),
             ]);
 
             return $row;
@@ -164,7 +166,8 @@ class CancellationCompletionService
             $booking->update(['status' => 'cancelled']);
 
             SafeAudit::log('cancellation.credited', 'Cancellation ' . $row->reference . ' ended as travel credit ' . $code, [
-                'subject_id' => $row->id, 'subject_type' => 'CancellationRequest', 'credit' => $amount, 'code' => $code, 'currency' => $row->currency,
+                ...$row->auditContext(),
+                'credit' => $amount, 'code' => $code,
             ]);
         });
 

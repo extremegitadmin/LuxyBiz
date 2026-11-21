@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CancellationRequest;
-use App\Services\Cancellations\CancellationDecisionService;
 use App\Services\Cancellations\CancellationCompletionService;
+use App\Services\Cancellations\CancellationDecisionService;
 use App\Services\Cancellations\CancellationPolicy;
 use App\Services\Cancellations\RefundCalculator;
 use App\Support\SafeAudit;
@@ -15,9 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-
 /** Cancellation requests: list (F1, Day 16), detail (F2, Day 17), refund override (Day 18), approve/reject (Day 19), refunded/credit (Day 20). */
-
 class CancellationController extends Controller
 {
     /** Values used for any key an older or partial snapshot does not have, so the detail page never breaks. */
@@ -150,8 +148,8 @@ class CancellationController extends Controller
             ]);
 
             SafeAudit::log('cancellation.refund_overridden', 'Refund of ' . $row->reference . ' changed', [
-                'subject_id' => $row->id, 'subject_type' => 'CancellationRequest',
-                'calculated' => (float) $row->calculated_refund, 'from' => $before, 'to' => $amount, 'currency' => $row->currency,
+                ...$row->auditContext(),
+                'calculated' => (float) $row->calculated_refund, 'from' => $before, 'to' => $amount, 'reason' => $reason,
             ]);
         });
 
@@ -184,7 +182,7 @@ class CancellationController extends Controller
             $row->update(['final_refund' => null, 'override_reason' => null, 'overridden_by' => null]);
 
             SafeAudit::log('cancellation.override_removed', 'Override of ' . $row->reference . ' removed', [
-                'subject_id' => $row->id, 'subject_type' => 'CancellationRequest', 'from' => $before, 'to' => (float) $row->calculated_refund, 'currency' => $row->currency,
+                ...$row->auditContext(), 'from' => $before, 'to' => (float) $row->calculated_refund,
             ]);
         });
 
@@ -240,7 +238,6 @@ class CancellationController extends Controller
             $ok ? 'The email was sent again.' : ($cancellation->fresh()->notification_error ?? 'The email could not be sent.'));
     }
 
-
     /** Record that the approved refund was paid, and cancel the booking. */
     public function markRefunded(Request $request, CancellationRequest $cancellation, CancellationCompletionService $completion)
     {
@@ -277,5 +274,4 @@ class CancellationController extends Controller
 
         return redirect()->route('admin.cancellations.show', $cancellation)->with('success', 'Travel credit ' . $code . ' issued. The booking is cancelled.');
     }
-
 }

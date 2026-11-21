@@ -43,13 +43,15 @@ class CancellationDecisionService
             ]);
 
             SafeAudit::log('cancellation.approved', 'Cancellation ' . $row->reference . ' approved', [
-                'subject_id' => $row->id, 'subject_type' => 'CancellationRequest', 'refund' => $amount, 'currency' => $row->currency, 'overridden' => $row->isOverridden(),
+                ...$row->auditContext(),
+                'refund' => $amount, 'overridden' => $row->isOverridden(), 'warnings_acknowledged' => $warnings !== [] && $acknowledged,
+                'note' => $row->decision_note,
             ]);
 
             return $row;
         });
 
-        $this->notify($row);
+        $this->notifyAndRecord($row, 'approved');
 
         return $row->fresh();
     }
@@ -79,15 +81,27 @@ class CancellationDecisionService
             }
 
             SafeAudit::log('cancellation.rejected', 'Cancellation ' . $row->reference . ' rejected', [
-                'subject_id' => $row->id, 'subject_type' => 'CancellationRequest',
+                ...$row->auditContext(),
+                'reason' => $reason,
             ]);
 
             return $row;
         });
 
-        $this->notify($row);
+        $this->notifyAndRecord($row, 'rejected');
 
         return $row->fresh();
+    }
+
+    /** First email after a decision. A failure is written to the audit log, because nobody is watching when it happens. */
+    private function notifyAndRecord(CancellationRequest $row, string $decision): void
+    {
+        if (! $this->notify($row)) {
+            SafeAudit::log('cancellation.email_failed', 'Decision email of ' . $row->reference . ' was not sent', [
+                ...$row->auditContext(),
+                'decision' => $decision, 'error' => $row->fresh()->notification_error,
+            ]);
+        }
     }
 
     /**
@@ -129,7 +143,7 @@ class CancellationDecisionService
         }
         $ok = $this->notify($request);
         SafeAudit::log('cancellation.email_resent', 'Decision email of ' . $request->reference . ' sent again', [
-            'subject_id' => $request->id, 'subject_type' => 'CancellationRequest', 'ok' => $ok,
+            ...$request->auditContext(), 'ok' => $ok, 'resent_by' => $by->id,
         ]);
 
         return $ok;
