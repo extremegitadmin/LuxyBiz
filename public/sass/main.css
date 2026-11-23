@@ -424,7 +424,7 @@ input::placeholder {
   justify-content: left;
   padding: 6px 16px;
   font-size: 15px;
-  color: #fff;
+  color: #c9c5c5;
   outline-width: 0;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -449,9 +449,9 @@ input::placeholder {
   background-color: #fff;
 }
 .sidebar-wrapper .sidebar-nav .metismenu a:hover {
-  color: #000;
+  color: #fff;
   text-decoration: none;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 .sidebar-wrapper .sidebar-nav .metismenu ul {
   /* background-color: #fff; */
@@ -472,9 +472,9 @@ input::placeholder {
   padding: 8px 15px 8px 45px;
 }
 .sidebar-wrapper .sidebar-nav .metismenu .mm-active > a {
-  color: #000;
+  color: #fff;
   text-decoration: none;
-  background-color: #fff;
+  background-color: #204437;
 }
 .sidebar-wrapper .menu-label {
   padding: 10px 16px 10px 16px;
