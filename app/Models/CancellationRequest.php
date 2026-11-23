@@ -94,4 +94,22 @@ class CancellationRequest extends Model
             return 0;
         }
     }
+
+    /**
+     * What every audit entry about this request carries, so the log can be searched by request or by booking.
+     * Money amounts, reasons and notes are added by the caller. Never add keys, links or card data here.
+     *
+     * @return array<string, mixed>
+     */
+    public function auditContext(): array
+    {
+        return [
+            'subject_id' => $this->id,
+            'subject_type' => 'CancellationRequest',
+            'request_reference' => $this->reference,
+            'booking_id' => $this->booking_id,
+            'booking_reference' => $this->booking?->reference,
+            'currency' => $this->currency,
+        ];
+    }
 }
