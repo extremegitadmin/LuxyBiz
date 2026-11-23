@@ -24,104 +24,72 @@
           <div class="menu-title">Dashboard</div>
         </a>
       </li>          
+  
+      @canany([
+          'admin.tour-categories.view',
+          'admin.tours.view',
+          'admin.objectives.view',
+          'admin.departures.view',
+          'admin.departure-operations.view'
+      ])
       <li class="menu-label">CATALOGUE</li>
-      <li>
-        <a href="{{ route('admin.tour-categories.index') }}">
-            <div class="parent-icon">
-                <i class="material-icons-outlined">category</i>
-            </div>
-            <div class="menu-title">Tour Categories</div>
-        </a>
+      @endcanany
+
+      @can('admin.tour-categories.view')
+      <li class="{{ request()->routeIs('admin.tour-categories.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.tour-categories.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">category</i>
+              </div>
+              <div class="menu-title">Tour Categories</div>
+          </a>
       </li>
-      <li>
-        <a href="{{ route('admin.tours.index') }}">
-          <div class="parent-icon"><i class="material-icons-outlined">inventory_2</i>
-          </div>
-          <div class="menu-title">Tours</div>
-        </a>
+      @endcan
+
+      @can('admin.tours.view')
+      <li class="{{ request()->routeIs('admin.tours.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.tours.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">inventory_2</i>
+              </div>
+              <div class="menu-title">Tours</div>
+          </a>
       </li>
+      @endcan
+
+      @can('admin.objectives.view')
+      <li class="{{ request()->routeIs('admin.objectives.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.objectives.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">flag</i>
+              </div>
+              <div class="menu-title">Objectives</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.departures.view')
+      <li class="{{ request()->routeIs('admin.departures.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.departures.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">event</i>
+              </div>
+              <div class="menu-title">Departures</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.departure-operations.view')
       <li class="{{ request()->routeIs('admin.departure-operations.*') ? 'mm-active' : '' }}">
-        <a href="{{ route('admin.departure-operations.index') }}">
-            <div class="parent-icon">
-                <i class="material-icons-outlined">event_available</i>
-            </div>
-            <div class="menu-title">Departure Operations</div>
-        </a>
-    </li>
-
-    <!-- content management -->
-    <li class="menu-label">CONTENT MANAGEMENT</li>
-
-<li>
-    <a href="{{ route('admin.cms.pages.index') }}"
-       class="{{ request()->routeIs('admin.cms.pages.*') ? 'active' : '' }}">
-        <div class="parent-icon">
-            <i class="material-icons-outlined">description</i>
-          </div>
-          <div class="menu-title">CMS Pages</div>
-    </a>
-</li>
-
-<li>
-    <a href="{{ route('admin.cms.homepage.edit') }}"
-       class="{{ request()->routeIs('admin.cms.homepage.*') ? 'active' : '' }}">
-        <div class="parent-icon">
-            <i class="material-icons-outlined">home</i>
-          </div>
-          <div class="menu-title">Homepage</div>
-    </a>
-</li>
-
-<li>
-    <a href="{{ route('admin.cms.testimonials.index') }}"
-       class="{{ request()->routeIs('admin.cms.testimonials.*') ? 'active' : '' }}">
-        <div class="parent-icon">
-            <i class="material-icons-outlined">reviews</i>
-          </div>
-          <div class="menu-title">Testimonials</div>
-    </a>
-</li>
-
-<li>
-    <a href="{{ route('admin.cms.trust-items.index') }}"
-       class="{{ request()->routeIs('admin.cms.trust-items.*') ? 'active' : '' }}">
-        <div class="parent-icon">
-            <i class="material-icons-outlined">verified_user</i>
-          </div>
-          <div class="menu-title">Trust Items</div>
-    </a>
-</li>
-
-<li>
-    <a href="{{ route('admin.cms.menus.index') }}"
-       class="{{ request()->routeIs('admin.cms.menus.*') ? 'active' : '' }}">
-        <div class="parent-icon">
-            <i class="material-icons-outlined">menu</i>
-          </div>
-          <div class="menu-title">Menu</div>
-    </a>
-</li>
-
-<li>
-    <a href="{{ route('admin.cms.site-settings.edit') }}"
-       class="{{ request()->routeIs('admin.cms.site-settings.*') ? 'active' : '' }}">
-        <div class="parent-icon">
-            <i class="material-icons-outlined">settings</i>
-          </div>
-          <div class="menu-title"> Site Settings</div>
-    </a>
-</li>
-
-    <li>
-        <a href="{{ route('admin.media.index') }}"
-          class="{{ request()->routeIs('admin.media.*') ? 'active' : '' }}">
-          <div class="parent-icon">
-            <i class="material-icons-outlined">perm_media</i>
-          </div>
-          <div class="menu-title">Media Library</div>
-        </a>
-    </li>
-    
+          <a href="{{ route('admin.departure-operations.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">event_available</i>
+              </div>
+              <div class="menu-title">Departure Operations</div>
+          </a>
+      </li>
+      @endcan    
+      <!-- END TOUR -->
 
       @canany(['admin.bookings.view', 'admin.assisted.view', 'admin.payments.view', 'admin.payments.events.view'])
       <li class="menu-label">BOOKINGS</li>
@@ -215,6 +183,96 @@
           <div class="menu-title">Users</div>
         </a>
       </li> 
+
+      <!-- CONTENT MANAGEMENT -->
+      @canany([
+          'admin.cms.pages.view',
+          'admin.cms.homepage.view',
+          'admin.cms.testimonials.view',
+          'admin.cms.trust-items.view',
+          'admin.cms.menus.view',
+          'admin.cms.site-settings.view',
+          'admin.media.view'
+      ])
+      <li class="menu-label">CONTENT MANAGEMENT</li>
+      @endcanany
+
+      @can('admin.cms.pages.view')
+      <li class="{{ request()->routeIs('admin.cms.pages.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.cms.pages.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">description</i>
+              </div>
+              <div class="menu-title">CMS Pages</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.cms.homepage.view')
+      <li class="{{ request()->routeIs('admin.cms.homepage.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.cms.homepage.edit') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">home</i>
+              </div>
+              <div class="menu-title">Homepage</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.cms.testimonials.view')
+      <li class="{{ request()->routeIs('admin.cms.testimonials.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.cms.testimonials.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">reviews</i>
+              </div>
+              <div class="menu-title">Testimonials</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.cms.trust-items.view')
+      <li class="{{ request()->routeIs('admin.cms.trust-items.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.cms.trust-items.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">verified_user</i>
+              </div>
+              <div class="menu-title">Trust Items</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.cms.menus.view')
+      <li class="{{ request()->routeIs('admin.cms.menus.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.cms.menus.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">menu</i>
+              </div>
+              <div class="menu-title">Menus & Footer</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.cms.site-settings.view')
+      <li class="{{ request()->routeIs('admin.cms.site-settings.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.cms.site-settings.edit') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">settings</i>
+              </div>
+              <div class="menu-title">Site Settings</div>
+          </a>
+      </li>
+      @endcan
+
+      @can('admin.media.view')
+      <li class="{{ request()->routeIs('admin.media.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.media.index') }}">
+              <div class="parent-icon">
+                  <i class="material-icons-outlined">perm_media</i>
+              </div>
+              <div class="menu-title">Media Library</div>
+          </a>
+      </li>
+      @endcan
     </ul>
     <!--end navigation-->
   </div>
