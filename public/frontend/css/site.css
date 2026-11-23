@@ -1,0 +1,99 @@
+/* =========================================================
+   Public pages (home, tour details): wireframe header behaviour, account menu, floating CTA.
+   Loads AFTER home.css.
+   ========================================================= */
+
+/* ---- header: sticky on every public page ---- */
+.hdr{position:fixed}
+.bar{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
+
+/* ---- home only: transparent over the hero, solid once you scroll ~80px (wireframe P01) ---- */
+@media(min-width:961px){
+  body[data-header=clear]:not(.scrolled) .bar{background:transparent;border-color:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  body[data-header=clear]:not(.scrolled) .logo{background:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .brand-copy strong{color:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .brand-copy>span{color:#D5E6DD}
+  body[data-header=clear]:not(.scrolled) .nav{background:rgba(14,42,34,.38);border-color:rgba(246,249,245,.3);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  body[data-header=clear]:not(.scrolled) .nav a{color:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .nav a:hover{background:var(--mist);color:var(--forest);border-color:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .tools>.login,
+  body[data-header=clear]:not(.scrolled) .acct-btn{color:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .cur{background:rgba(14,42,34,.38);border:1px solid rgba(246,249,245,.3)}
+  body[data-header=clear]:not(.scrolled) .cur button{color:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .cur button[aria-pressed=true]{background:var(--mist);color:var(--forest)}
+  body[data-header=clear]:not(.scrolled) .tools .btn.solid{background:var(--mist);color:var(--forest);border-color:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .acct-btn{background:rgba(14,42,34,.38);border-color:rgba(246,249,245,.3)}
+}
+@media(max-width:960px){
+  body[data-header=clear]:not(.scrolled) .bar{background:transparent;border-color:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  body[data-header=clear]:not(.scrolled) .logo{background:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .brand-copy strong{color:var(--mist)}
+  body[data-header=clear]:not(.scrolled) .brand-copy>span{color:#D5E6DD}
+}
+/* when the mobile menu is open the bar is solid again so the panel reads clearly */
+.hdr.open .bar{background:rgba(246,249,245,.97)!important;border-color:rgba(197,214,204,.9)!important}
+.hdr.open .brand-copy strong{color:var(--forest)!important}
+.hdr.open .brand-copy>span{color:var(--leaf)!important}
+
+/* ---- account menu (replaces "Login / Account" once someone is signed in) ---- */
+.acct{position:relative}
+.acct-btn{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--forest);font:600 .92rem var(--sans);cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.acct-btn:hover{border-color:var(--forest)}
+.acct-av{width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--mist);display:grid;place-items:center;font:500 1.02rem var(--serif);flex:none}
+.acct-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+.acct-btn[aria-expanded=true] svg{transform:rotate(180deg)}
+.acct-menu{position:absolute;right:0;top:calc(100% + 12px);z-index:70;min-width:260px;padding:8px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 60px -28px rgba(18,51,42,.6);display:none}
+.acct-menu.open{display:block;animation:acctin .22s ease both}
+@keyframes acctin{from{opacity:0;transform:translateY(-6px)}}
+.acct-who{padding:12px 14px 12px;border-bottom:1px solid var(--foam);margin-bottom:6px}
+.acct-who b{display:block;color:var(--forest);font-size:1rem}
+.acct-who small{display:block;color:var(--muted);font-size:.84rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acct-menu a{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;text-decoration:none;font-weight:600;font-size:.94rem;color:var(--forest);border:0}
+.acct-menu a:hover,.acct-menu a:focus-visible{background:var(--foam)}
+.acct-menu a svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.acct-menu hr{border:0;border-top:1px solid var(--foam);margin:6px 4px}
+.acct-menu a.out{color:#7E3B2C}
+.acct-menu a.out:hover{background:#F8E9E4}
+
+@media(max-width:960px){
+  /* inside the mobile menu the account links are a plain list */
+  .acct{border-bottom:1px solid var(--foam);padding-bottom:6px}
+  .acct-btn{display:none}
+  .acct-menu{display:block;position:static;box-shadow:none;border:0;padding:0;min-width:0;border-radius:0;animation:none}
+  .acct-who{padding:14px 0 10px}
+  .acct-menu a{padding:13px 0;border-radius:0;font-size:1.05rem;border-bottom:1px solid var(--foam)}
+  .acct-menu hr{display:none}
+}
+
+/* ---- floating Consultation / Contact CTA (wireframe: present on every public page) ---- */
+.float{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:55;display:inline-flex;align-items:center;gap:10px;background:var(--forest);color:var(--mist);padding:15px 22px;border-radius:999px;text-decoration:none;font:600 .92rem var(--sans);box-shadow:0 18px 36px -16px rgba(18,51,42,.7);transition:background .25s,opacity .3s,transform .3s}
+.float svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.float:hover{background:var(--deep)}
+.float.off{opacity:0;transform:translateY(14px);pointer-events:none}
+@media(max-width:640px){.float{padding:13px 18px}}
+.wa-float{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(max(16px,env(safe-area-inset-bottom)) + 66px);z-index:55;display:inline-flex;align-items:center;gap:9px;background:#25D366;color:#fff;padding:13px 18px;border-radius:999px;text-decoration:none;font:700 .92rem var(--sans);box-shadow:0 18px 36px -16px rgba(18,51,42,.55);transition:background .25s,transform .25s}
+.wa-float svg{width:20px;height:20px;fill:currentColor}
+.wa-float:hover{background:#1DA851;transform:translateY(-2px)}
+@media(max-width:640px){.wa-float{padding:13px;width:48px;height:48px;justify-content:center}.wa-float span{display:none}.wa-float svg{width:22px;height:22px}}
+
+
+/* ---- home: "Build a journey that is entirely yours" section (customizable packages) ---- */
+.custom-sec{background:var(--mist)}
+.custom-wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(32px,6vw,90px);align-items:center}
+.cz-eyebrow{font-weight:700;font-size:.82rem;letter-spacing:.07em;text-transform:uppercase;color:var(--leaf);margin:0 0 10px}
+.custom-steps{display:grid;gap:14px;margin:26px 0 8px;counter-reset:cs}
+.custom-steps li{position:relative;padding-left:52px;counter-increment:cs}
+.custom-steps li:before{content:counter(cs);position:absolute;left:0;top:1px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--forest);color:var(--forest);font:500 1rem var(--serif)}
+.custom-steps b{display:block;color:var(--forest)}
+.custom-steps span{color:var(--muted);font-size:.97rem}
+.custom-note{align-self:center;color:var(--muted);font-size:.92rem}
+.custom-viz{display:grid;gap:12px;padding:clamp(18px,2.4vw,28px);border:1.5px solid var(--forest);background:#fff}
+.cv-day{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:14px}
+.cv-day b{flex:0 0 100%;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cv{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1.5px solid var(--line);border-radius:10px;font-weight:600;font-size:.88rem;color:var(--forest);background:#fff}
+.cv:before{content:"";width:14px;height:14px;border:1.5px solid var(--forest);border-radius:4px;background:#fff}
+.cv.on{background:var(--foam);border-color:var(--forest)}
+.cv.on:before{background:var(--forest)}
+.cv.lock{border-style:dashed;border-color:#B9C9BF;background:#F1F4F2;color:#4E6459}
+.cv.lock:before{background:#9DB3A7;border-color:#9DB3A7}
+@media(max-width:960px){.custom-wrap{grid-template-columns:1fr}}

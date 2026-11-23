@@ -1,0 +1,24 @@
+.tiers-hero{position:relative;min-height:520px;display:flex;align-items:flex-end;overflow:hidden;background:var(--forest);color:var(--mist)}
+.tiers-hero-img{position:absolute;inset:0}
+.tiers-hero-img img{width:100%;height:100%;object-fit:cover}
+.tiers-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,42,34,.82),rgba(14,42,34,.12)),linear-gradient(to right,rgba(14,42,34,.38),transparent)}
+.tiers-hero-in{position:relative;padding-top:150px;padding-bottom:70px}
+.tiers-back{display:inline-block;color:var(--mist);text-decoration:none;margin-bottom:28px;border-bottom:1px solid rgba(246,249,245,.5)}
+.tiers-kicker{font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:#E8D59A;margin:0 0 10px}
+.tiers-hero h1{max-width:14em;margin:0;font-size:clamp(2.5rem,5vw,5rem);line-height:1;color:#fff;text-shadow:0 3px 18px rgba(14,42,34,.55);font-weight:600;opacity:1}
+.tiers-hero-in>p:last-child{max-width:36em;margin:18px 0 0;font-size:1.1rem;color:#fff;text-shadow:0 2px 12px rgba(14,42,34,.5)}
+.tier-section{padding-top:70px;padding-bottom:90px}
+.tier-heading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:28px}
+.tier-heading h2{margin:0;font-size:clamp(2rem,4vw,3.2rem)}
+.tier-heading p{max-width:390px;margin:0;color:var(--muted)}
+.tier-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.tier-card{border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:28px;display:flex;flex-direction:column;min-height:390px}
+.tier-label{text-transform:uppercase;letter-spacing:.12em;font-weight:800;font-size:.78rem;color:var(--leaf);margin:0 0 10px}
+.tier-card h3{font-size:1.7rem;margin:0 0 12px;color:var(--forest)}
+.tier-card>p:not(.tier-label){color:var(--muted);line-height:1.6}
+.tier-card ul{margin:12px 0 28px;padding:0 0 0 18px;color:var(--forest)}
+.tier-card li{margin:9px 0}
+.tier-card .btn{margin-top:auto;text-align:center;background:var(--forest);color:var(--mist);border-color:var(--forest)}
+.tier-card .btn:hover{background:var(--deep);color:var(--mist);border-color:var(--deep)}
+.tier-note{padding:20px;border:1px solid var(--line)}
+@media(max-width:960px){.tier-grid{grid-template-columns:1fr}.tier-heading{align-items:start;flex-direction:column}.tier-card{min-height:330px}}

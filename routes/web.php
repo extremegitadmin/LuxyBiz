@@ -88,3 +88,4 @@ require __DIR__.'/admin/cms.php';
 require __DIR__ . '/admin/documents.php';
 require __DIR__ . '/admin/health.php';
 require __DIR__ . '/admin/assisted.php';
+require __DIR__ . '/site.php';
