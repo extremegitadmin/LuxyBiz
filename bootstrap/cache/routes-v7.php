@@ -13,7 +13,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::x5IYLQ3YkFS0MlXp',
+            '_route' => 'generated::Fo5twoSjvLNh94XU',
           ),
           1 => NULL,
           2 => 
@@ -648,10 +648,30 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/admin/cancellations' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
     ),
     2 => 
     array (
-      0 => '{^(?|/admin/(?|r(?|eset\\-password/([^/]++)(*:44)|oles/([^/]++)(?|/edit(*:72)|(*:79)))|users/([^/]++)(?|/(?|edit(*:113)|toggle(*:127))|(*:136))|tour(?|\\-categories/([^/]++)(?|/edit(*:181)|(*:189))|s/([^/]++)(?|/(?|p(?|review(*:225)|ublish(*:239)|ermanent\\-delete(*:263))|duplicate(*:281)|itinerary(?|(*:301)|/([^/]++)(?|(*:321)))|gallery/([^/]++)(*:347)|edit(*:359))|(*:368)))|objectives/([^/]++)(?|(*:400))|departure(?|s/([^/]++)(?|(*:434)|/toggle(*:449))|\\-operations/([^/]++)(?|(*:482)|/(?|manifest(*:502)|toggle\\-sales(*:523))))|bookings/(?|([0-9]+)(*:554)|([0-9]+)/edit(*:575)|([0-9]+)(*:591)|([0-9]+)/payment\\-link(*:621))|payments/([0-9]+)(*:647)|settings/gateway/(?|(razorpay|stripe)(*:692)|(razorpay|stripe)/test(*:722)))|/webhooks/payments/(razorpay|stripe)(*:768)|/storage/(.*)(?|(*:792)))/?$}sDu',
+      0 => '{^(?|/admin/(?|r(?|eset\\-password/([^/]++)(*:44)|oles/([^/]++)(?|/edit(*:72)|(*:79)))|users/([^/]++)(?|/(?|edit(*:113)|toggle(*:127))|(*:136))|tour(?|\\-categories/([^/]++)(?|/edit(*:181)|(*:189))|s/([^/]++)(?|/(?|p(?|review(*:225)|ublish(*:239)|ermanent\\-delete(*:263))|duplicate(*:281)|itinerary(?|(*:301)|/([^/]++)(?|(*:321)))|gallery/([^/]++)(*:347)|edit(*:359))|(*:368)))|objectives/([^/]++)(?|(*:400))|departure(?|s/([^/]++)(?|(*:434)|/toggle(*:449))|\\-operations/([^/]++)(?|(*:482)|/(?|manifest(*:502)|toggle\\-sales(*:523))))|bookings/(?|([0-9]+)(*:554)|([0-9]+)/edit(*:575)|([0-9]+)(*:591)|([0-9]+)/payment\\-link(*:621))|payments/([0-9]+)(*:647)|settings/gateway/(?|(razorpay|stripe)(*:692)|(razorpay|stripe)/test(*:722))|cancellations/(?|([0-9]+)(*:756)|([0-9]+)/override(?|(*:784))|([0-9]+)/approve(*:809)|([0-9]+)/reject(*:832)|([0-9]+)/resend\\-email(*:862)|([0-9]+)/mark\\-refunded(*:893)|([0-9]+)/issue\\-credit(*:923)))|/webhooks/payments/(razorpay|stripe)(*:969)|/storage/(.*)(?|(*:993)))/?$}sDu',
     ),
     3 => 
     array (
@@ -1505,7 +1525,181 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      768 => 
+      756 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.show',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      784 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.override',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.override.reset',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      809 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.approve',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      832 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.reject',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      862 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.resend',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      893 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.refunded',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      923 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.cancellations.credit',
+          ),
+          1 => 
+          array (
+            0 => 'cancellation',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      969 => 
       array (
         0 => 
         array (
@@ -1527,7 +1721,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      792 => 
+      993 => 
       array (
         0 => 
         array (
@@ -1584,7 +1778,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::x5IYLQ3YkFS0MlXp' => 
+    'generated::Fo5twoSjvLNh94XU' => 
     array (
       'methods' => 
       array (
@@ -1612,8 +1806,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'C:\\\\wamp64\\\\www\\\\laravel\\\\luxybiz\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000008b20000000000000000";}}',
-        'as' => 'generated::x5IYLQ3YkFS0MlXp',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000008c50000000000000000";}}',
+        'as' => 'generated::Fo5twoSjvLNh94XU',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4404,6 +4598,367 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'admin.cancellations.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/cancellations',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@index',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@index',
+        'as' => 'admin.cancellations.index',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.show' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.view',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@show',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@show',
+        'as' => 'admin.cancellations.show',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.override' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}/override',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.override',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@override',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@override',
+        'as' => 'admin.cancellations.override',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.override.reset' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}/override',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.override',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@resetOverride',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@resetOverride',
+        'as' => 'admin.cancellations.override.reset',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.approve' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}/approve',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.decide',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@approve',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@approve',
+        'as' => 'admin.cancellations.approve',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.reject' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}/reject',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.decide',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@reject',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@reject',
+        'as' => 'admin.cancellations.reject',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.resend' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}/resend-email',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.decide',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@resendEmail',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@resendEmail',
+        'as' => 'admin.cancellations.resend',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.refunded' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}/mark-refunded',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.complete',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@markRefunded',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@markRefunded',
+        'as' => 'admin.cancellations.refunded',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.cancellations.credit' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/cancellations/{cancellation}/issue-credit',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'permission',
+          3 => 'permission:admin.cancellations.complete',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\CancellationController@issueCredit',
+        'controller' => 'App\\Http\\Controllers\\Admin\\CancellationController@issueCredit',
+        'as' => 'admin.cancellations.credit',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+        'cancellation' => '[0-9]+',
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'storage.local' => 
     array (
       'methods' => 
@@ -4420,7 +4975,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000008b70000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000008ca0000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,
@@ -4453,7 +5008,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000009030000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000009160000000000000000";}}',
         'as' => 'storage.local.upload',
       ),
       'fallback' => false,
