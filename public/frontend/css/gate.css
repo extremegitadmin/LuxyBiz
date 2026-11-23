@@ -1,0 +1,14 @@
+/* Pop-up shown to visitors who are not signed in when they open the customizable package option */
+dialog.gate{border:0;padding:0;border-radius:26px;max-width:min(460px,calc(100vw - 32px));width:100%;box-shadow:0 40px 90px -30px rgba(10,32,26,.75);color:#1D2A25;background:#fff}
+dialog.gate::backdrop{background:rgba(10,32,26,.58);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.gate-in{position:relative;padding:clamp(28px,5vw,40px);text-align:center;display:grid;gap:14px;justify-items:center}
+.gate-x{position:absolute;top:12px;right:14px;width:40px;height:40px;border:0;border-radius:50%;background:transparent;font-size:1.7rem;line-height:1;color:#51625A;cursor:pointer}
+.gate-x:hover{background:#E7F0EA}
+.gate-ic{width:64px;height:64px;border-radius:50%;background:#E7F0EA;display:grid;place-items:center}
+.gate-ic svg{width:30px;height:30px;fill:none;stroke:#1B4538;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.gate-in h2{font:400 clamp(1.6rem,3vw,2rem)/1.1 'Fraunces',Georgia,serif;color:#1B4538;margin:0}
+.gate-in p{margin:0;color:#51625A;max-width:30em}
+.gate-act{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px;width:100%}
+.gate-act .btn{flex:1 1 150px}
+.gate-later{border:0;background:none;color:#1B4538;font:600 .9rem 'Figtree',system-ui,sans-serif;border-bottom:1.5px solid #C79A3B;padding:0 0 2px;cursor:pointer}
+.gate-later:hover{border-color:#1B4538}
