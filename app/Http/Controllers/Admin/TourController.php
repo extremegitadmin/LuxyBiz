@@ -27,7 +27,7 @@ class TourController extends Controller
             'status' => ['nullable', Rule::in(Tour::STATUSES)],
             'objective_id' => ['nullable', 'integer', 'exists:objectives,id'],
             'tour_category_id' => ['nullable', 'integer', 'exists:tour_categories,id'],
-            'duration' => ['nullable', 'integer', 'min:1', 'max:365'],
+            'duration' => ['nullable', 'string', 'max:50'],
         ]);
 
         $tours = Tour::query()
@@ -69,20 +69,30 @@ class TourController extends Controller
             ],
         ]);
     }
-
     public function create()
     {
         return view('admin.tours.form', [
             'tour' => new Tour([
                 'status' => 'draft',
-                'currency' => 'USD',
-                'base_price' => 0,
-                'duration_days' => 7,
+                'duration_days' => '7 days / 8 nights',
             ]),
             'objectives' => Objective::orderBy('name')->get(),
             'categories' => TourCategory::orderBy('sort_order')->orderBy('name')->get(),
         ]);
     }
+    // public function create()
+    // {
+    //     return view('admin.tours.form', [
+    //         'tour' => new Tour([
+    //             'status' => 'draft',
+    //             'currency' => 'USD',
+    //             'base_price' => 0,
+    //             'duration_days' => 7,
+    //         ]),
+    //         'objectives' => Objective::orderBy('name')->get(),
+    //         'categories' => TourCategory::orderBy('sort_order')->orderBy('name')->get(),
+    //     ]);
+    // }
 
     public function store(TourRequest $request)
     {
@@ -116,7 +126,7 @@ class TourController extends Controller
 
         return redirect()
             ->route('admin.tours.edit', $tour)
-            ->with('success', 'Tour created. Continue adding the itinerary, gallery and departure dates.');
+            ->with('success', 'Tour created successfully. You can now add Silver, Gold and Platinum packages.');
     }
 
     public function edit(Tour $tour)
@@ -259,17 +269,26 @@ class TourController extends Controller
 
     public function preview(Tour $tour)
     {
+        // $tour->load([
+        //     'category',
+        //     'objective',
+        //     'days',
+        //     'images' => fn ($query) => $query->where('is_active', true),
+        //     'departures' => fn ($query) => $query
+        //         ->where('status', 'open')
+        //         ->whereDate('departs_on', '>=', today())
+        //         ->withSeatsBooked(),
+        // ]);
         $tour->load([
             'category',
             'objective',
-            'days',
+            'packages.days',
             'images' => fn ($query) => $query->where('is_active', true),
             'departures' => fn ($query) => $query
                 ->where('status', 'open')
                 ->whereDate('departs_on', '>=', today())
                 ->withSeatsBooked(),
         ]);
-
         return view('admin.tours.preview', compact('tour'));
     }
 
@@ -367,6 +386,8 @@ class TourController extends Controller
             ->with('success', 'Tour duplicated as a draft, including separate copies of its images.');
     }
 
+
+
     private function payload(TourRequest $request): array
     {
         $data = $request->safe()->except([
@@ -382,12 +403,35 @@ class TourController extends Controller
             ? Str::slug($requestedSlug)
             : $this->uniqueSlug($data['title'], $currentTour?->id);
 
-        // Existing tours.base_price is NOT NULL; never send null to MySQL.
-        $data['base_price'] = $data['base_price'] ?? 0;
-        $data['currency'] = $data['currency'] ?? 'USD';
-
+        // Keep legacy database fields compatible.
+        // New tours need defaults because these columns are still NOT NULL.
+        if (! $currentTour) {
+            $data['base_price'] = 0;
+            $data['currency'] = 'USD';
+        }
         return $data;
     }
+    // private function payload(TourRequest $request): array
+    // {
+    //     $data = $request->safe()->except([
+    //         'hero_image',
+    //         'gallery_images',
+    //     ]);
+
+    //     $currentTour = $request->route('tour');
+
+    //     $requestedSlug = $data['slug'] ?? null;
+
+    //     $data['slug'] = filled($requestedSlug)
+    //         ? Str::slug($requestedSlug)
+    //         : $this->uniqueSlug($data['title'], $currentTour?->id);
+
+    //     // Existing tours.base_price is NOT NULL; never send null to MySQL.
+    //     $data['base_price'] = $data['base_price'] ?? 0;
+    //     $data['currency'] = $data['currency'] ?? 'USD';
+
+    //     return $data;
+    // }
 
     private function storeGalleryImages(TourRequest $request, Tour $tour, array &$storedPaths): void
     {

@@ -37,30 +37,31 @@ class TourRequest extends FormRequest
             'objective_id' => ['nullable', 'integer', 'exists:objectives,id'],
             'status' => ['required', Rule::in(Tour::STATUSES)],
             'destination' => ['nullable', 'string', 'max:191'],
-            'duration_days' => ['required', 'integer', 'min:1', 'max:365'],
+            // 'duration_days' => ['required', 'integer', 'min:1', 'max:365'],
+            'duration_days' => ['required', 'string', 'max:50'],
 
             'short_description' => ['nullable', 'string', 'max:1000'],
             'description' => ['nullable', 'string'],
             'highlights' => ['nullable', 'string'],
 
             // Itinerary
-            'days' => ['sometimes', 'array'],
-            'days.*.title' => ['required', 'string', 'max:160'],
-            'days.*.description' => ['nullable', 'string'],
-            'days.*.activities' => ['nullable', 'string'],
-            'days.*.meals' => ['nullable', 'string', 'max:120'],
-            'days.*.stay' => ['nullable', 'string', 'max:160'],
+            // 'days' => ['sometimes', 'array'],
+            // 'days.*.title' => ['required', 'string', 'max:160'],
+            // 'days.*.description' => ['nullable', 'string'],
+            // 'days.*.activities' => ['nullable', 'string'],
+            // 'days.*.meals' => ['nullable', 'string', 'max:120'],
+            // 'days.*.stay' => ['nullable', 'string', 'max:160'],
 
             // Details
-            'inclusions' => ['nullable', 'string'],
-            'exclusions' => ['nullable', 'string'],
+            // 'inclusions' => ['nullable', 'string'],
+            // 'exclusions' => ['nullable', 'string'],
             'expert_name' => ['nullable', 'string', 'max:191'],
             'expert_role' => ['nullable', 'string', 'max:191'],
             'expert_bio' => ['nullable', 'string'],
 
             // Pricing
-            'base_price' => ['required', 'numeric', 'min:0'],
-            'currency' => ['required', Rule::in(Tour::CURRENCIES)],
+            // 'base_price' => ['required', 'numeric', 'min:0'],
+            // 'currency' => ['required', Rule::in(Tour::CURRENCIES)],
 
             // Main image
             'hero_image' => [
@@ -87,7 +88,7 @@ class TourRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'base_price.required' => 'Enter a base price. Use 0 only if this is intentionally a free tour.',
+            // 'base_price.required' => 'Enter a base price. Use 0 only if this is intentionally a free tour.',
             'slug.regex' => 'The URL slug may contain lowercase letters, numbers and hyphens only.',
             'gallery_images.max' => 'You can upload a maximum of 12 gallery images at a time.',
         ];

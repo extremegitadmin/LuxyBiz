@@ -25,7 +25,7 @@
         <i class="bi bi-eye fs-5"></i>
         <div class="flex-grow-1"><strong>Admin preview.</strong> This is a content preview, not the live public booking page. Current status: {{ ucfirst($tour->status) }}.</div>
         <a href="{{ route('admin.tours.edit', $tour) }}" class="btn btn-sm btn-outline-secondary">Edit tour</a>
-        <a href="{{ route('admin.tours.itinerary', $tour) }}" class="btn btn-sm btn-outline-secondary">Edit itinerary</a>
+        <!-- <a href="{{ route('admin.tours.itinerary', $tour) }}" class="btn btn-sm btn-outline-secondary">Edit itinerary</a> -->
     </div>
 
     <article class="preview-shell">
@@ -37,7 +37,7 @@
             <div class="d-flex flex-wrap gap-2 mb-3">
                 @if ($tour->category)<span class="badge text-bg-primary">{{ $tour->category->name }}</span>@endif
                 @if ($tour->objective)<span class="badge text-bg-light">{{ $tour->objective->name }}</span>@endif
-                <span class="badge text-bg-light">{{ $tour->duration_days }} days</span>
+                <span class="badge text-bg-light">{{ $tour->duration_days }}</span>
                 @if ($tour->destination)<span class="badge text-bg-light">{{ $tour->destination }}</span>@endif
             </div>
 
@@ -65,7 +65,7 @@
                 </section>
             @endif
 
-            <section class="preview-section">
+            <!-- <section class="preview-section">
                 <h2 class="h5 fw-bold mb-3">Your itinerary</h2>
                 @forelse ($tour->days as $day)
                     <div class="preview-day">
@@ -83,7 +83,102 @@
                 @empty
                     <div class="text-secondary small">No itinerary days have been added yet.</div>
                 @endforelse
+            </section> -->
+
+            <section class="preview-section">
+                <h2 class="h5 fw-bold mb-3">Available Packages</h2>
+
+                <div class="row g-4">
+                    @forelse ($tour->packages->where('is_active', true) as $package)
+                        <div class="col-lg-4">
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <h3 class="h5 fw-bold mb-2">
+                                    {{ $package->name }}
+                                </h3>
+
+                                <div class="fs-4 fw-bold text-primary mb-3">
+                                    USD {{ number_format((float) $package->price, 2) }}
+                                </div>
+
+                                @if ($package->description)
+                                    <p class="text-secondary small">
+                                        {{ $package->description }}
+                                    </p>
+                                @endif
+
+                                @if ($package->days->isNotEmpty())
+                                    <hr>
+                                    <h4 class="h6 fw-bold">Itinerary</h4>
+
+                                    @foreach ($package->days as $day)
+                                        <div class="mb-3">
+                                            <strong>
+                                                Day {{ $day->day_number }}:
+                                                {{ $day->title }}
+                                            </strong>
+
+                                            @if ($day->description)
+                                                <p class="small text-secondary mb-1"
+                                                style="white-space:pre-wrap">
+                                                    {{ $day->description }}
+                                                </p>
+                                            @endif
+
+                                            @if ($day->activities)
+                                                <div class="small">
+                                                    <strong>Activities:</strong>
+                                                    {{ $day->activities }}
+                                                </div>
+                                            @endif
+
+                                            @if ($day->meals)
+                                                <div class="small">
+                                                    <strong>Meals:</strong>
+                                                    {{ $day->meals }}
+                                                </div>
+                                            @endif
+
+                                            @if ($day->stay)
+                                                <div class="small">
+                                                    <strong>Stay:</strong>
+                                                    {{ $day->stay }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                @endif
+
+                                @if ($package->inclusions)
+                                    <hr>
+                                    <h4 class="h6 fw-bold">What's Included</h4>
+                                    <div class="small text-secondary"
+                                        style="white-space:pre-wrap">
+                                        {{ $package->inclusions }}
+                                    </div>
+                                @endif
+
+                                @if ($package->exclusions)
+                                    <hr>
+                                    <h4 class="h6 fw-bold">What's Not Included</h4>
+                                    <div class="small text-secondary"
+                                        style="white-space:pre-wrap">
+                                        {{ $package->exclusions }}
+                                    </div>
+                                @endif
+
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12">
+                            <p class="text-secondary">
+                                No active packages have been added yet.
+                            </p>
+                        </div>
+                    @endforelse
+                </div>
             </section>
+
 
             @if ($tour->images->isNotEmpty())
                 <section class="preview-section">
@@ -96,7 +191,7 @@
                 </section>
             @endif
 
-            @if ($tour->lines('inclusions') || $tour->lines('exclusions'))
+            <!-- @if ($tour->lines('inclusions') || $tour->lines('exclusions'))
                 <section class="preview-section">
                     <div class="row g-4">
                         @if ($tour->lines('inclusions'))
@@ -113,7 +208,7 @@
                         @endif
                     </div>
                 </section>
-            @endif
+            @endif -->
 
             @if ($tour->expert_name)
                 <section class="preview-section">
@@ -138,7 +233,7 @@
                             <p class="small text-secondary mb-0">No upcoming open departures are currently available.</p>
                         @endforelse
                     </div>
-                    <div class="col-lg-5">
+                    <!-- <div class="col-lg-5">
                         <div class="preview-price">
                             <div class="small text-secondary">Starting from</div>
                             <div class="display-6 fw-bold my-1">{{ $tour->currency }} {{ number_format((float) $tour->base_price, 2) }}</div>
@@ -146,7 +241,7 @@
                             <div class="small text-secondary mt-3">Departure-specific prices may differ.</div>
                             <a href="{{ route('admin.departures.index', ['tour_id' => $tour->id]) }}" class="btn btn-outline-primary w-100 mt-3">Manage departures</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </section>
         </div>
