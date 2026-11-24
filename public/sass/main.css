@@ -393,7 +393,7 @@ input::placeholder {
   background-color: #264d3f!important;
 }
 .sidebar-wrapper .sidebar-nav ul {
-  padding: 10px;
+  padding: 10px 0px;
   margin: 0;
   list-style: none;
   background: 0 0;
@@ -422,7 +422,7 @@ input::placeholder {
   display: flex;
   align-items: center;
   justify-content: left;
-  padding: 6px 16px;
+  padding: 6px 14px;
   font-size: 15px;
   color: #c9c5c5;
   outline-width: 0;
@@ -433,15 +433,21 @@ input::placeholder {
   transition: all 0.3s ease-out;
 }
 .sidebar-wrapper .sidebar-nav .metismenu a .parent-icon {
-  line-height: 1;
+  line-height: 1;  
 }
+
+.sidebar-wrapper .sidebar-nav .metismenu a .parent-icon:active {
+    line-height: 1;
+    color: #c9962e!important;
+}
+
 .sidebar-wrapper .sidebar-nav .metismenu a .menu-title {
   margin-left: 10px;
 }
 .sidebar-wrapper .sidebar-nav .metismenu a:active {
   color: #000;
   text-decoration: none;
-  background-color: #fff;
+  background-color: #fff;  
 }
 .sidebar-wrapper .sidebar-nav .metismenu a:focus {
   color: #000;
@@ -475,7 +481,13 @@ input::placeholder {
   color: #fff;
   text-decoration: none;
   background-color: #204437;
+  border-left: 4px solid #c9962e;
 }
+
+.sidebar-wrapper .sidebar-nav .metismenu .mm-active > a .parent-icon{
+  color: #c9962e;
+}
+
 .sidebar-wrapper .menu-label {
   padding: 10px 16px 10px 16px;
   color: #d1c6c6;
