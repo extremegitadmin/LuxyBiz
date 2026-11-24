@@ -10,20 +10,19 @@ return new class extends Migration
     {
         Schema::create('cms_pages', function (Blueprint $table) {
             $table->id();
-
-            $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('title',191);
+            $table->string('slug',191)->unique();
 
             $table->longText('body')->nullable();
             $table->json('content')->nullable();
 
-            $table->string('status')->default('draft');
+            $table->string('status',191)->default('draft');
             $table->boolean('is_homepage')->default(false);
 
-            $table->string('meta_title')->nullable();
+            $table->string('meta_title',191)->nullable();
             $table->text('meta_description')->nullable();
-            $table->string('meta_keywords')->nullable();
-            $table->string('canonical_url')->nullable();
+            $table->string('meta_keywords',191)->nullable();
+            $table->string('canonical_url',191)->nullable();
 
             $table->foreignId('featured_media_id')
                 ->nullable()

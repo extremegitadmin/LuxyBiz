@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('cms_trust_items', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title');
+            $table->string('title',191);
             $table->text('description')->nullable();
-            $table->string('icon')->nullable();
+            $table->string('icon',191)->nullable();
 
             $table->foreignId('media_id')
                 ->nullable()

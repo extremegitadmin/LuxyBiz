@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('cms_menus', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('name',191);
+            $table->string('slug',191)->unique();
 
-            $table->string('location')->default('header');
+            $table->string('location',191)->default('header');
             $table->boolean('is_active')->default(true);
 
             $table->timestamps();

@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('cms_testimonials', function (Blueprint $table) {
             $table->id();
 
-            $table->string('customer_name');
-            $table->string('designation')->nullable();
-            $table->string('location')->nullable();
+            $table->string('customer_name',191);
+            $table->string('designation',191)->nullable();
+            $table->string('location',191)->nullable();
 
             $table->text('testimonial');
             $table->unsignedTinyInteger('rating')->default(5);
