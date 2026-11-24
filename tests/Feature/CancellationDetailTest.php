@@ -19,6 +19,12 @@ class CancellationDetailTest extends TestCase
     use RefreshDatabase;
     use SignsInAsStaff;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        config(['booking.credits_enabled' => true]);   // these tests cover the credit option, which is off by default
+    }
+
     /** Booking 5000 + 200 insurance + 300 tax, paid in full, departing in 70 days: refund 4500 on the default rules. */
     private function openRequest(array $booking = []): CancellationRequest
     {

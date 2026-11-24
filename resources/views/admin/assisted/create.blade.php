@@ -160,7 +160,7 @@
     function fillDepartures() {
         const t = tours.find(x => String(x.id) === $('tour_id').value);
         const sel = $('tour_departure_id');
-        sel.innerHTML = t ? t.departures.map(d => `<option value="${d.id}">${esc(d.date)} · ${d.seats} seat(s) left · ${esc(t.currency)} ${Number(d.price).toFixed(2)} each</option>`).join('') : '<option value="">Choose a tour first</option>';
+        sel.innerHTML = t ? t.departures.map(d => `<option value="${d.id}">${esc(d.date)}${d.late ? ' (inside cut-off)' : ''} · ${d.seats === null ? 'unlimited seats' : d.seats + ' seat(s) left'} · ${esc(t.currency)} ${Number(d.price).toFixed(2)} each</option>`).join('') : '<option value="">Choose a tour first</option>';
         if (t && old.departure) { sel.value = old.departure; old.departure = null; }
         refreshQuote();
     }
@@ -207,7 +207,7 @@
             if (!d.ok) { $('quote').innerHTML = '<span class="text-danger">' + esc(d.error) + '</span>'; return; }
             const q = d.quote, f = (x) => q.currency + ' ' + Number(x).toFixed(2);
             $('quote').innerHTML = `${q.travelers} × ${f(q.unit_price)} = ${f(q.subtotal)}` + (q.insurance_amount > 0 ? `<br>Insurance: ${f(q.insurance_amount)}` : '')
-                + `<div class="fs-5 fw-semibold text-body mt-1">Total: ${f(q.total)}</div><div class="small">${q.seats_left} seat(s) left on this departure</div>`;
+                + `<div class="fs-5 fw-semibold text-body mt-1">Total: ${f(q.total)}</div><div class="small">${q.seats_left === null ? 'No seat limit on this departure' : q.seats_left + ' seat(s) left on this departure'}</div>`;
         }, 200);
     }
     $('tour_id').addEventListener('change', fillDepartures);

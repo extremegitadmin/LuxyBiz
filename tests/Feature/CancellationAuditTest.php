@@ -23,6 +23,7 @@ class CancellationAuditTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['booking.credits_enabled' => true]);   // these tests cover the credit option, which is off by default
         // The team's activity_logs table is Anakha's. The test makes a copy of it when the project does not have a migration for it.
         if (! Schema::hasTable('activity_logs')) {
             Schema::create('activity_logs', function ($t) {

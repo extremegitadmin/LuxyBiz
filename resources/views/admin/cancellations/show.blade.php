@@ -131,6 +131,7 @@
                             </ul>
                         @endif
 
+                        @if (config('booking.credits_enabled'))
                         <div class="border rounded-3 p-3 mb-3">
                             <div class="fw-semibold mb-1">Travel credit instead of a refund</div>
                             @if (($calc['credit'] ?? 0) > 0)
@@ -140,6 +141,7 @@
                                 <span class="text-secondary">No credit, because there is no refund.</span>
                             @endif
                         </div>
+                        @endif
 
                         @if ($tiers)
                             <div class="small text-secondary">
@@ -238,6 +240,7 @@
                                     </form>
                                 </div>
 
+                                @if (config('booking.credits_enabled'))
                                 <div class="col-lg-5">
                                     <form method="POST" action="{{ route('admin.cancellations.credit', $r) }}"
                                         onsubmit="return confirm('Issue travel credit instead of a refund and cancel the booking?');">
@@ -259,6 +262,7 @@
                                         <button type="submit" class="btn btn-outline-primary px-4" @disabled(! $booking?->user_id || $outstanding['amount'] <= 0 || $outstanding['already'] > 0)>Issue credit</button>
                                     </form>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -91,16 +91,17 @@ class AssistedBookingController extends Controller
 
     // ------------------------------------------------------------------ Days 26 and 27: the form
 
-    public function create(BookingEngine $engine)
+    public function create(Request $request, BookingEngine $engine)
     {
-        $tours = Tour::query()->published()->orderBy('title')->get()->map(function (Tour $t) use ($engine) {
-            $departures = $engine->bookableDepartures($t);
+        $override = $request->user()->can('admin.assisted.override_cutoff');
+        $tours = Tour::query()->published()->orderBy('title')->get()->map(function (Tour $t) use ($engine, $override) {
+            $departures = $engine->bookableDepartures($t, $override);
 
             return [
-                'id' => $t->id, 'title' => $t->title ?: ('Tour #' . $t->id), 'currency' => $t->currency,
+                'id' => $t->id, 'title' => $t->title ?: ('Tour #' . $t->id), 'currency' => $t->currency, 'cutoff' => $engine->cutoffDays($t),
                 'departures' => $departures->map(fn ($row) => [
                     'id' => $row['departure']->id, 'date' => $row['departure']->departs_on->format('d M Y'),
-                    'seats' => $row['seats_left'], 'price' => $row['unit_price'],
+                    'seats' => $row['seats_left'], 'price' => $row['unit_price'], 'late' => $row['inside_cutoff'],
                 ])->all(),
             ];
         })->filter(fn ($t) => $t['departures'] !== [])->values();
@@ -135,7 +136,7 @@ class AssistedBookingController extends Controller
         }
 
         try {
-            return response()->json(['ok' => true, 'quote' => $engine->quote($tour, $departure, (int) $data['travelers'], $request->boolean('insurance'))->toArray()]);
+            return response()->json(['ok' => true, 'quote' => $engine->quote($tour, $departure, (int) $data['travelers'], $request->boolean('insurance'), $request->user()->can('admin.assisted.override_cutoff'))->toArray()]);
         } catch (\DomainException $e) {
             return response()->json(['ok' => false, 'error' => $e->getMessage()]);
         }
@@ -168,7 +169,7 @@ class AssistedBookingController extends Controller
                     [$customer] = $customers->findOrCreate($data['customer_name'], $data['customer_email'], $data['customer_phone'] ?? null, $request->user());
                 }
 
-                return $engine->create($data, 'csr', $customer, $request->user());
+                return $engine->create($data, 'csr', $customer, $request->user(), $request->user()->can('admin.assisted.override_cutoff'));
             });
         } catch (\DomainException $e) {
             return back()->withInput()->withErrors(['booking' => $e->getMessage()]);

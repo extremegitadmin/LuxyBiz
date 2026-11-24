@@ -18,6 +18,12 @@ class CancellationCompletionTest extends TestCase
     use RefreshDatabase;
     use SignsInAsStaff;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        config(['booking.credits_enabled' => true]);   // these tests cover the credit option, which is off by default
+    }
+
     /** Booking 5000 paid in full by a Stripe charge; request approved for $1000. */
     private function approved(float $refund = 1000, array $booking = []): CancellationRequest
     {

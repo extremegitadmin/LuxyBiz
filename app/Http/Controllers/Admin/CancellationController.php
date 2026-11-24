@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CancellationRequest;
 use App\Services\Cancellations\CancellationCompletionService;
+use App\Services\Cancellations\CancellationDecisionService;
 use App\Services\Cancellations\CancellationPolicy;
 use App\Services\Cancellations\RefundCalculator;
 use App\Support\SafeAudit;
@@ -263,6 +264,10 @@ class CancellationController extends Controller
     /** End the request as travel credit instead of a refund. */
     public function issueCredit(Request $request, CancellationRequest $cancellation, CancellationCompletionService $completion)
     {
+        if (! config('booking.credits_enabled')) {
+            return back()->withErrors(['completion' => 'Travel credit is not offered. Refund the customer instead.']);
+        }
+
         $data = $request->validate(['note' => ['nullable', 'string', 'max:1000']]);
 
         try {
