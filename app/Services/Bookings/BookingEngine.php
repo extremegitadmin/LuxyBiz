@@ -40,23 +40,43 @@ class BookingEngine
     }
 
     /** Seats still free on a departure: capacity minus travelers on bookings that are not cancelled. */
-    public function seatsLeft(TourDeparture $departure): int
+    public function seatsLeft(TourDeparture $departure): ?int
     {
+        if ($departure->capacity === null) {
+            return null;   // blank capacity = no seat limit
+        }
         $booked = (int) Booking::query()->where('tour_departure_id', $departure->id)->where('status', '!=', 'cancelled')->sum('travelers_count');
 
         return max(0, (int) $departure->capacity - $booked);
     }
 
+    /** The last departure date that can still be booked today: today plus the tour's cut-off days. */
+    public function earliestBookableDate(Tour $tour): \Illuminate\Support\Carbon
+    {
+        return now()->startOfDay()->addDays($this->cutoffDays($tour));
+    }
+
+    /** Days before departure when booking closes: the tour's own number, or the default (config/booking.php, 5). */
+    public function cutoffDays(Tour $tour): int
+    {
+        return max(0, (int) ($tour->getAttribute('booking_cutoff_days') ?? config('booking.cutoff_days', 5)));
+    }
+
     /** Departures a customer can book today: published tour, open, in the future, with seats. */
-    public function bookableDepartures(Tour $tour): \Illuminate\Support\Collection
+    public function bookableDepartures(Tour $tour, bool $ignoreCutoff = false): \Illuminate\Support\Collection
     {
         if ($tour->status !== 'published') {
             return collect();
         }
 
-        return $tour->departures()->where('status', 'open')->whereDate('departs_on', '>', now()->toDateString())->orderBy('departs_on')->get()
-            ->map(fn (TourDeparture $d) => ['departure' => $d, 'seats_left' => $this->seatsLeft($d), 'unit_price' => $this->unitPrice($tour, $d)])
-            ->filter(fn ($row) => $row['seats_left'] > 0)
+        $from = $ignoreCutoff ? now()->startOfDay()->addDay() : $this->earliestBookableDate($tour)->max(now()->startOfDay()->addDay());
+
+        return $tour->departures()->where('status', 'open')->whereDate('departs_on', '>=', $from->toDateString())->orderBy('departs_on')->get()
+            ->map(fn (TourDeparture $d) => [
+                'departure' => $d, 'seats_left' => $this->seatsLeft($d), 'unit_price' => $this->unitPrice($tour, $d),
+                'inside_cutoff' => $d->departs_on->lt($this->earliestBookableDate($tour)),
+            ])
+            ->filter(fn ($row) => $row['seats_left'] === null || $row['seats_left'] > 0)
             ->values();
     }
 
@@ -73,7 +93,7 @@ class BookingEngine
     }
 
     /** @throws \DomainException */
-    public function quote(Tour $tour, TourDeparture $departure, int $travelers, bool $insurance): BookingQuote
+    public function quote(Tour $tour, TourDeparture $departure, int $travelers, bool $insurance, bool $ignoreCutoff = false): BookingQuote
     {
         $max = (int) config('booking.max_travelers', 10);
 
@@ -89,12 +109,16 @@ class BookingEngine
         if (! $departure->departs_on || $departure->departs_on->lte(now()->startOfDay())) {
             throw new \DomainException('This departure date has passed or is today. Choose a later departure.');
         }
+        if (! $ignoreCutoff && $departure->departs_on->lt($this->earliestBookableDate($tour))) {
+            $days = $this->cutoffDays($tour);
+            throw new \DomainException('Booking for this departure closed ' . $days . ' ' . ($days === 1 ? 'day' : 'days') . ' before it leaves. Choose a later departure.');
+        }
         if ($travelers < 1 || $travelers > $max) {
             throw new \DomainException('A booking can have 1 to ' . $max . ' travelers.');
         }
 
         $left = $this->seatsLeft($departure);
-        if ($travelers > $left) {
+        if ($left !== null && $travelers > $left) {
             throw new \DomainException($left === 0 ? 'This departure is full.' : 'Only ' . $left . ' ' . ($left === 1 ? 'seat is' : 'seats are') . ' left on this departure.');
         }
 
@@ -117,18 +141,18 @@ class BookingEngine
      *
      * @throws \DomainException
      */
-    public function create(array $data, string $source, User $customer, ?User $by = null): Booking
+    public function create(array $data, string $source, User $customer, ?User $by = null, bool $ignoreCutoff = false): Booking
     {
         if (! in_array($source, self::SOURCES, true)) {
             throw new \InvalidArgumentException('Unknown booking source.');
         }
 
-        $booking = DB::transaction(function () use ($data, $source, $customer, $by) {
+        $booking = DB::transaction(function () use ($data, $source, $customer, $by, $ignoreCutoff) {
             $tour = Tour::query()->find($data['tour_id']) ?? throw new \DomainException('Choose a tour.');
             $departure = TourDeparture::query()->lockForUpdate()->find($data['tour_departure_id']) ?? throw new \DomainException('Choose a departure.');
 
             $travelers = array_values($data['travelers']);
-            $quote = $this->quote($tour, $departure, count($travelers), (bool) ($data['insurance_selected'] ?? false));
+            $quote = $this->quote($tour, $departure, count($travelers), (bool) ($data['insurance_selected'] ?? false), $ignoreCutoff);
 
             $booking = Booking::create([
                 'reference' => Booking::generateReference(),
@@ -168,6 +192,7 @@ class BookingEngine
             'subject_id' => $booking->id, 'subject_type' => 'Booking', 'booking_reference' => $booking->reference,
             'source' => $source, 'created_by' => $by?->id, 'customer_id' => $customer->id,
             'tour_id' => $booking->tour_id, 'departure_id' => $booking->tour_departure_id,
+            'cutoff_overridden' => $ignoreCutoff && (bool) $booking->departure?->departs_on?->lt($this->earliestBookableDate($booking->tour ?? Tour::find($booking->tour_id))),
             'travelers' => $booking->travelers_count, 'total' => (float) $booking->total_amount, 'currency' => $booking->currency,
         ]);
 

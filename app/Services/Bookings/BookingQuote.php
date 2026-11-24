@@ -12,7 +12,7 @@ final class BookingQuote
         public readonly float $subtotal,
         public readonly float $insuranceAmount,
         public readonly float $total,
-        public readonly int $seatsLeft,
+        public readonly ?int $seatsLeft,   // null = unlimited
     ) {
     }
 

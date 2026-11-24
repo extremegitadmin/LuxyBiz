@@ -28,6 +28,7 @@ class CancellationRolesTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['booking.credits_enabled' => true]);   // these tests cover the credit option, which is off by default
         Notification::fake();
     }
 

@@ -16,6 +16,12 @@ return [
     // Most travelers one booking may hold. A bigger group is booked as several bookings or by the owner.
     'max_travelers' => (int) env('BOOKING_MAX_TRAVELERS', 10),
 
+    // Travel credit instead of a refund. The client said refunds only, so this is off. The code stays in case it is needed later.
+    'credits_enabled' => (bool) env('BOOKING_CREDITS_ENABLED', false),
+
+    // Booking closes this many days before departure (client: 5). A tour can set its own number (tours.booking_cutoff_days).
+    'cutoff_days' => (int) env('BOOKING_CUTOFF_DAYS', 5),
+
     // How long a customer payment link (Day 29) stays usable, in hours.
     'payment_link_hours' => (int) env('BOOKING_PAYMENT_LINK_HOURS', 72),
 ];

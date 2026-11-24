@@ -99,6 +99,7 @@
             </div>
         </div>
 
+        @if (config('booking.credits_enabled'))
         <div class="card rounded-4">
             <div class="card-body p-4">
                 <h5 class="mb-3 fw-semibold">Travel credit instead of a refund</h5>
@@ -115,6 +116,11 @@
                 </div>
             </div>
         </div>
+        @else
+            {{-- Travel credits are switched off (refund only). The values are kept so nothing is lost. --}}
+            <input type="hidden" name="credit_percent" value="{{ old('credit_percent', $policy->creditPercent) }}">
+            <input type="hidden" name="credit_months" value="{{ old('credit_months', $policy->creditMonths) }}">
+        @endif
 
         <div class="card rounded-4">
             <div class="card-body p-4">
