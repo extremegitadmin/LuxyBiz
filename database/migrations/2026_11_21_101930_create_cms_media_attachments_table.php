@@ -16,9 +16,9 @@ return new class extends Migration
                 ->constrained('cms_media')
                 ->cascadeOnDelete();
 
-            $table->morphs('attachable');
+            $table->morphs('attachable',191);
 
-            $table->string('collection_name')->nullable();
+            $table->string('collection_name',191)->nullable();
             $table->unsignedInteger('sort_order')->default(0);
 
             $table->timestamps();

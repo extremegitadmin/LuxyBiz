@@ -10,16 +10,16 @@ return new class extends Migration
         Schema::create('cms_media', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->string('file_name');
-            $table->string('file_path');
-            $table->string('disk')->default('public');
+            $table->string('name',191);
+            $table->string('file_name',191);
+            $table->string('file_path',191);
+            $table->string('disk',191)->default('public');
 
-            $table->string('mime_type')->nullable();
-            $table->string('file_type')->default('image');
+            $table->string('mime_type',191)->nullable();
+            $table->string('file_type',191)->default('image');
             $table->unsignedBigInteger('file_size')->default(0);
 
-            $table->string('alt_text')->nullable();
+            $table->string('alt_text',191)->nullable();
             $table->text('caption')->nullable();
 
             $table->unsignedInteger('width')->nullable();

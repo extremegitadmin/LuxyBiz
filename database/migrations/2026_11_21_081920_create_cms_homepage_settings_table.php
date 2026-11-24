@@ -11,33 +11,33 @@ return new class extends Migration
         Schema::create('cms_homepage_settings', function (Blueprint $table) {
             $table->id();
 
-            $table->string('hero_title')->nullable();
-            $table->text('hero_subtitle')->nullable();
+            $table->string('hero_title',191)->nullable();
+            $table->text('hero_subtitle',191)->nullable();
 
             $table->foreignId('hero_media_id')
                 ->nullable()
                 ->constrained('cms_media')
                 ->nullOnDelete();
 
-            $table->string('hero_button_text')->nullable();
-            $table->string('hero_button_url')->nullable();
+            $table->string('hero_button_text',191)->nullable();
+            $table->string('hero_button_url',191)->nullable();
 
             // IDs of existing tours selected for the homepage.
             $table->json('featured_tour_ids')->nullable();
 
-            $table->string('featured_section_title')->nullable();
+            $table->string('featured_section_title',191)->nullable();
             $table->text('featured_section_description')->nullable();
 
-            $table->string('trust_section_title')->nullable();
+            $table->string('trust_section_title',191)->nullable();
             $table->text('trust_section_description')->nullable();
 
-            $table->string('primary_cta_title')->nullable();
-            $table->string('primary_cta_button_text')->nullable();
-            $table->string('primary_cta_button_url')->nullable();
+            $table->string('primary_cta_title',191)->nullable();
+            $table->string('primary_cta_button_text',191)->nullable();
+            $table->string('primary_cta_button_url',191)->nullable();
 
-            $table->string('secondary_cta_title')->nullable();
-            $table->string('secondary_cta_button_text')->nullable();
-            $table->string('secondary_cta_button_url')->nullable();
+            $table->string('secondary_cta_title',191)->nullable();
+            $table->string('secondary_cta_button_text',191)->nullable();
+            $table->string('secondary_cta_button_url',191)->nullable();
 
             $table->timestamps();
         });
