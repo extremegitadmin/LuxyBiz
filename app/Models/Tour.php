@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
 class Tour extends Model
 {
     public const STATUSES = ['draft', 'published', 'archived'];
@@ -38,6 +39,12 @@ class Tour extends Model
         return $this->hasMany(TourDay::class)->orderBy('day_number');
     }
 
+    public function packages(): HasMany
+    {
+        return $this->hasMany(TourPackage::class)
+            ->orderBy('sort_order');
+    }
+
     public function departures(): HasMany
     {
         return $this->hasMany(TourDeparture::class)->orderBy('departs_on');
@@ -57,6 +64,7 @@ class Tour extends Model
     {
         return $query->where('status', 'published');
     }
+    
 
     /**
      * Convert a newline-separated database field into a clean list.

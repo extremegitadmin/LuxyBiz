@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ObjectiveController;
 use App\Http\Controllers\Admin\DepartureController;
 use App\Http\Controllers\Admin\TourCategoryController;
 use App\Http\Controllers\Admin\DepartureOperationsController;
+use App\Http\Controllers\Admin\TourPackageController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -35,6 +36,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Objectives
     Route::resource('objectives', ObjectiveController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    // Tour Packages (Silver, Gold, Platinum)
+    Route::prefix('tours/{tour}/packages')->name('tours.packages.')->controller(TourPackageController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{package}/edit', 'edit')->name('edit');
+        Route::put('/{package}', 'update')->name('update');
+        Route::delete('/{package}', 'destroy')->name('destroy');
+    });
 
     // Departures
     Route::resource('departures', DepartureController::class)->only(['index', 'show', 'store', 'update', 'destroy']);

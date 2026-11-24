@@ -40,11 +40,15 @@
         <div>
             <div class="text-secondary small mb-1">TOUR CATALOGUE / {{ $isEdit ? 'EDIT' : 'NEW' }}</div>
             <h1 class="editor-title h3 mb-1">{{ $isEdit ? $tour->title : 'Create a tour' }}</h1>
-            <div class="small text-secondary">{{ $isEdit ? 'Manage the content and presentation of this tour.' : 'Start with the essential information. You can add the itinerary and departures after saving.' }}</div>
+            <div class="small text-secondary">{{ $isEdit ? 'Manage the content and presentation of this tour.' : 'Start with the essential information. You can add packages after saving.' }}</div>
         </div>
         <div class="ms-auto d-flex flex-wrap gap-2">
             @if ($isEdit)
-                <a href="{{ route('admin.tours.itinerary', $tour) }}" class="btn btn-outline-primary"><i class="bi bi-calendar2-week me-1"></i> Itinerary</a>
+                <!-- <a href="{{ route('admin.tours.itinerary', $tour) }}" class="btn btn-outline-primary"><i class="bi bi-calendar2-week me-1"></i> Itinerary</a> -->
+                <a href="{{ route('admin.tours.packages.index', $tour) }}"
+                class="btn btn-outline-success">
+                    <i class="bi bi-box-seam me-1"></i> Manage Packages
+                </a>
                 <a href="{{ route('admin.tours.preview', $tour) }}" target="_blank" rel="noopener" class="btn btn-outline-secondary"><i class="bi bi-eye me-1"></i> Preview</a>
             @endif
             <a href="{{ route('admin.tours.index') }}" class="btn btn-light border"><i class="bi bi-arrow-left me-1"></i> All tours</a>
@@ -94,7 +98,7 @@
                 @foreach ([
                     'basics' => ['label' => 'Basic details', 'icon' => 'bi-card-text'],
                     'details' => ['label' => 'Other details', 'icon' => 'bi-info-circle'],
-                    'pricing' => ['label' => 'Pricing & cover', 'icon' => 'bi-currency-exchange'],
+                    'pricing' => ['label' => 'Cover image', 'icon' => 'bi-image'],
                     'gallery' => ['label' => 'Gallery', 'icon' => 'bi-images'],
                     'seo' => ['label' => 'SEO', 'icon' => 'bi-search'],
                 ] as $tab => $meta)
@@ -167,11 +171,20 @@
                             @error('destination')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label" for="duration_days">Duration in days <span class="text-danger">*</span></label>
-                            <input id="duration_days" type="number" min="1" max="365" name="duration_days"
-                                   class="form-control @error('duration_days') is-invalid @enderror"
-                                   value="{{ $field('duration_days', 7) }}" required>
-                            @error('duration_days')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <label class="form-label" for="duration_days">
+                                Duration <span class="text-danger">*</span>
+                            </label>
+                            <input id="duration_days"
+                                type="text"
+                                maxlength="50"
+                                name="duration_days"
+                                class="form-control @error('duration_days') is-invalid @enderror"
+                                value="{{ $field('duration_days', '7 days / 8 nights') }}"
+                                required
+                                placeholder="7 days / 8 nights">
+                            @error('duration_days')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="col-12">
@@ -202,11 +215,11 @@
                 {{-- OTHER DETAILS --}}
                 <div class="tab-pane fade" id="tab-details" role="tabpanel" aria-labelledby="tab-button-details">
                     <div class="mb-4">
-                        <h2 class="section-heading h5 mb-1">What's included in the experience?</h2>
-                        <p class="section-note mb-0">Add clear inclusions, exclusions and the tour expert's profile.</p>
+                        <h2 class="section-heading h5 mb-1">Tour expert information</h2>
+                        <p class="section-note mb-0">Add the travel expert or guide details for this tour.</p>
                     </div>
                     <div class="row g-3">
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <label class="form-label" for="inclusions">Inclusions</label>
                             <textarea id="inclusions" name="inclusions" rows="7" class="form-control"
                                       placeholder="One included item per line">{{ $field('inclusions') }}</textarea>
@@ -218,7 +231,7 @@
                                       placeholder="One excluded item per line">{{ $field('exclusions') }}</textarea>
                             <div class="form-text">For example: flights, personal expenses, travel insurance.</div>
                         </div>
-                        <div class="col-12"><hr class="my-2"></div>
+                        <div class="col-12"><hr class="my-2"></div> -->
                         <div class="col-md-6">
                             <label class="form-label" for="expert_name">Expert / guide name</label>
                             <input id="expert_name" name="expert_name" class="form-control" value="{{ $field('expert_name') }}" maxlength="191">
@@ -237,11 +250,11 @@
                 {{-- PRICING AND COVER --}}
                 <div class="tab-pane fade" id="tab-pricing" role="tabpanel" aria-labelledby="tab-button-pricing">
                     <div class="mb-4">
-                        <h2 class="section-heading h5 mb-1">Pricing and cover image</h2>
-                        <p class="section-note mb-0">Set the base price. Specific departure prices are managed in Departures.</p>
+                        <h2 class="section-heading h5 mb-1">Tour cover image</h2>
+                        <p class="section-note mb-0">Upload the main image displayed for this tour.</p>
                     </div>
                     <div class="row g-4">
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <label class="form-label" for="base_price">Base price per traveller <span class="text-danger">*</span></label>
                             <input id="base_price" type="number" name="base_price" min="0" step="0.01" required
                                    class="form-control @error('base_price') is-invalid @enderror"
@@ -265,9 +278,9 @@
                             @else
                                 <div class="hint-box w-100">Save this tour first. You can then add departure dates, capacity and departure-specific pricing.</div>
                             @endif
-                        </div>
+                        </div> -->
 
-                        <div class="col-12"><hr class="my-1"></div>
+                        <!-- <div class="col-12"><hr class="my-1"></div> -->
                         <div class="col-lg-7">
                             <label class="form-label" for="hero_image">Main / hero image</label>
                             <input id="hero_image" type="file" name="hero_image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
