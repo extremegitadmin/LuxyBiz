@@ -653,10 +653,14 @@
     font-size: 16px;
     left: 15px;
 }
-/* 
+
 .material-icons-outlined {
-	line-height: inherit;
-} */
+	font-size: 21px;
+}
+
+i.material-icons-outlined:active {
+    color: #c9962e;
+}
 
 .input-group-text {
 	background-color: transparent;
