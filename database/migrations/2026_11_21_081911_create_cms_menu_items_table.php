@@ -20,10 +20,10 @@ return new class extends Migration
                 ->constrained('cms_menu_items')
                 ->cascadeOnDelete();
 
-            $table->string('label');
-            $table->string('url')->nullable();
+            $table->string('label',191);
+            $table->string('url',191)->nullable();
 
-            $table->string('target')->default('_self');
+            $table->string('target',191)->default('_self');
 
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('sort_order')->default(0);

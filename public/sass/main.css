@@ -405,6 +405,7 @@ input::placeholder {
 }
 .sidebar-wrapper .sidebar-nav .metismenu li + li {
   margin-top: 5px;
+  color: #c9962e;
 }
 .sidebar-wrapper .sidebar-nav .metismenu li:first-child {
   margin-top: 5px;
