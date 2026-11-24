@@ -93,19 +93,19 @@ return [
             'admin.objectives.delete' => 'Delete objectives',
         ],
 
-        'Departures' => [
-            'admin.departures.view' => 'View departures',
-            'admin.departures.create' => 'Create departures',
-            'admin.departures.edit' => 'Edit departures',
-            'admin.departures.delete' => 'Delete departures',
-            'admin.departures.toggle' => 'Activate or deactivate departures',
-        ],
+        // 'Departures' => [
+        //     'admin.departures.view' => 'View departures',
+        //     'admin.departures.create' => 'Create departures',
+        //     'admin.departures.edit' => 'Edit departures',
+        //     'admin.departures.delete' => 'Delete departures',
+        //     'admin.departures.toggle' => 'Activate or deactivate departures',
+        // ],
 
-        'Departure Operations' => [
-            'admin.departure-operations.view' => 'View departure operations',
-            'admin.departure-operations.manifest' => 'View departure manifest',
-            'admin.departure-operations.sales.toggle' => 'Enable or disable departure sales',
-        ],
+        // 'Departure Operations' => [
+        //     'admin.departure-operations.view' => 'View departure operations',
+        //     'admin.departure-operations.manifest' => 'View departure manifest',
+        //     'admin.departure-operations.sales.toggle' => 'Enable or disable departure sales',
+        // ],
 
         'CMS Pages' => [
             'admin.cms.pages.view' => 'View CMS pages',

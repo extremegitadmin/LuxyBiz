@@ -68,7 +68,7 @@
       </li>
       @endcan
 
-      @can('admin.departures.view')
+      <!-- @can('admin.departures.view')
       <li class="{{ request()->routeIs('admin.departures.*') ? 'mm-active' : '' }}">
           <a href="{{ route('admin.departures.index') }}">
               <div class="parent-icon">
@@ -77,9 +77,9 @@
               <div class="menu-title">Departures</div>
           </a>
       </li>
-      @endcan
+      @endcan -->
 
-      @can('admin.departure-operations.view')
+      <!-- @can('admin.departure-operations.view')
       <li class="{{ request()->routeIs('admin.departure-operations.*') ? 'mm-active' : '' }}">
           <a href="{{ route('admin.departure-operations.index') }}">
               <div class="parent-icon">
@@ -88,7 +88,7 @@
               <div class="menu-title">Departure Operations</div>
           </a>
       </li>
-      @endcan    
+      @endcan     -->
       <!-- END TOUR -->
 
       @canany(['admin.bookings.view', 'admin.assisted.view', 'admin.payments.view', 'admin.payments.events.view'])
