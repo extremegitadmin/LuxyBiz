@@ -13,7 +13,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::1Zg9IwDFbWu0xpvf',
+            '_route' => 'generated::YlNQCDjax93sJhy5',
           ),
           1 => NULL,
           2 => 
@@ -129,7 +129,8 @@ app('router')->setCompiledRoutes(
           1 => NULL,
           2 => 
           array (
-            'POST' => 0,
+            'GET' => 0,
+            'HEAD' => 1,
           ),
           3 => NULL,
           4 => false,
@@ -3122,7 +3123,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::1Zg9IwDFbWu0xpvf' => 
+    'generated::YlNQCDjax93sJhy5' => 
     array (
       'methods' => 
       array (
@@ -3150,8 +3151,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'C:\\\\wamp64\\\\www\\\\laravel\\\\luxybiz\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000006280000000000000000";}}',
-        'as' => 'generated::1Zg9IwDFbWu0xpvf',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"0000000000000a0d0000000000000000";}}',
+        'as' => 'generated::YlNQCDjax93sJhy5',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3257,8 +3258,8 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'guest',
         ),
-        'uses' => 'PasswordController@showForgot',
-        'controller' => 'PasswordController@showForgot',
+        'uses' => 'App\\Http\\Controllers\\Auth\\PasswordController@showForgot',
+        'controller' => 'App\\Http\\Controllers\\Auth\\PasswordController@showForgot',
         'as' => 'admin.password.request',
         'namespace' => NULL,
         'prefix' => '/admin',
@@ -3295,8 +3296,8 @@ app('router')->setCompiledRoutes(
           1 => 'guest',
           2 => 'throttle:5,1',
         ),
-        'uses' => 'PasswordController@sendLink',
-        'controller' => 'PasswordController@sendLink',
+        'uses' => 'App\\Http\\Controllers\\Auth\\PasswordController@sendLink',
+        'controller' => 'App\\Http\\Controllers\\Auth\\PasswordController@sendLink',
         'as' => 'admin.password.email',
         'namespace' => NULL,
         'prefix' => '/admin',
@@ -3333,8 +3334,8 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'guest',
         ),
-        'uses' => 'PasswordController@showReset',
-        'controller' => 'PasswordController@showReset',
+        'uses' => 'App\\Http\\Controllers\\Auth\\PasswordController@showReset',
+        'controller' => 'App\\Http\\Controllers\\Auth\\PasswordController@showReset',
         'as' => 'admin.password.reset',
         'namespace' => NULL,
         'prefix' => '/admin',
@@ -3371,8 +3372,8 @@ app('router')->setCompiledRoutes(
           1 => 'guest',
           2 => 'throttle:5,1',
         ),
-        'uses' => 'PasswordController@reset',
-        'controller' => 'PasswordController@reset',
+        'uses' => 'App\\Http\\Controllers\\Auth\\PasswordController@reset',
+        'controller' => 'App\\Http\\Controllers\\Auth\\PasswordController@reset',
         'as' => 'admin.password.update',
         'namespace' => NULL,
         'prefix' => '/admin',
@@ -3398,7 +3399,8 @@ app('router')->setCompiledRoutes(
     array (
       'methods' => 
       array (
-        0 => 'POST',
+        0 => 'GET',
+        1 => 'HEAD',
       ),
       'uri' => 'admin/logout',
       'action' => 
@@ -3762,7 +3764,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
-          3 => 'permission:roles.view',
+          3 => 'permission:admin.roles.view',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\RoleController@index',
         'controller' => 'App\\Http\\Controllers\\Admin\\RoleController@index',
@@ -3802,7 +3804,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
-          3 => 'permission:roles.create',
+          3 => 'permission:admin.roles.create',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\RoleController@create',
         'controller' => 'App\\Http\\Controllers\\Admin\\RoleController@create',
@@ -3841,7 +3843,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
-          3 => 'permission:roles.create',
+          3 => 'permission:admin.roles.create',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\RoleController@store',
         'controller' => 'App\\Http\\Controllers\\Admin\\RoleController@store',
@@ -3881,7 +3883,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
-          3 => 'permission:roles.edit',
+          3 => 'permission:admin.roles.edit',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\RoleController@edit',
         'controller' => 'App\\Http\\Controllers\\Admin\\RoleController@edit',
@@ -3920,7 +3922,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
-          3 => 'permission:roles.edit',
+          3 => 'permission:admin.roles.edit',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\RoleController@update',
         'controller' => 'App\\Http\\Controllers\\Admin\\RoleController@update',
@@ -3959,7 +3961,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
-          3 => 'permission:roles.delete',
+          3 => 'permission:admin.roles.delete',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\RoleController@destroy',
         'controller' => 'App\\Http\\Controllers\\Admin\\RoleController@destroy',
@@ -3999,6 +4001,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
+          3 => 'permission:admin.insurance.view',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\InsuranceController@index',
         'controller' => 'App\\Http\\Controllers\\Admin\\InsuranceController@index',
@@ -4037,6 +4040,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
+          3 => 'permission:admin.insurance.create',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\InsuranceController@store',
         'controller' => 'App\\Http\\Controllers\\Admin\\InsuranceController@store',
@@ -4075,6 +4079,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
+          3 => 'permission:admin.insurance.edit',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\InsuranceController@update',
         'controller' => 'App\\Http\\Controllers\\Admin\\InsuranceController@update',
@@ -4114,6 +4119,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
           1 => 'auth',
           2 => 'permission',
+          3 => 'permission:admin.insurance.delete',
         ),
         'uses' => 'App\\Http\\Controllers\\Admin\\InsuranceController@destroy',
         'controller' => 'App\\Http\\Controllers\\Admin\\InsuranceController@destroy',
@@ -8846,7 +8852,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"000000000000062d0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000a120000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,
@@ -8879,7 +8885,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"000000000000096c0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"0000000000000aa90000000000000000";}}',
         'as' => 'storage.local.upload',
       ),
       'fallback' => false,
