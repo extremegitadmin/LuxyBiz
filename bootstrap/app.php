@@ -12,12 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Not logged in -> send to admin login page
         $middleware->redirectGuestsTo(fn () => route('admin.login'));
-        $middleware->redirectUsersTo('/admin/dashboard');
+
+        // Already logged in and opens the login page -> send to dashboard
+        $middleware->redirectUsersTo(fn () => route('admin.dashboard'));
+
         $middleware->alias([
             'permission' => CheckPermission::class,
         ]);
-        $middleware->redirectUsersTo('admin.dashboard');   // a signed-in person who opens /login goes to the dashboard
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

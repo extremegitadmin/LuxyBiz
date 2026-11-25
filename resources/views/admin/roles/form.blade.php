@@ -36,7 +36,7 @@
                         @if ($isEdit) @method('PUT') @endif
                         <div class="col-md-5">
                             <label for="input1" class="form-label">Role Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name="name" id="name" maxlength="60" @error('name') is-invalid @enderror" value="{{ old('name', $role->name) }}" placeholder="For example: Accounts" required>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" maxlength="60" value="{{ old('name', $role->name) }}" placeholder="For example: Accounts" required>
                         </div>
                         <div class="col-md-7">
                             <label for="input2" class="form-label">Short description <span class="text-danger">*</span></label>

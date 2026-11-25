@@ -836,6 +836,13 @@
         'admin.media.alt-text.edit' => 'Edit media alt text and captions',
         'admin.media.where-used.view' => 'View where media files are used',
       ),
+      'Insurance' => 
+      array (
+        'admin.insurance.view' => 'View Insurance options',
+        'admin.insurance.create' => 'Create Insurance options',
+        'admin.insurance.edit' => 'Edit Insurance options',
+        'admin.insurance.delete' => 'Delete Insurance options',
+      ),
     ),
   ),
   'queue' => 
