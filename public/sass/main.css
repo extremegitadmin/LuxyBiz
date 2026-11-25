@@ -451,9 +451,8 @@ input::placeholder {
   background-color: #fff;  
 }
 .sidebar-wrapper .sidebar-nav .metismenu a:focus {
-  color: #000;
+  color: #fff;
   text-decoration: none;
-  background-color: #fff;
 }
 .sidebar-wrapper .sidebar-nav .metismenu a:hover {
   color: #fff;

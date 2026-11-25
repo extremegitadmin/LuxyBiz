@@ -177,12 +177,12 @@
         </a>
       </li> 
       <li @if($url == "users") class="active mm-active" @endif>
-        <a href="{{route('admin.roles.index')}}">
+        <a href="{{route('admin.users.index')}}">
           <div class="parent-icon"><i class="material-icons-outlined">person</i>
           </div>
           <div class="menu-title">Users</div>
         </a>
-      </li> 
+      </li>      
 
       <!-- CONTENT MANAGEMENT -->
       @canany([
@@ -234,7 +234,7 @@
       <li class="{{ request()->routeIs('admin.cms.trust-items.*') ? 'mm-active' : '' }}">
           <a href="{{ route('admin.cms.trust-items.index') }}">
               <div class="parent-icon">
-                  <i class="material-icons-outlined">verified_user</i>
+                  <i class="material-icons-outlined">shield</i>
               </div>
               <div class="menu-title">Trust Items</div>
           </a>
@@ -273,6 +273,14 @@
           </a>
       </li>
       @endcan
+      <li class="menu-label">SETTINGS</li>
+      <li @if($url == "insurance") class="active mm-active" @endif>
+        <a href="{{route('admin.insurance.index')}}">
+          <div class="parent-icon"><i class="material-icons-outlined">verified_user</i>
+          </div>
+          <div class="menu-title">Insurance Options</div>
+        </a>
+      </li> 
     </ul>
     <!--end navigation-->
   </div>

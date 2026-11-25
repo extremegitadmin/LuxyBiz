@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\InsuranceController;
 
 use App\Http\Controllers\Admin\TourController;
 use App\Http\Controllers\Admin\ObjectiveController;
@@ -76,6 +77,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::delete('roles/{role}', [RoleController::class, 'destroy'])
             ->middleware('permission:roles.delete')->name('roles.destroy');
+
+        // Insurance options (checkout step 3)
+        Route::get('insurance', [InsuranceController::class, 'index'])->name('insurance.index');
+        Route::post('insurance', [InsuranceController::class, 'store'])->name('insurance.store');
+        Route::put('insurance/{option}', [InsuranceController::class, 'update'])->name('insurance.update')->whereNumber('option');
+        Route::delete('insurance/{option}', [InsuranceController::class, 'destroy'])->name('insurance.destroy')->whereNumber('option');
     });
 });
 
