@@ -115,4 +115,22 @@ class Booking extends Model
 
         $this->update(['payment_status' => $status]);
     }
+    protected static function booted(): void
+{
+    static::creating(function (self $b) {
+        $b->booking_date ??= now()->toDateString();
+    });
+    static::saving(function (self $b) {
+    if ($b->tour_departure_id && ($b->tour_date === null || $b->isDirty('tour_departure_id'))) {
+        $b->tour_date = \App\Models\TourDeparture::whereKey($b->tour_departure_id)->value('departs_on');
+    }
+});
+
+static::saved(function (self $b) {
+    // travelers follow the booking's tour date
+    if ($b->wasChanged('tour_date')) {
+        $b->travelers()->update(['tour_date' => $b->tour_date]);
+    }
+});
+}
 }
