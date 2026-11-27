@@ -4,12 +4,14 @@
 @section('content')
  <!--breadcrumb-->
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title">Insurance Options</div>
+        <div class="breadcrumb-title">Fulfillment Desk</div>
         <div class="ms-auto">
             <div class="btn-group">
-                @if ($selected)
-                    <a class="btn btn-outline-primary ms-auto" href="{{ route('admin.fulfillment.manifest', $selected) }}"><i class="bi bi-printer me-1"></i>Daily manifest</a>
-                @endif
+                @can('admin.fulfillment.manifest')
+                    @if ($selected)
+                        <a class="btn btn-outline-primary ms-auto" href="{{ route('admin.fulfillment.manifest', $selected) }}"><i class="bi bi-printer me-1"></i>Daily manifest</a>
+                    @endif
+                @endcan
             </div>
         </div>
     </div>
@@ -73,35 +75,29 @@
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Option</th>
-                                    <th style="width:130px">Price each</th>
-                                    <th style="width:90px">Order</th>
-                                    <th style="width:90px">Active</th>
-                                    <th class="text-end">Actions</th>
+                                    <th>Traveler</th>
+                                    <th>Booking</th>
+                                    <th>Insurance</th>
+                                    <th>Medical</th>
+                                    <th style="min-width:240px">Arrival details</th>
+                                    <th style="min-width:220px">Flag for ground team</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($options as $o)
-                                @php $f = 'ins-' . $o->id; @endphp
+                                @foreach ($travelers as $t)
+                                @php $f = 'tr-' . $t->id; @endphp
                                 <tr>
-                                    <td>
-                                        <input form="{{ $f }}" name="name" value="{{ $o->name }}" class="form-control mb-1" aria-label="Label" required>
-                                        <textarea form="{{ $f }}" name="description" rows="2" class="form-control" aria-label="Description">{{ $o->description }}</textarea>
+                                    <td class="fw-medium">{{ $t->full_name }}
+                                        <div class="small text-secondary">{{ $t->phone }}</div>
                                     </td>
-                                    <td>
-                                        <input form="{{ $f }}" name="price" type="number" step="0.01" min="0" value="{{ $o->price }}" class="form-control" aria-label="Price">
-                                    </td>
-                                    <td>
-                                        <input form="{{ $f }}" name="sort_order" type="number" min="0" value="{{ $o->sort_order }}" class="form-control" aria-label="Order">
-                                    </td>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input form="{{ $f }}" class="form-check-input" type="checkbox" role="switch" name="is_active" value="1" @checked($o->is_active) aria-label="Active">
-                                        </div>
-                                    </td>
-                                    <td class="text-end text-nowrap">
-                                        <form id="{{ $f }}" method="POST" action="{{ route('admin.insurance.update', $o) }}" class="d-inline">@csrf @method('PUT')<button class="btn btn-sm btn-primary">Save</button></form>
-                                        <form method="POST" action="{{ route('admin.insurance.destroy', $o) }}" class="d-inline" data-confirm="Delete this option?">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Delete</button></form>
+                                    <td>@if ($isAdmin)<a href="{{ route('admin.bookings.show', $t->booking_id) }}">{{ $t->booking->reference }}</a>@else{{ $t->booking->reference }}@endif</td>
+                                    <td>@if ($t->booking->insurance_selected)<span class="badge badge-soft-success">Yes</span>@else<span class="badge badge-soft-secondary">No</span>@endif</td>
+                                    <td>@if ($t->health_notes)<span class="badge badge-soft-danger"><i class="bi bi-heart-pulse me-1"></i>Alert</span><div class="small mt-1" style="max-width:220px">{{ \Illuminate\Support\Str::limit($t->health_notes, 90) }}</div>@else<span class="text-secondary">None</span>@endif</td>
+                                    <td><input form="{{ $f }}" name="arrival_details" value="{{ $t->arrival_details }}" class="form-control form-control-sm" placeholder="Flight, time, airport" aria-label="Arrival details"></td>
+                                    <td><input form="{{ $f }}" name="flag_note" value="{{ $t->flag_note }}" class="form-control form-control-sm" placeholder="e.g. needs wheelchair assistance" aria-label="Flag"></td>
+                                    <td class="text-end">
+                                        <form id="{{ $f }}" method="POST" action="{{ route('admin.fulfillment.traveler', $t) }}">@csrf @method('PATCH')<button class="btn btn-sm btn-primary">Save</button></form>
                                     </td>
                                 </tr>
                                 @endforeach

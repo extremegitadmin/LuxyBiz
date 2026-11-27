@@ -23,16 +23,30 @@
     @endif 
     <form method="GET" class="panel panel-body mb-3 row g-2 align-items-end">
         @csrf
-        <div class="col-md-4"><label class="form-label small" for="q">Search</label>
-            <input id="q" name="q" class="form-control" value="{{ request('q') }}" placeholder="Name, email or phone"></div>
+        <div class="col-md-4">
+            <label class="form-label small" for="q">Search</label>
+            <input id="q" name="q" class="form-control" value="{{ request('q') }}" placeholder="Name, email or phone">
+        </div>
         <div class="col-md-3"><label class="form-label small" for="role_id">Role</label>
-            <select id="role_id" name="role_id" class="form-select"><option value="">All roles</option>
-                @foreach ($roles as $r)<option value="{{ $r->id }}" @selected(request('role_id') == $r->id)>{{ $r->name }}</option>@endforeach</select></div>
-        <div class="col-md-2"><label class="form-label small" for="status">Status</label>
-            <select id="status" name="status" class="form-select"><option value="">All</option>
+            <select id="role_id" name="role_id" class="form-select">
+                <option value="">All roles</option>
+                @foreach ($roles as $r)
+                <option value="{{ $r->id }}" @selected(request('role_id') == $r->id)>{{ $r->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small" for="status">Status</label>
+            <select id="status" name="status" class="form-select">
+                <option value="">All</option>
                 <option value="active" @selected(request('status') === 'active')>Active</option>
-                <option value="inactive" @selected(request('status') === 'inactive')>Deactivated</option></select></div>
-        <div class="col-md-3 d-flex gap-2"><button class="btn btn-primary">Filter</button><a class="btn btn-outline-secondary" href="{{ route('admin.users.index') }}">Reset</a></div>
+                <option value="inactive" @selected(request('status') === 'inactive')>Deactivated</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-primary">Filter</button>
+            <a class="btn btn-outline-secondary" href="{{ route('admin.users.index') }}">Reset</a>
+        </div>
     </form>
     <div class="row">
 		<div class="col-12 col-xl-12">
