@@ -92,7 +92,9 @@ return [
             'admin.objectives.edit' => 'Edit objectives',
             'admin.objectives.delete' => 'Delete objectives',
         ],
-
+        'Customers' => [
+            'admin.customers.view' => 'See the Customers menu: the list of customers, their bookings and (with the documents permission) their documents',
+        ],
         // 'Departures' => [
         //     'admin.departures.view' => 'View departures',
         //     'admin.departures.create' => 'Create departures',

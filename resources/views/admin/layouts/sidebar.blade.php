@@ -91,7 +91,7 @@
       @endcan     -->
       <!-- END TOUR -->
 
-      @canany(['admin.bookings.view', 'admin.assisted.view', 'admin.payments.view', 'admin.payments.events.view'])
+      @canany(['admin.bookings.view', 'admin.assisted.view', 'admin.customers.view', 'admin.payments.view', 'admin.payments.events.view'])
       <li class="menu-label">BOOKINGS</li>
       @endcanany
       @can('admin.bookings.view')
@@ -109,6 +109,15 @@
           <div class="parent-icon"><i class="material-icons-outlined">support_agent</i>
           </div>
           <div class="menu-title">Assisted bookings</div>
+        </a>
+      </li>
+      @endcan
+       @can('admin.customers.view')
+      <li class="{{ request()->routeIs('admin.customers.*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.customers.index') }}">
+          <div class="parent-icon"><i class="material-icons-outlined">groups</i>
+          </div>
+          <div class="menu-title">Customers</div>
         </a>
       </li>
       @endcan
