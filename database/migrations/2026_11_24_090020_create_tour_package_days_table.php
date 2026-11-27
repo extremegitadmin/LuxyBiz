@@ -14,16 +14,13 @@ return new class extends Migration
             $table->foreignId('tour_package_id')
                 ->constrained('tour_packages')
                 ->cascadeOnDelete();
-
             $table->unsignedInteger('day_number');
             $table->string('title', 160);
             $table->longText('description')->nullable();
             $table->longText('activities')->nullable();
             $table->string('meals', 120)->nullable();
             $table->string('stay', 160)->nullable();
-
             $table->timestamps();
-
             $table->unique(['tour_package_id', 'day_number']);
         });
     }

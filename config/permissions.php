@@ -85,6 +85,12 @@ return [
             'admin.tours.itinerary.delete' => 'Delete itinerary days',
             'admin.tours.gallery.delete' => 'Delete tour gallery images',
         ],
+        'Tour Packages' => [
+            'admin.tour-packages.view' => 'View tour packages',
+            'admin.tour-packages.create' => 'Create tour packages',
+            'admin.tour-packages.edit' => 'Edit tour packages',
+            'admin.tour-packages.delete' => 'Delete tour packages',
+        ],
 
         'Objectives' => [
             'admin.objectives.view' => 'View objectives',
@@ -95,6 +101,7 @@ return [
         'Customers' => [
             'admin.customers.view' => 'See the Customers menu: the list of customers, their bookings and (with the documents permission) their documents',
         ],
+
         // 'Departures' => [
         //     'admin.departures.view' => 'View departures',
         //     'admin.departures.create' => 'Create departures',

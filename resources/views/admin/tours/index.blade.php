@@ -196,15 +196,29 @@
                                             <i class="bi bi-sliders me-1"></i> Manage
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-basics"><i class="bi bi-card-text"></i> Basic details</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-basics">
+                                                <i class="bi bi-card-text"></i> Basic details</a>
+                                            </li>
 
-                                            <li><a class="dropdown-item" href="{{ route('admin.tours.itinerary', $tour) }}"><i class="bi bi-calendar2-week"></i> Itinerary <span class="text-secondary ms-1">({{ $tour->days_count }})</span></a></li>
-                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-gallery"><i class="bi bi-images"></i> Gallery <span class="text-secondary ms-1">({{ $tour->images_count }})</span></a></li>
-                                            <li><a class="dropdown-item" href="{{ route('admin.departures.index', ['tour_id' => $tour->id]) }}"><i class="bi bi-calendar-event"></i> Departures <span class="text-secondary ms-1">({{ $tour->departures_count }})</span></a></li>
+                                            <!-- <li><a class="dropdown-item" href="{{ route('admin.tours.itinerary', $tour) }}">
+                                                <i class="bi bi-calendar2-week"></i> Itinerary 
+                                                <span class="text-secondary ms-1">({{ $tour->days_count }})</span></a>
+                                            </li> -->
+                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-gallery">
+                                                <i class="bi bi-images"></i> Gallery <span class="text-secondary ms-1">({{ $tour->images_count }})</span></a></li>
+                                            <!-- <li><a class="dropdown-item" href="{{ route('admin.departures.index', ['tour_id' => $tour->id]) }}">
+                                                <i class="bi bi-calendar-event"></i> Departures 
+                                                <span class="text-secondary ms-1">({{ $tour->departures_count }})</span></a></li> -->
                                             <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-details"><i class="bi bi-info-circle"></i> Other details</a></li>
-                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-seo"><i class="bi bi-search"></i> SEO settings</a></li>
-                                            <li><a class="dropdown-item" href="{{ route('admin.tours.preview', $tour) }}" target="_blank" rel="noopener"><i class="bi bi-eye"></i> Preview tour</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-details">
+                                                <i class="bi bi-info-circle"></i> Other details</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="{{ route('admin.tours.edit', $tour) }}#tab-seo">
+                                                <i class="bi bi-search"></i> SEO settings</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="{{ route('admin.tours.preview', $tour) }}" target="_blank" 
+                                            rel="noopener"><i class="bi bi-eye"></i> Preview tour</a>
+                                        </li>
                                         </ul>
                                     </div>
 
