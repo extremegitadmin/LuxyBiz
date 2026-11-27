@@ -28,6 +28,7 @@
       @canany([
           'admin.tour-categories.view',
           'admin.tours.view',
+          'admin.tour-packages.view',
           'admin.objectives.view',
           'admin.departures.view',
           'admin.departure-operations.view'
@@ -56,6 +57,7 @@
           </a>
       </li>
       @endcan
+
 
       @can('admin.objectives.view')
       <li class="{{ request()->routeIs('admin.objectives.*') ? 'mm-active' : '' }}">

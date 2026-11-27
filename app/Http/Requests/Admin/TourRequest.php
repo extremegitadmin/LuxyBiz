@@ -43,7 +43,6 @@ class TourRequest extends FormRequest
             'short_description' => ['nullable', 'string', 'max:1000'],
             'description' => ['nullable', 'string'],
             'highlights' => ['nullable', 'string'],
-
             // Itinerary
             // 'days' => ['sometimes', 'array'],
             // 'days.*.title' => ['required', 'string', 'max:160'],
@@ -51,18 +50,15 @@ class TourRequest extends FormRequest
             // 'days.*.activities' => ['nullable', 'string'],
             // 'days.*.meals' => ['nullable', 'string', 'max:120'],
             // 'days.*.stay' => ['nullable', 'string', 'max:160'],
-
             // Details
             // 'inclusions' => ['nullable', 'string'],
             // 'exclusions' => ['nullable', 'string'],
             'expert_name' => ['nullable', 'string', 'max:191'],
             'expert_role' => ['nullable', 'string', 'max:191'],
             'expert_bio' => ['nullable', 'string'],
-
             // Pricing
             // 'base_price' => ['required', 'numeric', 'min:0'],
             // 'currency' => ['required', Rule::in(Tour::CURRENCIES)],
-
             // Main image
             'hero_image' => [
                 'nullable',
@@ -70,7 +66,6 @@ class TourRequest extends FormRequest
                 'mimes:jpg,jpeg,png,webp',
                 'max:5120',
             ],
-
             // Gallery images
             'gallery_images' => ['nullable', 'array', 'max:12'],
             'gallery_images.*' => [
