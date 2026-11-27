@@ -137,9 +137,9 @@
       <li class="{{ request()->routeIs('admin.payments.events') ? 'mm-active' : '' }}">
         <a href="{{ route('admin.payments.events') }}">
           <div class="parent-icon">
-              <i class="material-icons-outlined">webhook</i>
+              <i class="material-icons-outlined">history</i>
           </div>
-          <div class="menu-title">Webhook events</div>
+          <div class="menu-title">Payment Activity</div>
         </a>
       </li>
       @endcan

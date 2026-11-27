@@ -7,7 +7,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
                     <li class="breadcrumb-item"><a href="{{ route('admin.payments.index') }}"><i class="bx bx-home-alt"></i></a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Webhook events</li>
+                    <li class="breadcrumb-item active" aria-current="page">Payment activity</li>
                 </ol>
             </nav>
         </div>
@@ -127,11 +127,11 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="text-center text-secondary py-5">
-                                    No webhook events match these filters.
+                                    No payment activity match these filters.
                                     @if (request()->query())
                                         <a href="{{ route('admin.payments.events') }}">Clear the filters</a>
                                     @else
-                                        <div class="small mt-1">Events appear here once an online gateway is connected and sends webhooks.</div>
+                                        <div class="small mt-1">Activity appears here once an online payment gateway is connected and starts sending updates.</div>
                                     @endif
                                 </td>
                             </tr>

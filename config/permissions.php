@@ -29,7 +29,7 @@ return [
         ],
         'Payments' => [
             'admin.payments.view' => 'View payments (list and detail)',
-            'admin.payments.events.view' => 'View payment webhook events',
+            'admin.payments.events.view' => 'View payment activity',
             'admin.payments.link.create' => 'Create online payment links for a booking',
         ],
         'Payment settings' => [
