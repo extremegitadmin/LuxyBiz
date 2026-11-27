@@ -46,5 +46,8 @@ class BookingTraveler extends Model
     static::creating(function (self $t) {
         $t->booking_date ??= $t->booking?->booking_date ?? now()->toDateString();
     });
+    static::creating(function (self $t) {
+    $t->tour_date ??= $t->booking?->tour_date;
+});
 }
 }
