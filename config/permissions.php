@@ -157,6 +157,13 @@ return [
             'admin.media.where-used.view' => 'View where media files are used',
         ],
 
+        'Insurance' => [
+            'admin.insurance.view'   => 'View Insurance options',
+            'admin.insurance.create' => 'Create Insurance options',
+            'admin.insurance.edit'   => 'Edit Insurance options',
+            'admin.insurance.delete' => 'Delete Insurance options',
+        ],
+
 
         // 'Products (sample module)' => [
         //     'products.view' => 'View products',

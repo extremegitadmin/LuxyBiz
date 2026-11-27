@@ -30,7 +30,7 @@
                             <h5 class="mb-4">Roles List</h5>
                         </div>
                         <div class="col-md-2">
-                            @can('roles.create')<a href="{{ route('admin.roles.create') }}" class="btn btn-primary ms-auto"><i class="bi bi-plus-lg me-1"></i>Create role</a>@endcan
+                            @can('admin.roles.create')<a href="{{ route('admin.roles.create') }}" class="btn btn-primary ms-auto"><i class="bi bi-plus-lg me-1"></i>Create role</a>@endcan
                         </div>
                     </div>                   
                     <p class="text-secondary">A role is a named set of permissions. Create the role first, then add users under it on the Users page. The Super Admin always has every permission and is not a role.</p>
@@ -55,7 +55,7 @@
                                     <td class="text-end text-nowrap">
                                         @can('admin.users.create')<a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.users.create', ['role_id' => $role->id]) }}">Add user</a>@endcan
                                         @can('admin.roles.edit')<a class="btn btn-sm btn-outline-primary" href="{{ route('admin.roles.edit', $role) }}">Edit</a>@endcan
-                                        @can('roles.delete')
+                                        @can('admin.roles.delete')
                                             <form method="POST" action="{{ route('admin.roles.destroy', $role) }}" class="d-inline" data-confirm="Delete the role {{ $role->name }}?">
                                                 @csrf @method('DELETE')
                                                 <button class="btn btn-sm btn-outline-danger" @disabled($role->users_count > 0) title="{{ $role->users_count > 0 ? 'Move its users to another role first' : 'Delete role' }}">Delete</button>

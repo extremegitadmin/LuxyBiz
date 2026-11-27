@@ -176,23 +176,28 @@
         </a>
       </li>
       @endcan
-      <li class="menu-label">ROLES & PERMISSIONS</li>
       
-      <li @if($url == "roles") class="active mm-active" @endif>
-        <a href="{{route('admin.roles.index')}}">
-          <div class="parent-icon"><i class="material-icons-outlined">lock</i>
-          </div>
+      @canany(['admin.roles.view', 'admin.users.view'])
+      <li class="menu-label">ROLES & PERMISSIONS</li>
+      @endcanany
+
+      @can('admin.roles.view')
+      <li class="{{ request()->routeIs('admin.roles.*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.roles.index') }}">
+          <div class="parent-icon"><i class="material-icons-outlined">lock</i></div>
           <div class="menu-title">Roles</div>
         </a>
-      </li> 
-      <li @if($url == "users") class="active mm-active" @endif>
-        <a href="{{route('admin.users.index')}}">
-          <div class="parent-icon"><i class="material-icons-outlined">person</i>
-          </div>
+      </li>
+      @endcan
+
+      @can('admin.users.view')
+      <li class="{{ request()->routeIs('admin.users.*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.users.index') }}">
+          <div class="parent-icon"><i class="material-icons-outlined">person</i></div>
           <div class="menu-title">Users</div>
         </a>
-      </li>      
-
+      </li>
+      @endcan
       <!-- CONTENT MANAGEMENT -->
       @canany([
           'admin.cms.pages.view',
@@ -282,14 +287,15 @@
           </a>
       </li>
       @endcan
+      @can('admin.insurance.view')
       <li class="menu-label">SETTINGS</li>
-      <li @if($url == "insurance") class="active mm-active" @endif>
-        <a href="{{route('admin.insurance.index')}}">
-          <div class="parent-icon"><i class="material-icons-outlined">verified_user</i>
-          </div>
+      <li class="{{ request()->routeIs('admin.insurance.*') ? 'mm-active' : '' }}">
+        <a href="{{ route('admin.insurance.index') }}">
+          <div class="parent-icon"><i class="material-icons-outlined">verified_user</i></div>
           <div class="menu-title">Insurance Options</div>
         </a>
-      </li> 
+      </li>
+      @endcan
     </ul>
     <!--end navigation-->
   </div>
