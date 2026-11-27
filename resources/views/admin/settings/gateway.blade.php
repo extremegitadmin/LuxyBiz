@@ -167,7 +167,7 @@
                                 <li><code>{{ $evt }}</code></li>
                             @endforeach
                         </ul>
-                        <div class="form-text">What arrives is listed in <a href="{{ route('admin.payments.events') }}">Webhook events</a>.</div>
+                        <div class="form-text">What arrives is listed in <a href="{{ route('admin.payments.events') }}">Payment activity</a>.</div>
                         @if ($c['updatedAt'])
                             <div class="form-text">Last changed {{ \Illuminate\Support\Carbon::parse($c['updatedAt'])->format('d M Y, H:i') }}</div>
                         @endif

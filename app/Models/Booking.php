@@ -115,4 +115,10 @@ class Booking extends Model
 
         $this->update(['payment_status' => $status]);
     }
+    protected static function booted(): void
+{
+    static::creating(function (self $b) {
+        $b->booking_date ??= now()->toDateString();
+    });
+}
 }

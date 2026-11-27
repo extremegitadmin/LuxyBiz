@@ -12,7 +12,7 @@
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ route('admin.payments.events') }}" class="btn btn-outline-primary px-4">Webhook events</a>
+            <a href="{{ route('admin.payments.events') }}" class="btn btn-outline-primary px-4">Payment activity</a>
         </div>
     </div>
     <!--end breadcrumb-->
