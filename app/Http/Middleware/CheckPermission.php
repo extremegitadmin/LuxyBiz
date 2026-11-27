@@ -13,16 +13,6 @@ class CheckPermission
     {
         $user = $request->user();
 
-        // TEMPORARY DEBUG: remove after testing
-        if ($permissions && ! $user->hasPermission(...$permissions)) {
-            dd([
-                'url'      => $request->path(),
-                'required' => $permissions,
-                'has'      => $user->permissionSlugs(),
-            ]);
-            abort(403, 'Your role does not have permission to open this page.');
-        }
-
         if (! $user) {
             return redirect()->guest(route('admin.login'));
         }

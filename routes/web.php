@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\InsuranceController;
+use App\Http\Controllers\Admin\FulfillmentController;
 
 use App\Http\Controllers\Admin\TourController;
 use App\Http\Controllers\Admin\ObjectiveController;
@@ -40,42 +41,31 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // User management
         Route::get('users', [UserController::class, 'index'])
-            ->middleware('permission:users.view')->name('users.index');
-
+            ->middleware('permission:admin.users.view')->name('users.index');
         Route::get('users/create', [UserController::class, 'create'])
-            ->middleware('permission:users.create')->name('users.create');
-
+            ->middleware('permission:admin.users.create')->name('users.create');
         Route::post('users', [UserController::class, 'store'])
-            ->middleware('permission:users.create')->name('users.store');
-
+            ->middleware('permission:admin.users.create')->name('users.store');
         Route::get('users/{user}/edit', [UserController::class, 'edit'])
-            ->middleware('permission:users.edit')->name('users.edit');
-
+            ->middleware('permission:admin.users.edit')->name('users.edit');
         Route::put('users/{user}', [UserController::class, 'update'])
-            ->middleware('permission:users.edit')->name('users.update');
-
+            ->middleware('permission:admin.users.edit')->name('users.update');
         Route::patch('users/{user}/toggle', [UserController::class, 'toggle'])
-            ->middleware('permission:users.edit')->name('users.toggle');
-
+            ->middleware('permission:admin.users.edit')->name('users.toggle');
         Route::delete('users/{user}', [UserController::class, 'destroy'])
-            ->middleware('permission:users.delete')->name('users.destroy');
+            ->middleware('permission:admin.users.delete')->name('users.destroy');
 
         // Role management
         Route::get('roles', [RoleController::class, 'index'])
             ->middleware('permission:admin.roles.view')->name('roles.index');
-
         Route::get('roles/create', [RoleController::class, 'create'])
             ->middleware('permission:admin.roles.create')->name('roles.create');
-
         Route::post('roles', [RoleController::class, 'store'])
             ->middleware('permission:admin.roles.create')->name('roles.store');
-
         Route::get('roles/{role}/edit', [RoleController::class, 'edit'])
             ->middleware('permission:admin.roles.edit')->name('roles.edit');
-
         Route::put('roles/{role}', [RoleController::class, 'update'])
             ->middleware('permission:admin.roles.edit')->name('roles.update');
-
         Route::delete('roles/{role}', [RoleController::class, 'destroy'])
             ->middleware('permission:admin.roles.delete')->name('roles.destroy');
 
@@ -83,18 +73,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('insurance', [InsuranceController::class, 'index'])
             ->middleware('permission:admin.insurance.view')
             ->name('insurance.index');
-
         Route::post('insurance', [InsuranceController::class, 'store'])
             ->middleware('permission:admin.insurance.create')
             ->name('insurance.store');
-
         Route::put('insurance/{option}', [InsuranceController::class, 'update'])
             ->middleware('permission:admin.insurance.edit')
             ->name('insurance.update')->whereNumber('option');
-
         Route::delete('insurance/{option}', [InsuranceController::class, 'destroy'])
             ->middleware('permission:admin.insurance.delete')
             ->name('insurance.destroy')->whereNumber('option');
+
+        // Fulfillment
+        Route::get('fulfillment', [FulfillmentController::class, 'index'])->name('fulfillment.index');
+        Route::get('fulfillment/manifest', [FulfillmentController::class, 'manifest'])->name('fulfillment.manifest');
     });
 });
 
