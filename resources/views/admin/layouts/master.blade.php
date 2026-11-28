@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LuxyBiz Admin</title>
     @include('admin.layouts.head-css')
+    @livewireStyles
 </head>
 
 <body>
@@ -34,5 +35,6 @@
 
     <!-- Load page-specific scripts AFTER jQuery -->
     @stack('scripts')
+@livewireScripts
 </body>
 </html>

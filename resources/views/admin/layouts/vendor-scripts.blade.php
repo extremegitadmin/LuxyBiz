@@ -34,5 +34,10 @@ $(".data-attributes span").peity("donut")
 <script src="{{asset('assets/js/main.js')}}"></script>
 <script src="{{asset('assets/js/dashboard1.js')}}"></script>
 <script>
-new PerfectScrollbar(".user-list")
+const userList = document.querySelector(".user-list");
+
+if (userList) {
+    new PerfectScrollbar(userList);
+}
+// new PerfectScrollbar(".user-list")
 </script>

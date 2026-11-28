@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\DepartureController;
 use App\Http\Controllers\Admin\TourCategoryController;
 use App\Http\Controllers\Admin\DepartureOperationsController;
 use App\Http\Controllers\Admin\TourPackageController;
+use App\Livewire\Admin\Tours\Packages\Index as PackageIndex;
+use App\Livewire\Admin\Tours\Packages\Form as PackageForm;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -38,14 +40,35 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('objectives', ObjectiveController::class)->only(['index', 'store', 'update', 'destroy']);
 
     // Tour Packages (Silver, Gold, Platinum)
-    Route::prefix('tours/{tour}/packages')->name('tours.packages.')->controller(TourPackageController::class)->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/{package}/edit', 'edit')->name('edit');
-        Route::put('/{package}', 'update')->name('update');
-        Route::delete('/{package}', 'destroy')->name('destroy');
-    });
+    // Route::prefix('tours/{tour}/packages')->name('tours.packages.')->controller(TourPackageController::class)->group(function () {
+    //     Route::get('/', 'index')->name('index');
+    //     Route::get('/create', 'create')->name('create');
+    //     Route::post('/', 'store')->name('store');
+    //     Route::get('/{package}/edit', 'edit')->name('edit');
+    //     Route::put('/{package}', 'update')->name('update');
+    //     Route::delete('/{package}', 'destroy')->name('destroy');
+    // });
+    // Tour Packages - Livewire listing page.
+    Route::get('tours/{tour}/packages', PackageIndex::class)
+        ->name('tours.packages.index');
+
+    // Existing package CRUD operations.
+    Route::prefix('tours/{tour}/packages')
+        ->name('tours.packages.')
+        ->controller(TourPackageController::class)
+        ->group(function () {
+
+        // Add/Edit package pages - Livewire
+        Route::get('/create', PackageForm::class)->name('create');
+        Route::get('/{package}/edit', PackageForm::class)->name('edit');
+
+            // Route::get('/create', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+
+            // Route::get('/{package}/edit', 'edit')->name('edit');
+            Route::put('/{package}', 'update')->name('update');
+            Route::delete('/{package}', 'destroy')->name('destroy');
+        });
 
     // Departures
     Route::resource('departures', DepartureController::class)->only(['index', 'show', 'store', 'update', 'destroy']);

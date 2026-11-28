@@ -1,12 +1,12 @@
 @stack('css')
 <!--favicon-->
-<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png">
+<link rel="icon" href="{{ asset('assets/images/favicon-32x32.png')}}" type="image/png">
 <!-- loader-->
-<link href="assets/css/pace.min.css')}}" rel="stylesheet">
-<script src="assets/js/pace.min.js"></script>
+<link href="{{ asset('assets/css/pace.min.css') }}" rel="stylesheet">
+<script src="{{ asset('assets/js/pace.min.js') }}"></script>
 
 <!--plugins-->
-<link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet">
+<link href="{{ asset('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/metismenu/metisMenu.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/metismenu/mm-vertical.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/simplebar/css/simplebar.css')}}">
